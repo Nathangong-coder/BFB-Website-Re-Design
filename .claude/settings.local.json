@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:bfbatucla.com)",
+      "Bash(npx create-next-app@latest temp-bfb --typescript --tailwind --eslint --app --import-alias \"@/*\" --use-npm --no-install)",
+      "Bash(mv temp-bfb/* .)",
+      "Bash(mv temp-bfb/.* .)",
+      "Bash(node *)",
+      "Bash(browser-use open *)",
+      "Bash(browser-use state *)",
+      "Bash(browser-use get *)",
+      "Skill(browser-use)",
+      "Bash(npm run *)",
+      "WebSearch"
+    ]
+  }
+}
