@@ -2,7 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Briefcase, Users } from "lucide-react";
+import { BookOpen, Briefcase, Users, Heart } from "lucide-react";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const approachItems = [
@@ -24,58 +24,73 @@ const approachItems = [
     icon: Users,
     highlight: "Elite Networking",
   },
+  {
+    title: "Community",
+    description: "A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions, we believe the best teams are built on genuine relationships. We work hard, play hard.",
+    icon: Heart,
+    highlight: "Work Hard, Play Hard",
+  },
 ];
 
 export default function Approach() {
   return (
-    <section id="approach" className="py-24 px-4 sm:px-6 lg:px-8 bg-midnight">
+    <section id="approach" className="py-24 px-4 sm:px-6 lg:px-8 bg-white dark:bg-midnight">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-20">
-          <motion.h2
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
+        {/* Section header */}
+        <div className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-serif text-silver mb-6"
+            className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-gold/70 mb-5"
           >
-            Our Approach
+            Our Philosophy
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
+            style={{ textWrap: "balance" } as React.CSSProperties}
+          >
+            The Approach
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
             whileInView={{ opacity: 1, scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="h-1 w-24 bg-gold mx-auto rounded-full"
+            className="h-px w-20 bg-gradient-to-r from-transparent via-gold/50 to-transparent mx-auto"
           />
         </div>
 
+        {/* Cards */}
         <motion.div
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
           {approachItems.map((item) => (
             <motion.div
               key={item.title}
               variants={fadeInUp}
-              whileHover={{ y: -10 }}
-              className="group relative p-8 bg-glass border border-silver/10 rounded-sm hover:border-gold/50 transition-all duration-300"
+              whileHover={{ y: -6 }}
+              className="group relative p-7 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm hover:border-gold/40 dark:hover:border-gold/30 shadow-sm dark:shadow-none transition-all duration-300"
             >
-              <div className="mb-6 inline-flex p-3 rounded-sm bg-gold/10 text-gold group-hover:bg-gold group-hover:text-midnight transition-colors duration-300">
-                <item.icon size={28} />
+              <div className="mb-5 inline-flex p-3 rounded-sm bg-gold/10 text-gold group-hover:bg-gold group-hover:text-white dark:group-hover:text-midnight transition-colors duration-300">
+                <item.icon size={22} />
               </div>
-              <h3 className="text-2xl font-serif text-silver mb-4">{item.title}</h3>
-              <p className="text-silver/60 leading-relaxed mb-6 font-light">
+              <h3 className="text-base font-serif text-slate-900 dark:text-silver mb-3">{item.title}</h3>
+              <p className="text-slate-500 dark:text-silver/55 leading-relaxed mb-5 font-light text-sm">
                 {item.description}
               </p>
-              <div className="text-xs font-bold tracking-widest uppercase text-gold/80">
+              <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-gold/70">
                 {item.highlight}
               </div>
-
-              <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-2 h-2 bg-gold rounded-full" />
+              <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="w-1.5 h-1.5 bg-gold rounded-full" />
               </div>
             </motion.div>
           ))}

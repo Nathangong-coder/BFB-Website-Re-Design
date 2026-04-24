@@ -11,7 +11,15 @@
       "Bash(browser-use get *)",
       "Skill(browser-use)",
       "Bash(npm run *)",
-      "WebSearch"
+      "WebSearch",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\assorted/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\assorted/\")",
+      "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\capstone/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\capstone/\")",
+      "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\group photo/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\group-photo/\")",
+      "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\companies/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\companies/\")",
+      "WebFetch(domain:www.bruinvalueinvesting.org)",
+      "WebFetch(domain:www.bruinassetmanagement.com)"
     ]
   }
 }

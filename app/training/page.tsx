@@ -1,11 +1,152 @@
 "use client";
 
-import React from "react";
+import React, { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrainingStore } from "@/lib/store";
 import { FINANCE_MODULES } from "@/lib/questions";
-import { ChevronRight, RotateCcw, Award, Terminal, BookOpen } from "lucide-react";
+import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
+
+// ─── Perfect Score Form ───────────────────────────────────────────────────────
+
+function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset: () => void }) {
+  const [pending, startTransition] = useTransition();
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    formData.set("module", moduleName);
+    startTransition(async () => {
+      const res = await sendQuizPerfectEmail(formData);
+      if (res.success) setSent(true);
+      else setError(res.error ?? "Something went wrong.");
+    });
+  }
+
+  if (sent) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="max-w-xl w-full text-center mx-auto px-4"
+      >
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 mb-6">
+          <CheckCircle size={32} className="text-green-500" />
+        </div>
+        <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">We&apos;ll Be in Touch</h2>
+        <p className="text-slate-500 dark:text-silver/60 mb-10 leading-relaxed">
+          Your information has been sent to our team. Expect to hear from us soon.
+        </p>
+        <button
+          onClick={onReset}
+          className="flex items-center gap-2 px-6 py-3 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all mx-auto"
+        >
+          <RotateCcw size={16} /> Take Another Module
+        </button>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="max-w-xl w-full mx-auto px-4"
+    >
+      <div className="text-center mb-10">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-6">
+          <Award size={32} className="text-green-600 dark:text-green-400" />
+        </div>
+        <h2 className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-silver mb-3">
+          Perfect Score!
+        </h2>
+        <p className="text-slate-500 dark:text-silver/60 text-sm leading-relaxed max-w-sm mx-auto">
+          You aced the <span className="font-semibold text-slate-700 dark:text-silver">{moduleName}</span> module.
+          Share your info and our team will reach out.
+        </p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
+            Full Name <span className="text-red-400">*</span>
+          </label>
+          <input
+            name="name"
+            type="text"
+            required
+            placeholder="Your full name"
+            className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
+            Email <span className="text-red-400">*</span>
+          </label>
+          <input
+            name="email"
+            type="email"
+            required
+            placeholder="you@ucla.edu"
+            className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
+              Year <span className="text-red-400">*</span>
+            </label>
+            <select
+              name="year"
+              required
+              className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue transition-colors text-sm"
+            >
+              <option value="">Select year</option>
+              <option>Freshman</option>
+              <option>Sophomore</option>
+              <option>Junior</option>
+              <option>Senior</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
+              Major <span className="text-red-400">*</span>
+            </label>
+            <input
+              name="major"
+              type="text"
+              required
+              placeholder="e.g. Economics"
+              className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
+            />
+          </div>
+        </div>
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-2"
+        >
+          {pending ? "Sending..." : "Submit"}
+        </button>
+      </form>
+
+      <button
+        onClick={onReset}
+        className="mt-6 w-full text-center text-sm text-slate-400 dark:text-silver/40 hover:text-slate-600 dark:hover:text-silver/70 transition-colors"
+      >
+        Skip and go back home
+      </button>
+    </motion.div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function TrainingPage() {
   const {
@@ -20,42 +161,42 @@ export default function TrainingPage() {
     resetQuiz,
   } = useTrainingStore();
 
-  // 1. Command Center (Module Selection)
+  // 1. Module selection
   if (quizStatus === "idle") {
     return (
-      <div className="min-h-screen bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-3 mb-8 text-gold">
+          <div className="flex items-center gap-3 mb-8 text-bfb-blue dark:text-gold">
             <Terminal size={24} />
-            <span className="text-xs font-bold tracking-widest uppercase">System Access: BFB Terminal</span>
+            <span className="text-xs font-bold tracking-widest uppercase">BFB Knowledge Assessment</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif text-silver mb-6">Knowledge Assessment</h1>
-          <p className="text-silver/60 text-lg mb-12 max-w-2xl">
-            Select a specialized module to test your technical proficiency.
-            Completion of these modules is highly recommended for aspiring BFB members.
+          <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h1>
+          <p className="text-slate-500 dark:text-silver/60 text-lg mb-12 max-w-2xl">
+            Select a module to test your technical proficiency. 5 questions are chosen at random from a pool of 50.
+            A perfect score gets you in touch with our team.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {FINANCE_MODULES.map((module) => (
               <motion.div
                 key={module.id}
-                whileHover={{ scale: 1.02, borderColor: "var(--color-gold)" }}
+                whileHover={{ scale: 1.02 }}
                 onClick={() => startModule(module)}
-                className="cursor-pointer p-6 bg-glass border border-silver/10 rounded-sm group hover:bg-glass/50 transition-all duration-300"
+                className="cursor-pointer p-6 bg-white dark:bg-glass border border-slate-200 dark:border-silver/10 rounded-sm group hover:border-bfb-blue/40 dark:hover:border-gold/40 transition-all duration-300 shadow-sm dark:shadow-none"
               >
                 <div className="flex justify-between items-start mb-4">
-                  <div className="p-2 rounded-sm bg-gold/10 text-gold group-hover:bg-gold group-hover:text-midnight transition-colors">
+                  <div className="p-2 rounded-sm bg-bfb-blue/10 dark:bg-gold/10 text-bfb-blue dark:text-gold group-hover:bg-bfb-blue group-hover:text-white dark:group-hover:bg-gold dark:group-hover:text-midnight transition-colors">
                     <BookOpen size={20} />
                   </div>
-                  <span className="text-[10px] font-bold uppercase tracking-tighter text-silver/40 group-hover:text-gold transition-colors">
+                  <span className="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-silver/40 group-hover:text-bfb-blue dark:group-hover:text-gold transition-colors">
                     {module.difficulty}
                   </span>
                 </div>
-                <h3 className="text-xl font-serif text-silver mb-2 group-hover:text-gold transition-colors">{module.title}</h3>
-                <p className="text-silver/60 text-sm leading-relaxed mb-6">{module.description}</p>
-                <div className="flex items-center gap-2 text-gold text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-                  Initialize Module <ChevronRight size={14} />
+                <h3 className="text-xl font-serif text-slate-900 dark:text-silver mb-2 group-hover:text-bfb-blue dark:group-hover:text-gold transition-colors">{module.title}</h3>
+                <p className="text-slate-500 dark:text-silver/60 text-sm leading-relaxed mb-6">{module.description}</p>
+                <div className="flex items-center gap-2 text-bfb-blue dark:text-gold text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                  Start Module <ChevronRight size={14} />
                 </div>
               </motion.div>
             ))}
@@ -65,31 +206,32 @@ export default function TrainingPage() {
     );
   }
 
-  // 2. Active Quiz Mode
+  // 2. Active Quiz
   if (quizStatus === "active" && currentModule) {
     const question = currentModule.questions[currentQuestionIndex];
     const selectedAnswer = answers[question.id];
     const hasSubmitted = selectedAnswer !== undefined;
+    const isAnswerCorrect = hasSubmitted && selectedAnswer === question.correctIndex;
 
     return (
-      <div className="min-h-screen bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-12">
-            <div className="flex items-center gap-3 text-gold">
+            <div className="flex items-center gap-3 text-bfb-blue dark:text-gold">
               <Terminal size={20} />
-              <span className="text-xs font-bold tracking-widest uppercase">{currentModule.title} // {currentModule.id}</span>
+              <span className="text-xs font-bold tracking-widest uppercase text-slate-600 dark:text-gold">{currentModule.title}</span>
             </div>
-            <div className="text-silver/40 text-xs font-mono">
+            <div className="text-slate-400 dark:text-silver/40 text-xs font-mono">
               Question {currentQuestionIndex + 1} of {currentModule.questions.length}
             </div>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full h-1 bg-silver/10 rounded-full mb-12 overflow-hidden">
+          <div className="w-full h-1 bg-slate-200 dark:bg-silver/10 rounded-full mb-12 overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${((currentQuestionIndex + 1) / currentModule.questions.length) * 100}%` }}
-              className="h-full bg-gold"
+              className="h-full bg-bfb-blue dark:bg-gold"
             />
           </div>
 
@@ -101,7 +243,7 @@ export default function TrainingPage() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <h2 className="text-2xl md:text-3xl font-serif text-silver leading-snug">
+              <h2 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver leading-snug">
                 {question.question}
               </h2>
 
@@ -110,23 +252,21 @@ export default function TrainingPage() {
                   const isCorrect = idx === question.correctIndex;
                   const isSelected = selectedAnswer === idx;
 
-                  let borderColor = "border-silver/10";
-                  let textColor = "text-silver/70";
-                  let bgColor = "bg-glass";
+                  let className =
+                    "p-4 text-left rounded-sm border transition-all duration-200 ";
 
                   if (hasSubmitted) {
                     if (isCorrect) {
-                      borderColor = "border-gold";
-                      textColor = "text-gold";
-                      bgColor = "bg-gold/10";
-                    } else if (isSelected && !isCorrect) {
-                      borderColor = "border-red-500/50";
-                      textColor = "text-red-400";
-                      bgColor = "bg-red-500/5";
+                      className += "border-green-500 text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/10";
+                    } else if (isSelected) {
+                      className += "border-red-400 text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/5";
+                    } else {
+                      className += "border-slate-200 dark:border-silver/10 text-slate-400 dark:text-silver/40 bg-white dark:bg-glass";
                     }
                   } else if (isSelected) {
-                    borderColor = "border-gold";
-                    textColor = "text-gold";
+                    className += "border-bfb-blue dark:border-gold text-bfb-blue dark:text-gold bg-bfb-blue/5 dark:bg-gold/5";
+                  } else {
+                    className += "border-slate-200 dark:border-silver/10 text-slate-700 dark:text-silver/70 bg-white dark:bg-glass hover:border-bfb-blue/50 dark:hover:border-gold/50";
                   }
 
                   return (
@@ -134,7 +274,7 @@ export default function TrainingPage() {
                       key={idx}
                       disabled={hasSubmitted}
                       onClick={() => submitAnswer(question.id, idx)}
-                      className={`p-4 text-left rounded-sm border transition-all duration-200 ${borderColor} ${textColor} ${bgColor} hover:border-gold/50`}
+                      className={className}
                     >
                       {option}
                     </button>
@@ -146,17 +286,28 @@ export default function TrainingPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="p-6 bg-gold/5 border border-gold/20 rounded-sm"
+                  className={`p-6 rounded-sm border ${
+                    isAnswerCorrect
+                      ? "bg-green-50 dark:bg-green-500/5 border-green-300 dark:border-green-500/30"
+                      : "bg-red-50 dark:bg-red-500/5 border-red-300 dark:border-red-500/30"
+                  }`}
                 >
-                  <div className="flex items-center gap-2 text-gold text-xs font-bold uppercase tracking-widest mb-3">
-                    <BookOpen size={14} /> Technical Brief
+                  <div
+                    className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3 ${
+                      isAnswerCorrect
+                        ? "text-green-700 dark:text-green-400"
+                        : "text-red-600 dark:text-red-400"
+                    }`}
+                  >
+                    <BookOpen size={14} />
+                    {isAnswerCorrect ? "Correct" : "Wrong"}
                   </div>
-                  <p className="text-silver/80 text-sm leading-relaxed">
+                  <p className="text-slate-700 dark:text-silver/80 text-sm leading-relaxed">
                     {question.explanation}
                   </p>
                   <button
                     onClick={nextQuestion}
-                    className="mt-6 flex items-center gap-2 px-4 py-2 bg-gold text-midnight text-xs font-bold uppercase tracking-widest rounded-sm hover:bg-gold/90 transition-all"
+                    className="mt-6 flex items-center gap-2 px-4 py-2 bg-bfb-blue dark:bg-gold text-white dark:text-midnight text-xs font-bold uppercase tracking-widest rounded-sm hover:opacity-90 transition-all"
                   >
                     Continue <ChevronRight size={14} />
                   </button>
@@ -169,57 +320,60 @@ export default function TrainingPage() {
     );
   }
 
-  // 3. Certification Screen
+  // 3. Completion
   if (quizStatus === "completed" && currentModule) {
-    const percentage = (score / currentModule.questions.length) * 100;
-    const isCertified = percentage >= 80;
+    const isPerfect = score === currentModule.questions.length;
 
+    // Perfect score → show contact form
+    if (isPerfect) {
+      return (
+        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+          <PerfectScoreForm moduleName={currentModule.title} onReset={resetQuiz} />
+        </div>
+      );
+    }
+
+    // Non-perfect completion
+    const percentage = (score / currentModule.questions.length) * 100;
     return (
-      <div className="min-h-screen bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="max-w-xl w-full text-center p-12 bg-glass border border-silver/10 rounded-sm relative overflow-hidden"
+          className="max-w-xl w-full text-center p-12 bg-white dark:bg-glass border border-slate-200 dark:border-silver/10 rounded-sm relative overflow-hidden shadow-sm dark:shadow-none"
         >
-          {/* Decorative badge bg */}
-          <div className="absolute -top-24 -right-24 w-48 h-48 bg-gold/10 rounded-full blur-3xl" />
+          <div className="absolute -top-24 -right-24 w-48 h-48 bg-bfb-blue/5 dark:bg-gold/10 rounded-full blur-3xl" />
 
           <div className="relative z-10">
             <div className="flex justify-center mb-8">
-              <div className={`p-4 rounded-full ${isCertified ? "bg-gold text-midnight" : "bg-silver/10 text-silver/40"}`}>
+              <div className="p-4 rounded-full bg-slate-100 dark:bg-silver/10 text-slate-400 dark:text-silver/40">
                 <Award size={48} />
               </div>
             </div>
 
-            <h2 className="text-4xl font-serif text-silver mb-4">
-              {isCertified ? "Module Certified" : "Assessment Complete"}
-            </h2>
-            <p className="text-silver/60 mb-8">
-              You scored <span className="text-gold font-bold">{score} / {currentModule.questions.length}</span> ({percentage.toFixed(0)}%)
+            <h2 className="text-4xl font-serif text-slate-900 dark:text-silver mb-4">Assessment Complete</h2>
+            <p className="text-slate-500 dark:text-silver/60 mb-8">
+              You scored{" "}
+              <span className="text-bfb-blue dark:text-gold font-bold">
+                {score} / {currentModule.questions.length}
+              </span>{" "}
+              ({percentage.toFixed(0)}%)
             </p>
 
-            {isCertified ? (
-              <p className="text-silver/80 mb-12 leading-relaxed">
-                Congratulations. You have demonstrated a strong technical command of {currentModule.title}.
-                Your proficiency has been logged in the BFB database.
-              </p>
-            ) : (
-              <p className="text-silver/80 mb-12 leading-relaxed">
-                You did not meet the certification threshold. We recommend reviewing the technical briefs
-                and attempting the module again to master the material.
-              </p>
-            )}
+            <p className="text-slate-600 dark:text-silver/80 mb-12 leading-relaxed text-sm">
+              You need a perfect 5/5 to unlock the next step. Review the explanations and try again — you&apos;ve got this.
+            </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={resetQuiz}
-                className="flex items-center gap-2 px-6 py-3 bg-gold text-midnight font-bold rounded-sm hover:bg-gold/90 transition-all"
+                className="flex items-center gap-2 px-6 py-3 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all"
               >
                 <RotateCcw size={16} /> Try Again
               </button>
               <Link
                 href="/"
-                className="px-6 py-3 border border-silver/20 text-silver hover:text-gold hover:border-gold transition-all rounded-sm font-medium"
+                className="px-6 py-3 border border-slate-200 dark:border-silver/20 text-slate-600 dark:text-silver hover:text-bfb-blue dark:hover:text-gold hover:border-bfb-blue/40 dark:hover:border-gold transition-all rounded-sm font-medium text-sm"
               >
                 Back to Home
               </Link>

@@ -1,17 +1,28 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #0A0F1C;
-  --foreground: #F8FAFC;
+  --bg: #FFFFFF;
+  --bg-secondary: #F8FAFC;
   --midnight: #0A0F1C;
   --bfb-blue: #2774AE;
+  --gold: #C5A059;
   --silver: #E2E8F0;
   --glass: rgba(255, 255, 255, 0.03);
 }
 
+.dark {
+  --bg: #0A0F1C;
+  --bg-secondary: #080C18;
+}
+
 @theme inline {
+  --color-bg: var(--bg);
+  --color-bg-secondary: var(--bg-secondary);
   --color-midnight: var(--midnight);
   --color-bfb-blue: var(--bfb-blue);
+  --color-gold: var(--gold);
   --color-silver: var(--silver);
   --color-glass: var(--glass);
   --font-serif: "Playfair Display", serif;
@@ -19,11 +30,15 @@
 }
 
 body {
-  background: var(--midnight);
-  color: var(--silver);
+  background: var(--bg);
+  color: var(--fg, #0F172A);
   font-family: var(--font-sans);
   position: relative;
   overflow-x: hidden;
+}
+
+.dark body {
+  color: var(--silver);
 }
 
 body::before {
@@ -35,6 +50,11 @@ body::before {
   height: 100%;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.03;
+  opacity: 0;
+  transition: opacity 0.4s;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+.dark body::before {
+  opacity: 0.045;
 }
