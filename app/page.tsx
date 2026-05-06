@@ -1,14 +1,16 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
-import Approach from "@/components/Approach";
-import Events from "@/components/Events";
+import LifeAtBFB from "@/components/LifeAtBFB";
+import DiversePlacements from "@/components/DiversePlacements";
+import PlacementsTicker from "@/components/PlacementsTicker";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Hero />
-      <Approach />
-      <Events />
+      <LifeAtBFB />
+      <DiversePlacements />
+      <PlacementsTicker />
 
       {/* Apply CTA */}
       <section id="apply" className="relative py-36 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -17,7 +19,7 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-bfb-blue/[0.05] dark:bg-bfb-blue/[0.07] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-6">
+          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-6">
             Applications Open
           </span>
           <h2

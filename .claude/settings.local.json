@@ -19,7 +19,14 @@
       "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\group photo/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\group-photo/\")",
       "Bash(cp \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\companies/\"* \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\public\\\\companies/\")",
       "WebFetch(domain:www.bruinvalueinvesting.org)",
-      "WebFetch(domain:www.bruinassetmanagement.com)"
+      "WebFetch(domain:www.bruinassetmanagement.com)",
+      "Bash(bash *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\components\\\\Approach.tsx\" -Force)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\components\\\\Events.tsx\" -Force)",
+      "Bash(Write-Output \"Deleted\")"
     ]
   }
 }

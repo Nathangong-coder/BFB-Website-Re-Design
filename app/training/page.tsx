@@ -38,7 +38,7 @@ function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset
         </div>
         <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">We&apos;ll Be in Touch</h2>
         <p className="text-slate-500 dark:text-silver/60 mb-10 leading-relaxed">
-          Your information has been sent to our team. Expect to hear from us soon.
+          Your information has been saved in our database. Congratulations again on your perfect score!
         </p>
         <button
           onClick={onReset}

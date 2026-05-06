@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 Block Selection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0e1a; color: #e1e1e1; font-family: 'DM Sans', sans-serif; padding: 28px 22px; }
+
+  h1 { font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 28px; }
+
+  .section-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #5b9cd4; margin-bottom: 10px; text-align: center; display: block; }
+  .section-title { font-family: 'Libre Baskerville', serif; font-size: 28px; text-align: center; color: #e1e1e1; margin-bottom: 6px; }
+  .section-divider { width: 48px; height: 2px; background: #253d86; margin: 12px auto 32px; }
+
+  .block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 3px;
+    border-radius: 0;
+    overflow: hidden;
+  }
+  .block:first-of-type { border-radius: 8px 8px 0 0; }
+  .block:last-of-type { border-radius: 0 0 8px 8px; margin-bottom: 0; }
+
+  .img-side {
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+    background: #1a2035;
+  }
+  .img-side img {
+    width: 100%; height: 100%; object-fit: cover;
+    opacity: 0.8;
+  }
+  .img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(37,61,134,0.45), rgba(10,14,26,0.3));
+  }
+  .img-tag {
+    position: absolute; bottom: 10px; left: 12px;
+    font-size: 8px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.6); background: rgba(0,0,0,0.5); padding: 3px 8px; border-radius: 2px;
+  }
+  .img-placeholder {
+    min-height: 140px;
+    background: linear-gradient(135deg, #1e2a45 0%, #253d86 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.1em; text-transform: uppercase;
+    flex-direction: column; gap: 6px;
+  }
+  .img-placeholder .add-icon { font-size: 22px; opacity: 0.4; }
+
+  .text-side {
+    padding: 24px 26px;
+    background: #111827;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 6px;
+  }
+  .text-eyebrow { font-size: 8px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: #5b9cd4; }
+  .text-title { font-family: 'Libre Baskerville', serif; font-size: 17px; color: #e1e1e1; }
+  .text-body { font-size: 11px; color: rgba(225,225,225,0.55); line-height: 1.65; }
+  .text-sources {
+    margin-top: 4px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+  }
+  .source-tag {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.07em;
+    background: rgba(37,61,134,0.3); color: #a5b4fc;
+    padding: 2px 8px; border-radius: 3px;
+  }
+
+  .block-num {
+    position: absolute; top: 12px; right: 12px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(37,61,134,0.7); border: 1px solid rgba(91,156,212,0.4);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700; color: #5b9cd4;
+  }
+  .img-side { position: relative; }
+
+  .note { background: #131824; border: 1px solid #1e2a45; border-radius: 8px; padding: 14px 18px; margin-top: 20px; font-size: 11px; color: #94a3b8; line-height: 1.6; }
+  .note strong { color: #e1e1e1; }
+</style>
+</head>
+<body>
+
+<h1>Proposed 4 Blocks</h1>
+<p class="subtitle">Merged best-of from Approach + Life at BFB. Photos matched to existing assets — block 4 needs a new image from you.</p>
+
+<span class="section-eyebrow">Our Philosophy</span>
+<div class="section-title">The Approach &amp; Life at BFB</div>
+<div class="section-divider"></div>
+
+<!-- Block 1: Education — image LEFT -->
+<div class="block">
+  <div class="img-side">
+    <img src="/assorted/bfb-general-meeting.jpg" alt="General Meeting" />
+    <div class="img-overlay"></div>
+    <span class="img-tag">General Meetings</span>
+    <div class="block-num">1</div>
+  </div>
+  <div class="text-side">
+    <div class="text-eyebrow">Technical Mastery</div>
+    <div class="text-title">Education</div>
+    <div class="text-body">Our rigorous accelerator program equips members with the technical foundations of finance — from DCF modeling to complex valuation techniques — ensuring every member is career-ready from day one.</div>
+    <div class="text-sources">
+      <span class="source-tag">Approach</span>
+      <span class="source-tag">General Meetings</span>
+    </div>
+  </div>
+</div>
+
+<!-- Block 2: Guest Speakers — image RIGHT -->
+<div class="block">
+  <div class="text-side" style="background:#0f1622;">
+    <div class="text-eyebrow">Elite Networking</div>
+    <div class="text-title">Guest Speakers</div>
+    <div class="text-body">Direct access to industry leaders — from New York hedge funds to LA private credit firms. Weekly alumni speaker events bridge the gap between academic theory and professional practice.</div>
+    <div class="text-sources">
+      <span class="source-tag">Approach</span>
+      <span class="source-tag">Alumni Speakers</span>
+    </div>
+  </div>
+  <div class="img-side">
+    <img src="/assorted/bfb-alum-speaker.jpg" alt="Alumni Speaker" />
+    <div class="img-overlay" style="background:linear-gradient(135deg,rgba(10,14,26,0.3),rgba(37,61,134,0.45));"></div>
+    <span class="img-tag">Alumni Night</span>
+    <div class="block-num">2</div>
+  </div>
+</div>
+
+<!-- Block 3: Member Projects — image LEFT -->
+<div class="block">
+  <div class="img-side">
+    <img src="/capstone/bfb-capstone.jpg" alt="Capstone Project" />
+    <div class="img-overlay"></div>
+    <span class="img-tag">Capstone Projects</span>
+    <div class="block-num">3</div>
+  </div>
+  <div class="text-side">
+    <div class="text-eyebrow">Applied Experience</div>
+    <div class="text-title">Member Projects</div>
+    <div class="text-body">Quarterly team-based challenges including investment pitches, M&amp;A simulations, company partnerships, and quant modeling — mirroring real-world institutional workflows.</div>
+    <div class="text-sources">
+      <span class="source-tag">Approach</span>
+      <span class="source-tag">Self-Selected Projects</span>
+    </div>
+  </div>
+</div>
+
+<!-- Block 4: Community — image RIGHT, needs new photo -->
+<div class="block" style="border-radius:0 0 8px 8px;">
+  <div class="text-side" style="background:#0f1622;">
+    <div class="text-eyebrow">Work Hard, Play Hard</div>
+    <div class="text-title">Community</div>
+    <div class="text-body">A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions. We believe the best teams are built on genuine relationships.</div>
+    <div class="text-sources">
+      <span class="source-tag">Approach</span>
+      <span class="source-tag">Community</span>
+    </div>
+  </div>
+  <div class="img-placeholder">
+    <span class="add-icon">📸</span>
+    <span>Add a community photo</span>
+    <span style="font-size:9px;opacity:0.6;">(retreat, social event, etc.)</span>
+  </div>
+</div>
+
+<div class="note">
+  <strong>Note on block 4:</strong> Blocks 1–3 already have matching photos in <code>/assorted/</code> and <code>/capstone/</code>. For Community, a retreat or social event photo would work great. You can drop an image into <code>/public/assorted/</code> and I'll wire it up — or I can use your group photo as a fallback.
+</div>
+
+</body>
+</html>

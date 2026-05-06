@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Font Pairings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Geist:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+<script>
+  let selected = null;
+  function select(choice) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    const el = document.querySelector(`[data-choice="${choice}"]`);
+    if (el) { el.classList.add('selected'); selected = choice; }
+    // record event
+    try {
+      fetch('/select', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({choice, text: el?.querySelector('.card-label')?.textContent}) }).catch(()=>{});
+    } catch(e) {}
+    document.getElementById('indicator').textContent = `Selected: ${choice.toUpperCase()}`;
+    document.getElementById('indicator').style.display = 'block';
+  }
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f1117; color: #e2e8f0; font-family: 'Inter', sans-serif; padding: 32px 24px; min-height: 100vh; }
+
+  h1 { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 600; color: #e2e8f0; margin-bottom: 6px; }
+  .subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 28px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px; }
+
+  .card {
+    background: #1a1f2e;
+    border: 2px solid #2a3147;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .card:hover { border-color: #4a5568; transform: translateY(-2px); }
+  .card.selected { border-color: #5b9cd4; box-shadow: 0 0 0 3px rgba(91,156,212,0.2); }
+
+  .card-preview {
+    padding: 20px 22px 14px;
+    background: #0d1117;
+    border-bottom: 1px solid #2a3147;
+  }
+
+  .nav-preview {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 22px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .nav-logo { font-size: 13px; font-weight: 700; letter-spacing: 0.05em; color: #e2e8f0; }
+  .nav-link { font-size: 12px; color: rgba(226,232,240,0.6); }
+  .nav-link.active { color: #5b9cd4; font-weight: 600; }
+  .nav-btn { font-size: 11px; font-weight: 700; background: #253d86; color: white; padding: 5px 14px; border-radius: 3px; margin-left: auto; }
+
+  .hero-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: #5b9cd4; margin-bottom: 10px; }
+  .hero-heading { font-size: 28px; line-height: 1.12; color: #e2e8f0; margin-bottom: 8px; }
+  .hero-heading span { color: #5b9cd4; }
+  .hero-sub { font-size: 11px; color: rgba(226,232,240,0.55); line-height: 1.6; }
+
+  .card-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .card-desc { font-family: 'Inter', sans-serif; font-size: 11px; color: #64748b; }
+  .card-footer { padding: 12px 22px; display: flex; flex-direction: column; gap: 3px; }
+
+  .tag { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; margin-top: 6px; }
+  .tag-nav { background: rgba(91,156,212,0.15); color: #5b9cd4; }
+  .tag-heading { background: rgba(37,61,134,0.3); color: #a5b4fc; }
+
+  #indicator {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #253d86;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<h1>Font Pairing Options</h1>
+<p class="subtitle">You asked for a <strong>sharper</strong> navbar font and a <strong>softer</strong> hero heading. Here are 4 pairings — click to select your favorite.</p>
+
+<div class="grid">
+
+  <!-- OPTION A -->
+  <div class="card" data-choice="a" onclick="select('a')">
+    <div class="card-preview">
+      <!-- Navbar preview -->
+      <div class="nav-preview" style="font-family: 'Space Grotesk', sans-serif;">
+        <span class="nav-logo">BFB</span>
+        <span class="nav-link active">Home</span>
+        <span class="nav-link">Team</span>
+        <span class="nav-link">Events</span>
+        <span class="nav-btn">Join Us</span>
+      </div>
+      <!-- Hero heading preview -->
+      <div class="hero-eyebrow" style="font-family:'Space Grotesk',sans-serif;">UCLA's Premier Finance Club</div>
+      <div class="hero-heading" style="font-family:'DM Serif Display',serif;">
+        Forging the <span><em>Future</em></span><br>of Finance &amp; Banking
+      </div>
+      <div class="hero-sub" style="font-family:'Space Grotesk',sans-serif;">Preparing UCLA undergraduates for elite careers in finance.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-label">Option A</span>
+      <span class="card-desc">Sharp + Elegant</span>
+      <div>
+        <span class="tag tag-nav">Nav: Space Grotesk</span>
+        <span class="tag tag-heading">Heading: DM Serif Display</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION B -->
+  <div class="card" data-choice="b" onclick="select('b')">
+    <div class="card-preview">
+      <div class="nav-preview" style="font-family: 'Inter', sans-serif; letter-spacing: 0.01em;">
+        <span class="nav-logo">BFB</span>
+        <span class="nav-link active">Home</span>
+        <span class="nav-link">Team</span>
+        <span class="nav-link">Events</span>
+        <span class="nav-btn">Join Us</span>
+      </div>
+      <div class="hero-eyebrow" style="font-family:'Inter',sans-serif;">UCLA's Premier Finance Club</div>
+      <div class="hero-heading" style="font-family:'Cormorant Garamond',serif; font-weight:600; font-size:30px; letter-spacing:-0.01em;">
+        Forging the <span><em>Future</em></span><br>of Finance &amp; Banking
+      </div>
+      <div class="hero-sub" style="font-family:'Inter',sans-serif;">Preparing UCLA undergraduates for elite careers in finance.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-label">Option B</span>
+      <span class="card-desc">Crisp + Luxurious</span>
+      <div>
+        <span class="tag tag-nav">Nav: Inter</span>
+        <span class="tag tag-heading">Heading: Cormorant Garamond</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION C -->
+  <div class="card" data-choice="c" onclick="select('c')">
+    <div class="card-preview">
+      <div class="nav-preview" style="font-family: 'Outfit', sans-serif; letter-spacing: 0.02em;">
+        <span class="nav-logo">BFB</span>
+        <span class="nav-link active">Home</span>
+        <span class="nav-link">Team</span>
+        <span class="nav-link">Events</span>
+        <span class="nav-btn">Join Us</span>
+      </div>
+      <div class="hero-eyebrow" style="font-family:'Outfit',sans-serif;">UCLA's Premier Finance Club</div>
+      <div class="hero-heading" style="font-family:'Fraunces',serif; font-style:italic; font-size:28px;">
+        Forging the <span>Future</span><br>of Finance &amp; Banking
+      </div>
+      <div class="hero-sub" style="font-family:'Outfit',sans-serif;">Preparing UCLA undergraduates for elite careers in finance.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-label">Option C</span>
+      <span class="card-desc">Modern + Expressive</span>
+      <div>
+        <span class="tag tag-nav">Nav: Outfit</span>
+        <span class="tag tag-heading">Heading: Fraunces</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPTION D — Keep current serif, sharper sans -->
+  <div class="card" data-choice="d" onclick="select('d')">
+    <div class="card-preview">
+      <div class="nav-preview" style="font-family: 'DM Sans', sans-serif; letter-spacing: 0.015em;">
+        <span class="nav-logo">BFB</span>
+        <span class="nav-link active">Home</span>
+        <span class="nav-link">Team</span>
+        <span class="nav-link">Events</span>
+        <span class="nav-btn">Join Us</span>
+      </div>
+      <div class="hero-eyebrow" style="font-family:'DM Sans',sans-serif;">UCLA's Premier Finance Club</div>
+      <div class="hero-heading" style="font-family:'Libre Baskerville',serif; font-size:25px; line-height:1.18;">
+        Forging the <span><em>Future</em></span><br>of Finance &amp; Banking
+      </div>
+      <div class="hero-sub" style="font-family:'DM Sans',sans-serif;">Preparing UCLA undergraduates for elite careers in finance.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-label">Option D</span>
+      <span class="card-desc">Clean + Classic</span>
+      <div>
+        <span class="tag tag-nav">Nav: DM Sans</span>
+        <span class="tag tag-heading">Heading: Libre Baskerville</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="indicator"></div>
+
+</body>
+</html>

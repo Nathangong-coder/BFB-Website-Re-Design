@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BFB Full Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #253d86;
+    --accent: #5b9cd4;
+    --silver: #e1e1e1;
+    --bg: #0a0e1a;
+    --bg2: #0d1220;
+    --bg3: #111827;
+    --border: rgba(255,255,255,0.07);
+  }
+  body { background: var(--bg); color: var(--silver); font-family: 'DM Sans', sans-serif; font-size: 14px; }
+  h1,h2,h3 { font-family: 'Libre Baskerville', serif; }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,14,26,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px;
+  }
+  .nav-logo img { height: 28px; object-fit: contain; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-link { font-size: 13px; color: rgba(225,225,225,0.6); font-weight: 500; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .nav-link:hover { color: var(--silver); }
+  .nav-cta {
+    background: var(--primary); color: white;
+    font-size: 12px; font-weight: 700;
+    padding: 7px 18px; border-radius: 3px;
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 92vh;
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 32px 60px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #050a14 0%, #0d1630 40%, #1a2a52 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(37,61,134,0.15) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(37,61,134,0.15) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  .hero-glow {
+    position: absolute; top: 20%; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, rgba(37,61,134,0.35) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 780px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .eyebrow-line { width: 32px; height: 1px; background: var(--accent); opacity: 0.5; }
+  .hero h1 {
+    font-size: clamp(36px, 6vw, 72px);
+    line-height: 1.08; letter-spacing: -0.02em;
+    color: var(--silver); margin-bottom: 20px;
+    font-style: italic;
+  }
+  .hero h1 span { color: var(--accent); font-style: italic; }
+  .hero p { font-size: 15px; color: rgba(225,225,225,0.6); line-height: 1.7; max-width: 480px; margin: 0 auto 36px; font-weight: 400; }
+  .btn-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--primary); color: white; padding: 13px 32px; border-radius: 3px; font-size: 13px; font-weight: 700; font-family: 'DM Sans', sans-serif; }
+  .btn-secondary { border: 1px solid rgba(225,225,225,0.2); color: rgba(225,225,225,0.7); padding: 13px 32px; border-radius: 3px; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; }
+  .hero-stats { display: flex; gap: 0; margin-top: 64px; position: relative; z-index: 2; }
+  .stat { flex: 1; text-align: center; padding: 0 28px; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-val { font-family: 'Libre Baskerville', serif; font-size: 26px; font-weight: 700; color: var(--silver); display: block; }
+  .stat-lbl { font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(225,225,225,0.35); display: block; margin-top: 4px; }
+
+  /* ── SECTION HEADER ── */
+  .section-header { text-align: center; padding: 64px 32px 48px; }
+  .section-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 12px; font-family: 'DM Sans', sans-serif; }
+  .section-title { font-family: 'Libre Baskerville', serif; font-size: clamp(28px, 4vw, 44px); color: var(--silver); margin-bottom: 12px; }
+  .section-rule { width: 40px; height: 2px; background: var(--primary); margin: 0 auto; }
+
+  /* ── BLOG BLOCKS ── */
+  .blog-section { background: var(--bg2); }
+  .blog-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--border);
+  }
+  .blog-block:last-child { border-bottom: 1px solid var(--border); }
+  .img-side {
+    position: relative; overflow: hidden;
+    min-height: 320px;
+    background: var(--bg3);
+  }
+  .img-side img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+  .img-side-placeholder {
+    width: 100%; height: 100%; min-height: 320px;
+    background: linear-gradient(135deg, #1a2540 0%, #253d86 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px;
+  }
+  .img-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(37,61,134,0.4), rgba(5,10,20,0.2)); }
+  .img-caption {
+    position: absolute; bottom: 16px; left: 18px;
+    font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    background: rgba(0,0,0,0.45); padding: 3px 9px; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .text-side {
+    padding: 52px 52px;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: 14px;
+    background: var(--bg3);
+  }
+  .text-side.alt { background: #0f1622; }
+  .text-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); font-family: 'DM Sans', sans-serif; }
+  .text-title { font-family: 'Libre Baskerville', serif; font-size: 26px; color: var(--silver); line-height: 1.2; }
+  .text-body { font-size: 13px; color: rgba(225,225,225,0.55); line-height: 1.75; max-width: 380px; }
+
+  /* ── DIVERSE PLACEMENTS ── */
+  .diverse-section { background: var(--bg); padding: 0 0 72px; }
+  .diverse-inner { display: grid; grid-template-columns: 1fr 1fr; }
+  .diverse-img {
+    position: relative; overflow: hidden; min-height: 440px;
+    background: linear-gradient(160deg, #0d1630 0%, #1e2f5e 100%);
+  }
+  .diverse-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+  .diverse-img-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(5,10,20,0.2), rgba(37,61,134,0.3)); }
+  .diverse-text { padding: 60px 56px; display: flex; flex-direction: column; justify-content: center; gap: 20px; background: var(--bg2); }
+  .tracks { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .track { display: flex; align-items: baseline; gap: 12px; }
+  .track-bullet { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; }
+  .track-name { font-size: 13px; font-weight: 700; color: var(--silver); font-family: 'DM Sans', sans-serif; }
+  .track-firms { font-size: 11px; color: rgba(225,225,225,0.4); font-family: 'DM Sans', sans-serif; }
+
+  /* ── PLACEMENTS MARQUEE ── */
+  .marquee-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 56px 0; }
+  .marquee-wrap { overflow: hidden; position: relative; margin-top: 32px; }
+  .marquee-wrap::before, .marquee-wrap::after {
+    content:''; position: absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+  }
+  .marquee-wrap::before { left:0; background: linear-gradient(to right, var(--bg2), transparent); }
+  .marquee-wrap::after { right:0; background: linear-gradient(to left, var(--bg2), transparent); }
+  .marquee-track {
+    display: flex; gap: 10px;
+    animation: scroll 28s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .firm-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 18px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px; font-weight: 600;
+    color: rgba(225,225,225,0.7);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .firm-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--primary); flex-shrink: 0; }
+
+  /* ── APPLY CTA ── */
+  .apply-section {
+    background: var(--bg); padding: 96px 32px;
+    text-align: center; border-top: 1px solid var(--border);
+  }
+  .apply-section .eyebrow { justify-content: center; }
+  .apply-section h2 { font-family: 'Libre Baskerville', serif; font-size: 48px; color: var(--silver); margin: 16px 0; }
+  .apply-section p { color: rgba(225,225,225,0.45); font-size: 15px; max-width: 380px; margin: 0 auto 36px; }
+
+  /* ── PLACEHOLDER ── */
+  .ph { color: rgba(255,255,255,0.3); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'DM Sans', sans-serif; }
+  .ph-icon { font-size: 32px; opacity: 0.25; }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-logo">
+    <img src="/bfb_bear.png" alt="BFB" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+    <span style="display:none;font-family:'Libre Baskerville',serif;font-weight:700;font-size:16px;color:#e1e1e1;">BFB</span>
+  </div>
+  <div class="nav-links">
+    <span class="nav-link">Home</span>
+    <span class="nav-link">Team ▾</span>
+    <span class="nav-link">Events</span>
+    <span class="nav-link">Resources ▾</span>
+    <span class="nav-cta">Join Us</span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="eyebrow">
+      <span class="eyebrow-line"></span>
+      UCLA's Premier Finance Club
+      <span class="eyebrow-line"></span>
+    </div>
+    <h1>Forging the <span>Future</span><br>of Finance &amp; Banking</h1>
+    <p>Preparing UCLA undergraduates for elite careers in investment banking, private equity, and hedge funds through technical rigor and unmatched networking.</p>
+    <div class="btn-row">
+      <span class="btn-primary">Join the Cohort →</span>
+      <span class="btn-secondary">Explore Our Approach</span>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-val">50+</span><span class="stat-lbl">Placements</span></div>
+    <div class="stat"><span class="stat-val">100%</span><span class="stat-lbl">Commitment</span></div>
+    <div class="stat"><span class="stat-val">Top-Tier</span><span class="stat-lbl">Alumni Network</span></div>
+  </div>
+</section>
+
+<!-- COMBINED SECTION: Approach + Life at BFB -->
+<section class="blog-section">
+  <div class="section-header">
+    <span class="section-eyebrow">Our Philosophy</span>
+    <h2 class="section-title">The Approach &amp; Life at BFB</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <!-- Block 1: Education — IMG LEFT -->
+  <div class="blog-block">
+    <div class="img-side">
+      <img src="/assorted/bfb-general-meeting.jpg" alt="General Meeting" onerror="this.style.display='none'" />
+      <div class="img-overlay"></div>
+      <span class="img-caption">General Meetings</span>
+    </div>
+    <div class="text-side">
+      <div class="text-eyebrow">Technical Mastery</div>
+      <h3 class="text-title">Education</h3>
+      <p class="text-body">Our rigorous accelerator program equips members with the technical foundations of finance — from DCF modeling to complex valuation techniques — ensuring every member is career-ready from day one.</p>
+    </div>
+  </div>
+
+  <!-- Block 2: Guest Speakers — IMG RIGHT -->
+  <div class="blog-block">
+    <div class="text-side alt">
+      <div class="text-eyebrow">Elite Networking</div>
+      <h3 class="text-title">Guest Speakers</h3>
+      <p class="text-body">Direct access to industry leaders — from New York hedge funds to LA private credit firms. Our alumni speaker series bridges the gap between academic theory and professional practice.</p>
+    </div>
+    <div class="img-side">
+      <img src="/assorted/bfb-alum-speaker.jpg" alt="Alumni Speaker" onerror="this.style.display='none'" />
+      <div class="img-overlay"></div>
+      <span class="img-caption">Alumni Night</span>
+    </div>
+  </div>
+
+  <!-- Block 3: Member Projects — IMG LEFT -->
+  <div class="blog-block">
+    <div class="img-side">
+      <img src="/capstone/bfb-capstone.jpg" alt="Capstone" onerror="this.style.display='none'" />
+      <div class="img-overlay"></div>
+      <span class="img-caption">Capstone Projects</span>
+    </div>
+    <div class="text-side">
+      <div class="text-eyebrow">Applied Experience</div>
+      <h3 class="text-title">Member Projects</h3>
+      <p class="text-body">Quarterly team-based challenges including investment pitches, M&amp;A simulations, company partnerships, and quant modeling that mirror real-world institutional workflows.</p>
+    </div>
+  </div>
+
+  <!-- Block 4: Community — IMG RIGHT (placeholder) -->
+  <div class="blog-block">
+    <div class="text-side alt">
+      <div class="text-eyebrow">Work Hard, Play Hard</div>
+      <h3 class="text-title">Community</h3>
+      <p class="text-body">A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions. We believe the best teams are built on genuine relationships.</p>
+    </div>
+    <div class="img-side">
+      <img src="/group-photo/bfb-group-photo.jpg" alt="Community" onerror="this.style.display='none'" />
+      <div class="img-overlay"></div>
+      <span class="img-caption">BFB Community</span>
+    </div>
+  </div>
+</section>
+
+<!-- DIVERSE PLACEMENTS -->
+<section class="diverse-section">
+  <div class="section-header" style="padding-bottom:0;">
+    <span class="section-eyebrow">Career Tracks</span>
+    <h2 class="section-title">Diverse Placements</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="diverse-inner">
+    <div class="diverse-img">
+      <img src="/group-photo/bfb-group-photo-professional.jpg" alt="" onerror="this.style.display='none'" />
+      <div class="diverse-img-overlay"></div>
+    </div>
+    <div class="diverse-text">
+      <div class="text-eyebrow">Where We Go</div>
+      <h3 class="text-title" style="font-size:28px;">From campus to<br>every corner of finance</h3>
+      <p class="text-body" style="font-size:13px;color:rgba(225,225,225,0.55);line-height:1.75;">BFB alumni go on to some of the most competitive roles in the industry — across banking, markets, investments, and beyond.</p>
+      <div class="tracks">
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Investment Banking</span> <span class="track-firms">— Morgan Stanley · JPMorgan · Barclays · Citi</span></div>
+        </div>
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Asset Management</span> <span class="track-firms">— GIC · TCW · TPG · Almitas Capital</span></div>
+        </div>
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Sales &amp; Trading</span> <span class="track-firms">— UBS · Scotiabank · KeyBanc · Mizuho</span></div>
+        </div>
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Consulting &amp; Advisory</span> <span class="track-firms">— Deloitte · Altman Solon · Accenture · PwC</span></div>
+        </div>
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Public Finance</span> <span class="track-firms">— Federal Reserve</span></div>
+        </div>
+        <div class="track">
+          <div class="track-bullet"></div>
+          <div><span class="track-name">Private Equity</span> <span class="track-firms">— TPG · Ducera Partners</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLACEMENTS MARQUEE -->
+<section class="marquee-section">
+  <div class="section-header" style="padding: 0 32px 0;">
+    <span class="section-eyebrow">Career Outcomes</span>
+    <h2 class="section-title">Our Placements</h2>
+    <div class="section-rule"></div>
+  </div>
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="firm-chip"><span class="firm-dot"></span>Morgan Stanley</div>
+      <div class="firm-chip"><span class="firm-dot"></span>JPMorgan</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Citi</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Barclays</div>
+      <div class="firm-chip"><span class="firm-dot"></span>UBS</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Ducera Partners</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Federal Reserve</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Mizuho Financial</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Altman Solon</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Waymo</div>
+      <div class="firm-chip"><span class="firm-dot"></span>TPG</div>
+      <div class="firm-chip"><span class="firm-dot"></span>GIC</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Scotiabank</div>
+      <div class="firm-chip"><span class="firm-dot"></span>KeyBanc Capital Markets</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Almitas Capital</div>
+      <div class="firm-chip"><span class="firm-dot"></span>TCW</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Deloitte</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Lazard</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Accenture</div>
+      <div class="firm-chip"><span class="firm-dot"></span>PwC</div>
+      <div class="firm-chip"><span class="firm-dot"></span>KPMG</div>
+      <!-- duplicate for seamless loop -->
+      <div class="firm-chip"><span class="firm-dot"></span>Morgan Stanley</div>
+      <div class="firm-chip"><span class="firm-dot"></span>JPMorgan</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Citi</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Barclays</div>
+      <div class="firm-chip"><span class="firm-dot"></span>UBS</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Ducera Partners</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Federal Reserve</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Mizuho Financial</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Altman Solon</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Waymo</div>
+      <div class="firm-chip"><span class="firm-dot"></span>TPG</div>
+      <div class="firm-chip"><span class="firm-dot"></span>GIC</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Scotiabank</div>
+      <div class="firm-chip"><span class="firm-dot"></span>KeyBanc Capital Markets</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Almitas Capital</div>
+      <div class="firm-chip"><span class="firm-dot"></span>TCW</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Deloitte</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Lazard</div>
+      <div class="firm-chip"><span class="firm-dot"></span>Accenture</div>
+      <div class="firm-chip"><span class="firm-dot"></span>PwC</div>
+      <div class="firm-chip"><span class="firm-dot"></span>KPMG</div>
+    </div>
+  </div>
+</section>
+
+<!-- APPLY CTA -->
+<section class="apply-section">
+  <div class="eyebrow">Applications Open</div>
+  <h2>Join the Legacy</h2>
+  <p>We recruit the most ambitious students at UCLA. Ready to take the first step?</p>
+  <span class="btn-primary" style="display:inline-block;padding:14px 40px;font-size:14px;">Begin Application</span>
+</section>
+
+</body>
+</html>
