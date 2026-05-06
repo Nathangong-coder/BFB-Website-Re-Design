@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placements Scroll Style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0e1a; color: #e1e1e1; font-family: 'DM Sans', sans-serif; padding: 28px 22px; }
+
+  h1 { font-size: 17px; font-weight: 600; margin-bottom: 5px; }
+  .subtitle { font-size: 12px; color: #64748b; margin-bottom: 26px; }
+
+  .opt-card {
+    border: 2px solid #1e2535;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .opt-card:hover { border-color: #3a4a6b; }
+  .opt-card.selected { border-color: #5b9cd4; box-shadow: 0 0 0 3px rgba(91,156,212,0.18); }
+
+  .opt-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 18px;
+    background: #131824;
+    border-bottom: 1px solid #1e2535;
+  }
+  .opt-label { font-size: 14px; font-weight: 700; }
+  .opt-sub { font-size: 11px; color: #5b9cd4; font-weight: 500; }
+  .opt-badge { margin-left: auto; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; background: rgba(37,61,134,0.4); color: #a5b4fc; padding: 3px 9px; border-radius: 3px; }
+
+  .preview { padding: 24px 20px; background: #0d1220; }
+
+  .section-eyebrow { font-size: 9px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: #5b9cd4; margin-bottom: 8px; text-align: center; display: block; }
+  .section-title { font-family: 'Libre Baskerville', serif; font-size: 22px; text-align: center; color: #e1e1e1; margin-bottom: 20px; }
+
+  /* ── OPTION A: Infinite auto-scroll marquee ── */
+  .marquee-wrap { overflow: hidden; position: relative; }
+  .marquee-wrap::before, .marquee-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2;
+    pointer-events: none;
+  }
+  .marquee-wrap::before { left: 0; background: linear-gradient(to right, #0d1220, transparent); }
+  .marquee-wrap::after { right: 0; background: linear-gradient(to left, #0d1220, transparent); }
+
+  .marquee-track {
+    display: flex; gap: 12px;
+    animation: scroll 18s linear infinite;
+    width: max-content;
+  }
+  .marquee-track:hover { animation-play-state: paused; }
+
+  @keyframes scroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .firm-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px;
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 12px; font-weight: 600; color: rgba(225,225,225,0.75);
+    transition: border-color 0.2s;
+  }
+  .firm-dot { width: 6px; height: 6px; border-radius: 50%; background: #253d86; }
+
+  /* ── OPTION B: Two-row ticker ── */
+  .ticker-row { overflow: hidden; margin-bottom: 8px; }
+  .ticker-inner {
+    display: flex; gap: 10px;
+    animation: scroll 22s linear infinite;
+    width: max-content;
+  }
+  .ticker-row:nth-child(2) .ticker-inner { animation-direction: reverse; animation-duration: 28s; }
+  .ticker-chip {
+    padding: 6px 14px;
+    border: 1px solid rgba(37,61,134,0.5);
+    border-radius: 3px;
+    background: rgba(37,61,134,0.12);
+    font-size: 11px; font-weight: 600;
+    color: rgba(91,156,212,0.85);
+    white-space: nowrap;
+  }
+
+  /* ── OPTION C: Static logo grid ── */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+  }
+  .logo-cell {
+    background: #111827;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 4px;
+    padding: 10px 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; color: rgba(225,225,225,0.5);
+    text-align: center;
+    min-height: 44px;
+  }
+
+  #indicator {
+    display: none;
+    position: fixed; bottom: 18px; right: 18px;
+    background: #253d86; color: white;
+    font-size: 12px; font-weight: 700;
+    padding: 9px 16px; border-radius: 6px;
+  }
+
+  .pro-con { display: flex; gap: 16px; margin-top: 12px; padding: 0 4px; }
+  .pro { font-size: 10px; color: #4ade80; }
+  .con { font-size: 10px; color: #f87171; }
+</style>
+<script>
+  function select(choice) {
+    document.querySelectorAll('.opt-card').forEach(c => c.classList.remove('selected'));
+    document.querySelector(`[data-choice="${choice}"]`).classList.add('selected');
+    try { fetch('/select',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({choice})}).catch(()=>{}); } catch(e){}
+    document.getElementById('indicator').textContent = `Selected: ${choice.toUpperCase()}`;
+    document.getElementById('indicator').style.display = 'block';
+  }
+</script>
+</head>
+<body>
+
+<h1>Homepage Placements Section Style</h1>
+<p class="subtitle">Where should the placements logos live on the homepage? Three styles — click your pick.</p>
+
+<!-- OPTION A: Single-row infinite marquee -->
+<div class="opt-card" data-choice="a" onclick="select('a')">
+  <div class="opt-header">
+    <span class="opt-label">Option A</span>
+    <span class="opt-sub">Infinite Marquee</span>
+    <span class="opt-badge">Most Popular</span>
+  </div>
+  <div class="preview">
+    <span class="section-eyebrow">Career Outcomes</span>
+    <div class="section-title">Our Placements</div>
+    <div class="marquee-wrap">
+      <div class="marquee-track">
+        <!-- repeated twice for seamless loop -->
+        <div class="firm-chip"><span class="firm-dot"></span>Morgan Stanley</div>
+        <div class="firm-chip"><span class="firm-dot"></span>JPMorgan</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Citi</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Barclays</div>
+        <div class="firm-chip"><span class="firm-dot"></span>TPG</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Deloitte</div>
+        <div class="firm-chip"><span class="firm-dot"></span>GIC</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Lazard</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Federal Reserve</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Ducera Partners</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Morgan Stanley</div>
+        <div class="firm-chip"><span class="firm-dot"></span>JPMorgan</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Citi</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Barclays</div>
+        <div class="firm-chip"><span class="firm-dot"></span>TPG</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Deloitte</div>
+        <div class="firm-chip"><span class="firm-dot"></span>GIC</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Lazard</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Federal Reserve</div>
+        <div class="firm-chip"><span class="firm-dot"></span>Ducera Partners</div>
+      </div>
+    </div>
+    <div class="pro-con">
+      <span class="pro">✓ Energetic, shows volume of placements</span>
+      <span class="con">✗ Pauses on hover only</span>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION B: Two-row counter-scrolling ticker -->
+<div class="opt-card" data-choice="b" onclick="select('b')">
+  <div class="opt-header">
+    <span class="opt-label">Option B</span>
+    <span class="opt-sub">Two-Row Counter-Scroll</span>
+    <span class="opt-badge">High Impact</span>
+  </div>
+  <div class="preview">
+    <span class="section-eyebrow">Career Outcomes</span>
+    <div class="section-title">Our Placements</div>
+    <div class="ticker-row">
+      <div class="ticker-inner">
+        <span class="ticker-chip">Morgan Stanley</span><span class="ticker-chip">JPMorgan</span>
+        <span class="ticker-chip">Citi</span><span class="ticker-chip">Barclays</span>
+        <span class="ticker-chip">TPG</span><span class="ticker-chip">Deloitte</span>
+        <span class="ticker-chip">GIC</span><span class="ticker-chip">Lazard</span>
+        <span class="ticker-chip">Morgan Stanley</span><span class="ticker-chip">JPMorgan</span>
+        <span class="ticker-chip">Citi</span><span class="ticker-chip">Barclays</span>
+        <span class="ticker-chip">TPG</span><span class="ticker-chip">Deloitte</span>
+        <span class="ticker-chip">GIC</span><span class="ticker-chip">Lazard</span>
+      </div>
+    </div>
+    <div class="ticker-row">
+      <div class="ticker-inner">
+        <span class="ticker-chip">UBS</span><span class="ticker-chip">Federal Reserve</span>
+        <span class="ticker-chip">Ducera Partners</span><span class="ticker-chip">Scotiabank</span>
+        <span class="ticker-chip">TCW</span><span class="ticker-chip">PwC</span>
+        <span class="ticker-chip">KPMG</span><span class="ticker-chip">Accenture</span>
+        <span class="ticker-chip">UBS</span><span class="ticker-chip">Federal Reserve</span>
+        <span class="ticker-chip">Ducera Partners</span><span class="ticker-chip">Scotiabank</span>
+        <span class="ticker-chip">TCW</span><span class="ticker-chip">PwC</span>
+        <span class="ticker-chip">KPMG</span><span class="ticker-chip">Accenture</span>
+      </div>
+    </div>
+    <div class="pro-con">
+      <span class="pro">✓ Dramatic, shows breadth across two tracks</span>
+      <span class="con">✗ More visually busy</span>
+    </div>
+  </div>
+</div>
+
+<!-- OPTION C: Static grid of logo pills -->
+<div class="opt-card" data-choice="c" onclick="select('c')">
+  <div class="opt-header">
+    <span class="opt-label">Option C</span>
+    <span class="opt-sub">Static Logo Grid</span>
+    <span class="opt-badge">Clean &amp; Simple</span>
+  </div>
+  <div class="preview">
+    <span class="section-eyebrow">Career Outcomes</span>
+    <div class="section-title">Our Placements</div>
+    <div class="logo-grid">
+      <div class="logo-cell">Morgan Stanley</div>
+      <div class="logo-cell">JPMorgan</div>
+      <div class="logo-cell">Citi</div>
+      <div class="logo-cell">Barclays</div>
+      <div class="logo-cell">TPG</div>
+      <div class="logo-cell">Deloitte</div>
+      <div class="logo-cell">GIC</div>
+      <div class="logo-cell">Lazard</div>
+      <div class="logo-cell">Federal Reserve</div>
+      <div class="logo-cell">Ducera</div>
+      <div class="logo-cell">UBS</div>
+      <div class="logo-cell">TCW</div>
+    </div>
+    <div class="pro-con">
+      <span class="pro">✓ Easy to read, shows actual logos</span>
+      <span class="con">✗ Static, less dynamic on homepage</span>
+    </div>
+  </div>
+</div>
+
+<div id="indicator"></div>
+
+</body>
+</html>
