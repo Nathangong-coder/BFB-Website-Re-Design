@@ -76,7 +76,7 @@ export default function Team() {
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
                   onError={(e) => {
                     e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=F8FAFC&color=2774AE`;
                   }}
