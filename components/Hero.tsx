@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { fadeInUp } from "@/lib/animations";
 
 const phrases = [
   "Real Clients.",
@@ -63,9 +64,9 @@ export default function Hero() {
       {/* Text Section - Centered Overlay */}
       <div className="relative z-10 flex flex-col items-center justify-center px-6 py-12 text-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          variants={fadeInUp}
+          initial="hidden"
+          animate="visible"
           className="flex flex-col items-center gap-6"
         >
           <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/60">
