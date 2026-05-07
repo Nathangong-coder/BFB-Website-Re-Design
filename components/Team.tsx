@@ -20,19 +20,9 @@ const team = [
 export default function Team() {
   return (
     <section id="team" className="relative">
-      {/* Photo header block */}
-      <div className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-center overflow-hidden">
-        <img
-          src="/group-photo/bfb-group-photo-professional.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-midnight/75" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white dark:from-midnight to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white dark:from-midnight to-transparent" />
-
-        <div className="relative z-10 text-center px-4">
+      {/* Section header */}
+      <div className="pt-32 pb-16 flex flex-col items-center justify-center bg-white dark:bg-midnight">
+        <div className="text-center px-4">
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -45,7 +35,7 @@ export default function Team() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-serif text-silver mb-6"
+            className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-silver mb-6"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             Our Team

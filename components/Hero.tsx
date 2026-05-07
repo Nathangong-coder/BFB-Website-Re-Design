@@ -47,18 +47,18 @@ export default function Hero() {
   }, [text, deleting, idx, settled]);
 
   return (
-    <section className="relative h-[600px] flex flex-col items-center justify-center overflow-hidden pt-20 pb-8 bg-midnight">
+    <section className="relative h-[880px] flex flex-col items-center justify-center overflow-hidden pt-20 pb-8 bg-midnight">
       {/* Background Photo Section */}
       <div className="absolute inset-0 z-0">
         <img
           src="/group-photo/bfb-group-photo.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-[center_20%]"
+          className="w-full h-full object-cover object-[center_20%] opacity-40 grayscale-[0.5]"
         />
-        {/* Dark blue overlay for legibility */}
-        <div className="absolute inset-0 bg-midnight/50" />
-        <div className="absolute inset-0 bg-bfb-blue/20" />
+        {/* Dark blue overlay for maximum text pop */}
+        <div className="absolute inset-0 bg-midnight/70" />
+        <div className="absolute inset-0 bg-bfb-blue/30" />
       </div>
 
       {/* Text Section - Centered Overlay */}
@@ -67,13 +67,13 @@ export default function Hero() {
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex flex-col items-center gap-6"
+          className="flex flex-col items-center gap-10"
         >
-          <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-white/60">
+          <span className="text-xs font-bold tracking-[0.3em] uppercase text-white/60">
             UCLA&apos;s Only All-Encompassing Finance Organization
           </span>
 
-          <h1 className="text-4xl md:text-5xl font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center">
+          <h1 className="text-5xl md:text-7xl font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
             <span>{text}</span>
             {!settled && (
               <span className="ml-1 inline-block w-[3px] h-[0.8em] bg-white align-middle animate-pulse" />

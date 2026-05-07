@@ -73,13 +73,13 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/92 dark:bg-midnight/90 backdrop-blur-md border-b border-slate-100 dark:border-white/8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
+        <div className="flex justify-between h-20 items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
             <img
               src="/bfb_bear.png"
               alt="BFB Logo"
-              className="h-8 w-auto object-contain"
+              className="h-10 w-auto object-contain"
             />
           </Link>
 
@@ -93,7 +93,7 @@ export default function Navbar() {
                   onMouseEnter={() => handleMouseEnter(item.name)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <button className="text-sm text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver transition-colors py-1">
+                  <button className="text-[15px] text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver transition-colors py-1">
                     {item.name}
                   </button>
                   <AnimatePresence>
@@ -106,7 +106,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`text-sm transition-colors ${
+                  className={`text-[15px] transition-colors ${
                     pathname === item.href
                       ? "text-bfb-blue font-medium"
                       : "text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver"
@@ -123,7 +123,7 @@ export default function Navbar() {
             <ThemeToggle />
             <Link
               href="/join"
-              className="hidden md:inline-flex items-center px-5 py-2 bg-bfb-blue text-white text-sm font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
+              className="hidden md:inline-flex items-center px-5 py-2.5 bg-bfb-blue text-white text-[15px] font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
             >
               Join Us
             </Link>

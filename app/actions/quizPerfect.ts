@@ -16,7 +16,7 @@ export async function sendQuizPerfectEmail(formData: FormData) {
     console.log("Quiz perfect score submission (no email key):", { name, email, year, major, module });
     return { success: true };
   }
-
+a
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",

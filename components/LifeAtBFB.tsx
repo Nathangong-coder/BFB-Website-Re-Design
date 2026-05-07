@@ -37,6 +37,13 @@ const blocks = [
     title: "Community",
     body: "A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions. We believe the best teams are built on genuine relationships.",
   },
+  /*{
+    imageLeft: true,
+    src: "/group-photo/bfb-group-photo-professional.jpg",
+    caption: "BFB Placements",
+    title: "Diverse Placements",
+    body: "A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions. We believe the best teams are built on genuine relationships.",
+  },  */
 ] as const;
 
 export default function LifeAtBFB() {
@@ -74,7 +81,7 @@ export default function LifeAtBFB() {
       </div>
 
       {/* Blocks */}
-      <div className="max-w-[1300px] mx-auto w-full border-t border-slate-100 dark:border-white/8">
+      <div className="max-w-[1300px] mx-auto w-full flex flex-col gap-12 py-12">
         {blocks.map((block, index) => (
           <motion.div
             key={block.title}
@@ -82,7 +89,7 @@ export default function LifeAtBFB() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className={`flex flex-col border-b border-slate-100 dark:border-white/8 md:flex-row${
+            className={`flex flex-col border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden md:flex-row${
               !block.imageLeft ? " md:flex-row-reverse" : ""
             }`}
           >
@@ -110,7 +117,7 @@ export default function LifeAtBFB() {
               <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver">
                 {block.title}
               </h3>
-              <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-sm max-w-md">
+              <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-sm max-w-md whitespace-pre-line">
                 {block.body}
               </p>
             </div>
