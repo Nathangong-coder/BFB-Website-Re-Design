@@ -19,9 +19,6 @@ export default function Home() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-bfb-blue/[0.05] dark:bg-bfb-blue/[0.07] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-6">
-            Applications Open
-          </span>
           <h2
             className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
             style={{ textWrap: "balance" } as React.CSSProperties}

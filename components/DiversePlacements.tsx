@@ -35,9 +35,6 @@ export default function DiversePlacements() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="w-full md:w-1/2 px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-5 bg-white dark:bg-midnight"
         >
-          <span className="text-[9px] font-bold tracking-[0.3em] uppercase text-[var(--accent)]">
-            Career Tracks
-          </span>
           <h2
             className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-silver leading-tight"
             style={{ textWrap: "balance" } as React.CSSProperties}
