@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { fadeInUp } from "@/lib/animations";
 
 const blocks = [
   {
@@ -44,25 +45,28 @@ export default function LifeAtBFB() {
       {/* Section header */}
       <div className="py-16 px-4 text-center">
         <motion.span
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
           className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
         >
           Our Philosophy
         </motion.span>
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
           className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
           style={{ textWrap: "balance" } as React.CSSProperties}
         >
-          The Approach &amp; Life at BFB
+          The BFB Approach
         </motion.h2>
         <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
           className="h-0.5 w-10 bg-[var(--bfb-blue)] mx-auto"
@@ -70,20 +74,20 @@ export default function LifeAtBFB() {
       </div>
 
       {/* Blocks */}
-      <div className="border-t border-slate-100 dark:border-white/8">
+      <div className="max-w-[1300px] mx-auto w-full border-t border-slate-100 dark:border-white/8">
         {blocks.map((block, index) => (
           <motion.div
             key={block.title}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className={`flex flex-col border-b border-slate-100 dark:border-white/8 md:flex-row${
               !block.imageLeft ? " md:flex-row-reverse" : ""
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full md:w-1/2 min-h-[240px] md:min-h-[360px] overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[60%] min-h-[240px] md:min-h-[500px] overflow-hidden flex-shrink-0">
               <img
                 src={block.src}
                 alt={block.caption}
@@ -97,15 +101,12 @@ export default function LifeAtBFB() {
 
             {/* Text half */}
             <div
-              className={`w-full md:w-1/2 px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-4 ${
+              className={`w-full md:w-[40%] px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-4 ${
                 index % 2 !== 0
-                  ? "bg-slate-50 dark:bg-[#0f1622]"
+                  ? "bg-slate-50 dark:bg-bg-secondary"
                   : "bg-white dark:bg-midnight"
               }`}
             >
-              <div className="text-[9px] font-bold tracking-[0.25em] uppercase text-[var(--accent)]">
-                {block.eyebrow}
-              </div>
               <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver">
                 {block.title}
               </h3>
