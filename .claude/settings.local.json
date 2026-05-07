@@ -26,7 +26,11 @@
       "Bash(curl -s http://localhost:3000)",
       "Bash(Remove-Item \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\components\\\\Approach.tsx\" -Force)",
       "Bash(Remove-Item \"C:\\\\Users\\\\nagon\\\\OneDrive\\\\Documents\\\\Coding\\\\BFB Website Re-Design\\\\components\\\\Events.tsx\" -Force)",
-      "Bash(Write-Output \"Deleted\")"
+      "Bash(Write-Output \"Deleted\")",
+      "Bash(npx tsc *)",
+      "Bash(where browser-use *)",
+      "Bash(browser-use screenshot *)",
+      "Bash(git commit *)"
     ]
   }
 }

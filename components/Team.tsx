@@ -20,19 +20,9 @@ const team = [
 export default function Team() {
   return (
     <section id="team" className="relative">
-      {/* Photo header block */}
-      <div className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-center overflow-hidden">
-        <img
-          src="/group-photo/bfb-group-photo-professional.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-midnight/75" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white dark:from-midnight to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white dark:from-midnight to-transparent" />
-
-        <div className="relative z-10 text-center px-4">
+      {/* Section header */}
+      <div className="pt-32 pb-16 flex flex-col items-center justify-center bg-white dark:bg-midnight">
+        <div className="text-center px-4">
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -45,10 +35,10 @@ export default function Team() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-serif text-silver mb-6"
+            className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-silver mb-6"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
-            Our Team
+            Executive Board
           </motion.h2>
           <motion.div
             initial={{ opacity: 0, scaleX: 0 }}
@@ -72,34 +62,26 @@ export default function Team() {
               transition={{ delay: index * 0.07, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="group relative bg-white dark:bg-glass border border-slate-200 dark:border-white/8 p-5 rounded-sm hover:border-bfb-blue/40 dark:hover:border-bfb-blue/30 shadow-sm dark:shadow-none transition-all duration-300"
             >
-              <div className="aspect-square mb-5 overflow-hidden rounded-sm border border-slate-100 dark:border-white/8">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
-                  onError={(e) => {
-                    e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=F8FAFC&color=2774AE`;
-                  }}
-                />
-              </div>
-              <h3 className="text-base font-serif text-slate-900 dark:text-silver mb-1">{member.name}</h3>
-              <p className="text-bfb-blue text-[10px] font-bold uppercase tracking-[0.15em] mb-4 leading-snug">
-                {member.role}
-              </p>
-
               <a
                 href={member.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${member.name} on LinkedIn`}
-                className="inline-flex items-center gap-2 text-slate-400 dark:text-silver/40 hover:text-bfb-blue transition-colors text-xs font-medium"
+                className="block h-full w-full"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                  <rect x="2" y="9" width="4" height="12" />
-                  <circle cx="4" cy="4" r="2" />
-                </svg>
-                Connect
+                <div className="aspect-square mb-5 overflow-hidden rounded-sm border border-slate-100 dark:border-white/8">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=F8FAFC&color=2774AE`;
+                    }}
+                  />
+                </div>
+                <h3 className="text-base font-serif text-slate-900 dark:text-silver mb-1">{member.name}</h3>
+                <p className="text-bfb-blue text-[10px] font-bold uppercase tracking-[0.15em] mb-4 leading-snug">
+                  {member.role}
+                </p>
               </a>
             </motion.div>
           ))}
