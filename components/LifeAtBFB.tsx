@@ -31,7 +31,7 @@ const blocks = [
   },
   {
     imageLeft: false,
-    src: "/group-photo/bfb-group-photo.jpg",
+    src: "/group-photo/joshua-tree-social.jpeg",
     caption: "BFB Community",
     eyebrow: "Work Hard, Play Hard",
     title: "Community",

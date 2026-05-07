@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
       { name: "Placements", href: "/placements" },
     ],
   },
+  { name: "Clients", href: "/clients" },
   { name: "Events", href: "/events" },
   {
     name: "Resources",

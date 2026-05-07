@@ -30,7 +30,9 @@
       "Bash(npx tsc *)",
       "Bash(where browser-use *)",
       "Bash(browser-use screenshot *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(dir /s /b public)",
+      "Bash(findstr /i \"joshua\")"
     ]
   }
 }
