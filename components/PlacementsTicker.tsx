@@ -70,7 +70,7 @@ export default function PlacementsTicker() {
           {doubled.map((firm, i) => (
             <div
               key={i}
-              className="flex items-center justify-center w-32 h-16 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-2 transition-transform duration-300 hover:scale-105"
+              className="flex items-center justify-center w-48 h-24 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-3 transition-transform duration-300 hover:scale-105"
             >
               <img
                 src={logoMap[firm]}

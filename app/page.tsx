@@ -23,17 +23,25 @@ export default function Home() {
             className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
-            Join the Legacy
+            Interested?
           </h2>
           <p className="text-slate-500 dark:text-silver/50 text-lg mb-12 max-w-md mx-auto leading-relaxed font-light">
-            We recruit the most ambitious students at UCLA. Ready to take the first step?
+            Whether you’re a student passionate about making real-world impact or a business looking to harness new opportunities, we’d love to learn more about you!
           </p>
-          <Link
-            href="/join"
-            className="inline-block px-12 py-5 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20"
-          >
-            Begin Application
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/join"
+              className="inline-block px-12 py-5 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20 w-full sm:w-auto"
+            >
+              Students
+            </Link>
+            <Link
+              href="/clients"
+              className="inline-block px-12 py-5 border border-bfb-blue text-bfb-blue dark:text-gold font-bold rounded-sm hover:bg-bfb-blue/5 dark:hover:bg-gold/5 transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
+            >
+              Clients
+            </Link>
+          </div>
         </div>
       </section>
     </div>

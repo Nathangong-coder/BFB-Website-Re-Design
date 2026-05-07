@@ -7,10 +7,12 @@ interface TrainingState {
   score: number;
   quizStatus: "idle" | "active" | "completed";
   answers: Record<string, number>;
+  timeLeft: number;
 
   startModule: (module: Module) => void;
   submitAnswer: (questionId: string, answerIndex: number) => void;
   nextQuestion: () => void;
+  tickTimer: () => void;
   resetQuiz: () => void;
 }
 
@@ -29,15 +31,17 @@ export const useTrainingStore = create<TrainingState>((set) => ({
   score: 0,
   quizStatus: "idle",
   answers: {},
+  timeLeft: 120,
 
   startModule: (module) => {
-    const selected = pickRandom(module.questions, 5);
+    const selected = pickRandom(module.questions, 10);
     set({
       currentModule: { ...module, questions: selected },
       currentQuestionIndex: 0,
       score: 0,
       quizStatus: "active",
       answers: {},
+      timeLeft: 120,
     });
   },
 
@@ -59,6 +63,17 @@ export const useTrainingStore = create<TrainingState>((set) => ({
     };
   }),
 
+  tickTimer: () => set((state) => {
+    const newTime = state.timeLeft - 1;
+    if (newTime <= 0 && state.quizStatus === "active") {
+      return {
+        timeLeft: 0,
+        quizStatus: "completed",
+      };
+    }
+    return { timeLeft: newTime };
+  }),
+
   resetQuiz: () => {
     set({
       currentModule: null,
@@ -66,6 +81,7 @@ export const useTrainingStore = create<TrainingState>((set) => ({
       score: 0,
       quizStatus: "idle",
       answers: {},
+      timeLeft: 120,
     });
   },
 }));

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrainingStore } from "@/lib/store";
 import { FINANCE_MODULES } from "@/lib/questions";
-import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle } from "lucide-react";
+import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle, Timer } from "lucide-react";
 import Link from "next/link";
 import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
 
@@ -36,9 +36,9 @@ function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 mb-6">
           <CheckCircle size={32} className="text-green-500" />
         </div>
-        <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">We&apos;ll Be in Touch</h2>
+        <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">Records Updated</h2>
         <p className="text-slate-500 dark:text-silver/60 mb-10 leading-relaxed">
-          Your information has been saved in our database. Congratulations again on your perfect score!
+          Your information has been saved in our records. Congratulations again on your perfect score!
         </p>
         <button
           onClick={onReset}
@@ -65,7 +65,7 @@ function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset
         </h2>
         <p className="text-slate-500 dark:text-silver/60 text-sm leading-relaxed max-w-sm mx-auto">
           You aced the <span className="font-semibold text-slate-700 dark:text-silver">{moduleName}</span> module.
-          Share your info and our team will reach out.
+          Please share your info so we can save it in our records.
         </p>
       </div>
 
@@ -155,11 +155,28 @@ export default function TrainingPage() {
     score,
     quizStatus,
     answers,
+    timeLeft,
     startModule,
     submitAnswer,
     nextQuestion,
+    tickTimer,
     resetQuiz,
   } = useTrainingStore();
+
+  useEffect(() => {
+    if (quizStatus === "active") {
+      const timer = setInterval(() => {
+        tickTimer();
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [quizStatus, tickTimer]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   // 1. Module selection
   if (quizStatus === "idle") {
@@ -173,8 +190,7 @@ export default function TrainingPage() {
 
           <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h1>
           <p className="text-slate-500 dark:text-silver/60 text-lg mb-12 max-w-2xl">
-            Select a module to test your technical proficiency. 5 questions are chosen at random from a pool of 50.
-            A perfect score gets you in touch with our team.
+            Select a module to test your technical proficiency.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -221,8 +237,14 @@ export default function TrainingPage() {
               <Terminal size={20} />
               <span className="text-xs font-bold tracking-widest uppercase text-slate-600 dark:text-gold">{currentModule.title}</span>
             </div>
-            <div className="text-slate-400 dark:text-silver/40 text-xs font-mono">
-              Question {currentQuestionIndex + 1} of {currentModule.questions.length}
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 text-slate-400 dark:text-silver/40 text-xs font-mono">
+                <Timer size={14} />
+                <span>{formatTime(timeLeft)}</span>
+              </div>
+              <div className="text-slate-400 dark:text-silver/40 text-xs font-mono">
+                Question {currentQuestionIndex + 1} of {currentModule.questions.length}
+              </div>
             </div>
           </div>
 
@@ -295,8 +317,8 @@ export default function TrainingPage() {
                   <div
                     className={`flex items-center gap-2 text-xs font-bold uppercase tracking-widest mb-3 ${
                       isAnswerCorrect
-                        ? "text-green-700 dark:text-green-400"
-                        : "text-red-600 dark:text-red-400"
+                      ? "text-green-700 dark:text-green-400"
+                      : "text-red-600 dark:text-red-400"
                     }`}
                   >
                     <BookOpen size={14} />
@@ -361,7 +383,7 @@ export default function TrainingPage() {
             </p>
 
             <p className="text-slate-600 dark:text-silver/80 mb-12 leading-relaxed text-sm">
-              You need a perfect 5/5 to unlock the next step. Review the explanations and try again — you&apos;ve got this.
+              You need a perfect 10/10 to unlock the next step. Review the explanations and try again — you&apos;ve got this.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
