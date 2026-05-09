@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { fadeInUp } from "@/lib/animations";
+import { SpeakerSlideshow } from "./SpeakerSlideshow";
 
 const blocks = [
   {
@@ -15,7 +16,10 @@ const blocks = [
   },
   {
     imageLeft: false,
-    src: "/assorted/bfb-alum-speaker.jpg",
+    images: [
+      "/speakers/Horizontal Anderson Speaker Photo.jpeg",
+      "/speakers/jpm speaker.jpeg",
+    ],
     caption: "Alumni Night",
     eyebrow: "Elite Networking",
     title: "Guest Speakers",
@@ -35,7 +39,7 @@ const blocks = [
     caption: "BFB Community",
     eyebrow: "Work Hard, Play Hard",
     title: "Community",
-    body: "A tight-knit group that extends beyond the boardroom — from retreat weekends to big/little traditions. We believe the best teams are built on genuine relationships.",
+    body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. This spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we aim to create an environment where mentorship happens naturally and friendships run deep.\n\nOur goal isn't to just simply prepare you for the future of the industry; we are trying to build a lifelong community where every member has the support, confidence, and connection to thrive.",
   },
   /*{
     imageLeft: true,
@@ -95,12 +99,18 @@ export default function LifeAtBFB() {
           >
             {/* Image half */}
             <div className="relative w-full md:w-[60%] min-h-[240px] md:min-h-[500px] overflow-hidden flex-shrink-0">
-              <img
-                src={block.src}
-                alt={block.caption}
-                className="absolute inset-0 w-full h-full object-cover opacity-80"
-              />
-              <div className="absolute inset-0 bg-midnight/40" />
+              {block.title === "Guest Speakers" ? (
+                <SpeakerSlideshow images={(block as any).images} />
+              ) : (
+                <>
+                  <img
+                    src={block.src}
+                    alt={block.caption}
+                    className="absolute inset-0 w-full h-full object-cover opacity-80"
+                  />
+                  <div className="absolute inset-0 bg-midnight/40" />
+                </>
+              )}
               <span className="absolute bottom-4 left-4 text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 bg-black/40 px-2 py-1 rounded-sm">
                 {block.caption}
               </span>
