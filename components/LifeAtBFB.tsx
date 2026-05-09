@@ -99,8 +99,8 @@ export default function LifeAtBFB() {
           >
             {/* Image half */}
             <div className="relative w-full md:w-[60%] min-h-[240px] md:min-h-[500px] overflow-hidden flex-shrink-0">
-              {block.title === "Guest Speakers" ? (
-                <SpeakerSlideshow images={(block as any).images} />
+              {"images" in block ? (
+                <SpeakerSlideshow images={block.images} />
               ) : (
                 <>
                   <img
