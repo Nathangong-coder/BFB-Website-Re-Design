@@ -34,8 +34,8 @@ export default function DiversePlacements() {
             {/* Text half */}
             <motion.div
               variants={fadeInUp}
-              initial="initial"
-              whileInView="animate"
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
               className="w-full md:w-[40%] px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-5 bg-white dark:bg-midnight"
             >
@@ -53,7 +53,7 @@ export default function DiversePlacements() {
               <ul className="flex flex-col gap-3 mt-1">
                 {tracks.map((track) => (
                   <li key={track.name} className="flex items-start gap-3">
-                    <span className="mt-[7px] w-[5px] h-[5px] rounded-full bg-[var(--accent)] flex-shrink-0" />
+                    <span className="mt-[7px] w-[5px] h-[5px] rounded-full bg-accent flex-shrink-0" />
                     <span>
                       <span className="text-sm font-semibold text-slate-900 dark:text-silver">
                         {track.name}
