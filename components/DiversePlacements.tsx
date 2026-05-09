@@ -14,7 +14,7 @@ const tracks = [
 
 export default function DiversePlacements() {
   return (
-    <section className="bg-slate-50 dark:bg-[#080C18] border-t border-slate-100 dark:border-white/8">
+    <section className="bg-white dark:bg-midnight border-t border-slate-100 dark:border-white/8">
       <div className="max-w-[1300px] mx-auto w-full py-12 px-4 sm:px-6 lg:px-8">
         <div className="border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden bg-white dark:bg-midnight">
           <div className="flex flex-col md:flex-row">
