@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { fadeInUp } from "@/lib/animations";
 
 const tracks = [
   { name: "Investment Banking", firms: "Morgan Stanley · JPMorgan · Barclays · Citi" },
@@ -14,27 +15,29 @@ const tracks = [
 
 export default function DiversePlacements() {
   return (
-    <section className="bg-white dark:bg-midnight border-t border-slate-100 dark:border-white/8">
+    <section className="bg-white dark:bg-midnight border-t border-slate-100 dark:border-white/10">
       <div className="max-w-[1300px] mx-auto w-full py-12 px-4 sm:px-6 lg:px-8">
         <div className="border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden bg-white dark:bg-midnight">
           <div className="flex flex-col md:flex-row">
             {/* Image half */}
-            <div className="relative w-full md:w-1/2 min-h-[300px] md:min-h-[460px] overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[60%] min-h-[300px] md:min-h-[460px] overflow-hidden flex-shrink-0">
               <img
                 src="/group-photo/bfb-group-photo-professional.jpg"
                 alt=""
                 aria-hidden="true"
                 className="absolute inset-0 w-full h-full object-cover object-top opacity-75"
               />
+              <div className="absolute inset-0 bg-midnight/40" />
+              <span className="absolute bottom-4 left-4 text-[9px] font-bold tracking-[0.2em] uppercase text-white/50 bg-black/40 px-2 py-1 rounded-sm">Our Network</span>
             </div>
 
             {/* Text half */}
             <motion.div
-              initial={{ opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              variants={fadeInUp}
+              initial="initial"
+              whileInView="animate"
               viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full md:w-1/2 px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-5 bg-white dark:bg-midnight"
+              className="w-full md:w-[40%] px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-5 bg-white dark:bg-midnight"
             >
               <div className="max-w-md mx-auto md:mx-0">
                 <h2
