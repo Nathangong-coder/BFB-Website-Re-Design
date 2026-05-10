@@ -20,7 +20,7 @@ export default function DiversePlacements() {
         <div className="border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden bg-white dark:bg-midnight">
           <div className="flex flex-col md:flex-row">
             {/* Image half */}
-            <div className="relative w-full md:w-[60%] min-h-[300px] md:min-h-[460px] overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[60%] min-h-[400px] md:min-h-[600px] overflow-hidden flex-shrink-0">
               <img
                 src="/group-photo/bfb-group-photo-professional.jpg"
                 alt=""
@@ -41,15 +41,58 @@ export default function DiversePlacements() {
             >
               <div className="max-w-md mx-auto md:mx-0">
                 <h2
-                  className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-silver leading-tight"
+                  className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver leading-tight"
                   style={{ textWrap: "balance" } as React.CSSProperties}
                 >
                   Diverse Placements
                 </h2>
               </div>
-              <p className="text-slate-500 dark:text-silver/50 text-sm font-light leading-relaxed max-w-sm">
+              <p className="text-slate-500 dark:text-silver/50 text-base font-light leading-relaxed max-w-sm">
                 BFB alumni go on to some of the most competitive roles in the industry — across banking, markets, investments, and beyond.
               </p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               <ul className="flex flex-col gap-3 mt-1">
                 {tracks.map((track) => (
                   <li key={track.name} className="flex items-start gap-3">

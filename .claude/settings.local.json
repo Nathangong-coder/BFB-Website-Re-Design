@@ -32,7 +32,17 @@
       "Bash(browser-use screenshot *)",
       "Bash(git commit *)",
       "Bash(dir /s /b public)",
-      "Bash(findstr /i \"joshua\")"
+      "Bash(findstr /i \"joshua\")",
+      "Skill(agent-browser)",
+      "PowerShell(agent-browser *)",
+      "Bash(npm i *)",
+      "Bash(agent-browser install *)",
+      "Bash(agent-browser skills *)",
+      "PowerShell(npm run *)",
+      "Bash(agent-browser open *)",
+      "Bash(agent-browser screenshot *)",
+      "Bash(agent-browser snapshot *)",
+      "Bash(agent-browser scroll *)"
     ]
   }
 }
