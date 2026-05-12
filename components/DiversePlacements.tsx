@@ -15,12 +15,12 @@ const tracks = [
 
 export default function DiversePlacements() {
   return (
-    <section className="bg-white dark:bg-midnight border-t border-slate-100 dark:border-white/10">
-      <div className="max-w-[1300px] mx-auto w-full py-12 px-4 sm:px-6 lg:px-8">
-        <div className="border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden bg-white dark:bg-midnight">
-          <div className="flex flex-col md:flex-row">
+    <section className="bg-white dark:bg-midnight">
+      <div className="max-w-[1300px] mx-auto w-full px-4">
+        <div className="overflow-hidden">
+          <div className="flex flex-col md:flex-row border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden">
             {/* Image half */}
-            <div className="relative w-full md:w-[60%] min-h-[400px] md:min-h-[600px] overflow-hidden flex-shrink-0">
+            <div className="relative w-full md:w-[60%] min-h-[240px] md:min-h-[500px] overflow-hidden flex-shrink-0">
               <img
                 src="/group-photo/bfb-group-photo-professional.jpg"
                 alt=""
@@ -100,9 +100,6 @@ export default function DiversePlacements() {
                     <span>
                       <span className="text-sm font-semibold text-slate-900 dark:text-silver">
                         {track.name}
-                      </span>
-                      <span className="text-xs text-slate-400 dark:text-silver/40">
-                        {" "}{track.firms}
                       </span>
                     </span>
                   </li>

@@ -5,55 +5,94 @@ import { motion } from "framer-motion";
 
 // Year assignments based on bfbatucla.com groupings (2026: 10, 2025: 12, 2024: 6).
 // Verify and reorder within each year array as needed.
-const placementsByYear: Record<number, { name: string; filename: string }[]> = {
+const placementsByYear: Record<number, { name: string; member: string; industry: string; group: string; filename: string; type: "full-time" | "internship"; location: string }[]> = {
   2026: [
-    { name: "Morgan Stanley", filename: "morgan stanley.jpg" },
-    { name: "Citi", filename: "citi.jpg" },
-    { name: "Barclays", filename: "barclays.jpg" },
-    {name: "UBS", filename: "ubs.jpg"},
-    { name: "Ducera Partners", filename: "ducera.jpg" },
-    { name: "Federal Reserve", filename: "fed reserve.jpg" },
-    { name: "Mizuhoki Financial Group", filename: "mizuho.jpg" },
-    { name: "Altman Solon", filename: "altman solon.jpg" },
-    { name: "Waymo", filename: "waymo.jpg" },
-    { name: "Siemens Healthineers", filename: "siemens healthineers.jpg" },
+    { name: "Mizuho", member: "Jack Ren", industry: "Finance", group: "Investment Banking", filename: "mizuho.jpg", type: "full-time", location: "TBD" },
+    { name: "Federal Reserve", member: "Jordan Lee", industry: "Economics", group: "Research", filename: "fed reserve.jpg", type: "full-time", location: "New York, NY" },
+    { name: "UBS", member: "Miguel Quinones", industry: "Finance", group: "Investment Banking", filename: "ubs.jpg", type: "full-time", location: "New York, NY" },
+    { name: "World Bank Group", member: "Zachary Pelikh", industry: "Finance", group: "Development", filename: "world-bank-group.webp", type: "internship", location: "Los Angeles, CA" },
+    { name: "Google", member: "Harris Song", industry: "Tech", group: "Software Engineering", filename: "google.webp", type: "internship", location: "TBD" },
+    { name: "Accenture", member: "Nams Doan", industry: "Consulting", group: "Consulting", filename: "accenture.jpg", type: "internship", location: "TBD" },
+    { name: "BMO Capital Markets", member: "Jenaro Rodriguez", industry: "Finance", group: "Investment Banking", filename: "bmo.jpg", type: "internship", location: "New York, NY" },
+    { name: "Amazon", member: "Alain Izawa", industry: "Tech", group: "Product Management", filename: "Amazon.png", type: "internship", location: "TBD" },
+    { name: "Siemens Healthineers", member: "Kareina Zhao", industry: "Healthcare", group: "Financial Development", filename: "siemens healthineers.jpg", type: "internship", location: "TBD" },
+    { name: "Barclays", member: "Ashley Hinkel", industry: "Finance", group: "Sales & Trading", filename: "barclays.jpg", type: "internship", location: "TBD" },
+    { name: "Waymo", member: "Henry McNamara", industry: "Tech", group: "Software Engineering", filename: "waymo.jpg", type: "internship", location: "TBD" },
   ],
   2025: [
-    { name: "Morgan Stanley", filename: "morgan stanley.jpg" },
-    { name: "Citi", filename: "citi.jpg" },
-    { name: "JPMorgan", filename: "jpmorgan.jpg" },
-    { name: "Scotiabank", filename: "scotiabank.jpg" },
-    { name: "Barclays", filename: "barclays.jpg" },
-    { name: "KeyBanc Capital Markets", filename: "keybanc capital markets.jpg" },
-    { name: "GIC", filename: "gic.jpg" },
-    { name: "TPG", filename: "tpg.jpg" },
-    { name: "Almitas Capital", filename: "almitas capital.jpg" },
-    { name: "TCW", filename: "tcw.jpg" },
-    { name: "Federal Reserve", filename: "fed reserve.jpg" },
-    { name: "Deloitte", filename: "deloitte.jpg" },
+    { name: "JP Morgan Chase", member: "Charlotte Humphreys", industry: "Finance", group: "Risk Management", filename: "jp morgan.jpg", type: "full-time", location: "Newark, Delaware" },
+    { name: "Charles Schwab", member: "Luke Garlick", industry: "Finance", group: "FP&A", filename: "charles-schwab.webp", type: "full-time", location: "Phoenix, AZ" },
+    { name: "Deloitte", member: "Kartik Parab", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "full-time", location: "Los Angeles, CA" },
+    { name: "Georgia Tech", member: "Michael Thompson", industry: "Education", group: "Academic", filename: "georgia-tech.jpg", type: "full-time", location: "Atlanta, GA" },
+    { name: "Hilltop", member: "Oriana Van Den Handel", industry: "Finance", group: "Investment Banking", filename: "hilltop.png", type: "full-time", location: "Austin, TX" },
+    { name: "Imperial College London", member: "Francesca Moulds", industry: "Education", group: "Academic", filename: "imperial-college.jpg", type: "full-time", location: "London, England" },
+    { name: "JP Morgan", member: "Christopher Dolak", industry: "Finance", group: "Investment Banking", filename: "jp morgan.jpg", type: "full-time", location: "New York, NY" },
+    { name: "JP Morgan", member: "Katelyn Pool", industry: "Finance", group: "Commercial Banking", filename: "jp morgan.jpg", type: "full-time", location: "New York, NY" },
+    { name: "Deloitte", member: "Gursahil Sran", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "full-time", location: "Los Angeles, CA" },
+    { name: "TCW", member: "Kyle Jurkowski", industry: "Finance", group: "Fixed Income", filename: "tcw.jpg", type: "full-time", location: "Los Angeles, CA" },
+    { name: "Carollo", member: "Saksham Makin", industry: "Finance", group: "Investment Banking", filename: "carollo.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "Federal Reserve of New York", member: "Jordan Lee", industry: "Economics", group: "Economics Research", filename: "fed reserve.jpg", type: "internship", location: "New York, NY" },
+    { name: "Stifel", member: "Alan Whitmoyer", industry: "Finance", group: "Wealth Management", filename: "stifel.jpg", type: "internship", location: "Brookfield, WI" },
+    { name: "Deloitte", member: "Heschel Fernando", industry: "Finance", group: "Investment Banking", filename: "deloitte.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "Rivian", member: "Yulia Anashkina", industry: "Tech", group: "Software Engineering", filename: "rivian.webp", type: "internship", location: "Palo Alto, CA" },
+    { name: "Scotiabank", member: "Jack Ren", industry: "Finance", group: "Corporate Banking", filename: "scotiabank.jpg", type: "internship", location: "New York, NY" },
+    { name: "HCVT", member: "Richard Tucholski", industry: "Finance", group: "Investment Banking", filename: "hcvt.png", type: "internship", location: "Los Angeles, CA" },
+    { name: "PwC", member: "Richard Tucholski", industry: "Finance", group: "Deal Analytics", filename: "pwc.jpg", type: "internship", location: "San Francisco, CA" },
+    { name: "GIC", member: "Joanna Zhang", industry: "Finance", group: "Private Credit", filename: "gic.jpg", type: "internship", location: "Singapore" },
+    { name: "Barclays", member: "Nandini Singh", industry: "Finance", group: "Investment Banking", filename: "barclays.jpg", type: "internship", location: "New York, NY" },
+    { name: "TCW", member: "Shveenita Kanapathy", industry: "Finance", group: "Fixed Income", filename: "tcw.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "Hyundai", member: "Megan Nakasone", industry: "Automotive", group: "Product Planning", filename: "hyundai.webp", type: "internship", location: "TBD" },
+    { name: "Citi", member: "Maria Bozhkova", industry: "Finance", group: "Investment Banking", filename: "citi.jpg", type: "internship", location: "New York, NY" },
+    { name: "LinkedIn", member: "Lucie Plantevin", industry: "Tech", group: "Product Strategy", filename: "LinkedIn.png", type: "internship", location: "Sunnyvale, CA" },
+    { name: "First Capital Securities", member: "Kareina Zhao", industry: "Finance", group: "Asset Management", filename: "first-capital-securities.webp", type: "internship", location: "Shenzhen, CN" },
   ],
   2024: [
-    { name: "morgan stanley", filename: "morgan stanley.jpg" },
-    { name: "jpmc", filename: "jpmc.jpg" },
-    { name: "lazard", filename: "lazard.jpg" },
-    { name: "bmo", filename: "bmo.jpg" },
-    { name: "deloitte", filename: "deloitte.jpg" },
-    { name: "stifel", filename: "stifel.jpg" },
-    { name: "accenture", filename: "accenture.jpg" },
-    { name: "kpmg", filename: "kpmg.jpg" },
-    { name: "pwc", filename: "pwc.jpg" },
-    { name: "adobe", filename: "adobe.jpg" },
-    { name: "hp", filename: "hp.jpg" },
-    { name: "lockton", filename: "lockton.jpg" },
+    { name: "JP Morgan", member: "Natalie Smith", industry: "Finance", group: "Commercial Banking", filename: "jp morgan.jpg", type: "full-time", location: "Houston, TX" },
+    { name: "Max Banjamin Partners", member: "Sanjum Dhaliwal", industry: "Real Estate", group: "Investment", filename: "MBP Partners.webp", type: "full-time", location: "Los Angeles, CA" },
+    { name: "IEQ Capital", member: "Adit Gorawara", industry: "Finance", group: "Research", filename: "ieq capital.jpg", type: "full-time", location: "Foster City, CA" },
+    { name: "Morgan Stanley", member: "Kalani Seymore", industry: "Finance", group: "S&T", filename: "morgan stanley.jpg", type: "full-time", location: "New York, NY" },
+    { name: "BMO", member: "Joanna Zhang", industry: "Finance", group: "Investment", filename: "bmo.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "KPMG", member: "Saksham Makin", industry: "Consulting", group: "Strategy", filename: "kpmg.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "Clifford Swan", member: "Luke Garlick", industry: "Finance", group: "Wealth Management", filename: "clifford swan.jpg", type: "internship", location: "Pasadena, CA" },
+    { name: "Deloitte", member: "Kartik Parab", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "Stifel", member: "Michael Thompson", industry: "Finance", group: "Investment Banking", filename: "stifel.jpg", type: "internship", location: "Century City, CA" },
+    { name: "Piper Sandler", member: "Oriana Van Den Handel", industry: "Finance", group: "Public Finance", filename: "piper-sandler.webp", type: "internship", location: "Minneapolis, MN" },
+    { name: "Avalerian Capital", member: "Francesca Moulds", industry: "Finance", group: "Private Equity", filename: "avalerian capital.jpg", type: "internship", location: "Remote" },
+    { name: "The O'Hagan Group", member: "Charlotte Humphreys", industry: "Finance", group: "Wealth Management", filename: "ohagan group.jpg", type: "internship", location: "Bethlehem, PA" },
+    { name: "JP Morgan", member: "Christopher Dolak", industry: "Finance", group: "Investment Banking", filename: "jp morgan.jpg", type: "internship", location: "New York, NY" },
+    { name: "City National Bank", member: "Abel Mengistu", industry: "Finance", group: "FP&A", filename: "city-national-bank.png", type: "internship", location: "Los Angeles, CA" },
+    { name: "Pimco", member: "Kyle Jurkowski", industry: "Finance", group: "Wealth Management", filename: "pimco.png", type: "internship", location: "Newport Beach, CA" },
+    { name: "Deloitte", member: "Jacob Schultz", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "internship", location: "Los Angeles, CA" },
+    { name: "JP Morgan", member: "Gursahil Sran", industry: "Finance", group: "Commercial Banking", filename: "jpmorgan.jpg", type: "internship", location: "New York, NY" },
+    { name: "PWC", member: "Katelyn Pool", industry: "Finance", group: "Accounting", filename: "pwc.jpg", type: "internship", location: "Santa Cruz, Bolivia" },
   ],
 };
+
+const Switch = ({ viewMode, setViewMode }: { viewMode: "grid" | "list"; setViewMode: (mode: "grid" | "list") => void }) => (
+  <div className="flex items-center gap-3">
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-bfb-blue' : 'text-slate-400'}`}>Logos</span>
+    <button
+      onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
+      className="w-12 h-6 bg-slate-200 dark:bg-white/10 rounded-full relative transition-colors focus:outline-none"
+    >
+      <div className={`absolute top-1 w-4 h-4 bg-white dark:bg-silver rounded-full shadow transition-all duration-300 ${viewMode === 'list' ? 'left-7' : 'left-1'}`} />
+    </button>
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'list' ? 'text-bfb-blue' : 'text-slate-400'}`}>Spreadsheet</span>
+  </div>
+);
 
 const years = [2026, 2025, 2024];
 
 export default function Placements() {
   const [activeYear, setActiveYear] = useState<number | "all">("all");
+  const [activeType, setActiveType] = useState<"all" | "full-time" | "internship">("all");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   const displayYears = activeYear === "all" ? years : [activeYear as number];
+
+  const getFilteredPlacements = (year: number) => {
+    return placementsByYear[year].filter((p) => activeType === "all" || p.type === activeType);
+  };
 
   return (
     <section id="placements" className="relative">
@@ -97,86 +136,120 @@ export default function Placements() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="bg-white dark:bg-midnight pt-16 pb-28 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-
-          {/* Year filter tabs */}
-          <div className="flex justify-center gap-2 mb-16">
-            <button
-              onClick={() => setActiveYear("all")}
-              className={`px-5 py-2 rounded-sm text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-200 border ${
-                activeYear === "all"
-                  ? "bg-bfb-blue text-white border-bfb-blue"
-                  : "bg-transparent text-slate-500 dark:text-silver/50 border-slate-200 dark:border-white/15 hover:border-bfb-blue/40 hover:text-bfb-blue"
-              }`}
-            >
-              All Years
-            </button>
-            {years.map((year) => (
-              <button
-                key={year}
-                onClick={() => setActiveYear(year)}
-                className={`px-5 py-2 rounded-sm text-[10px] font-bold tracking-[0.15em] uppercase transition-all duration-200 border ${
-                  activeYear === year
-                    ? "bg-bfb-blue text-white border-bfb-blue"
-                    : "bg-transparent text-slate-500 dark:text-silver/50 border-slate-200 dark:border-white/15 hover:border-bfb-blue/40 hover:text-bfb-blue"
-                }`}
-              >
-                {year}
-              </button>
-            ))}
+          {/* Controls */}
+          <div className="flex flex-col items-center gap-8 mb-16">
+            <Switch viewMode={viewMode} setViewMode={setViewMode} />
+            <div className="flex justify-center gap-2">
+              <motion.button initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} onClick={() => setActiveYear("all")} className={`px-5 py-2 rounded-sm text-[10px] font-bold tracking-[0.15em] uppercase border ${activeYear === "all" ? "bg-bfb-blue text-white" : "border-slate-200"}`}>All Years</motion.button>
+              {years.map(year => (
+                <motion.button key={year} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} onClick={() => setActiveYear(year)} className={`px-5 py-2 rounded-sm text-[10px] font-bold tracking-[0.15em] uppercase border ${activeYear === year ? "bg-bfb-blue text-white" : "border-slate-200"}`}>{year}</motion.button>
+              ))}
+            </div>
           </div>
 
-          {/* Year sections */}
-          <div className="space-y-16">
-            {displayYears.map((year) => (
-              <motion.div
-                key={year}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="flex items-center gap-4 mb-8">
-                  <h3 className="text-sm font-bold tracking-[0.2em] uppercase text-slate-400 dark:text-silver/40">
-                    {year} Internships
-                  </h3>
-                  <div className="flex-1 h-px bg-slate-100 dark:bg-white/8" />
-                  <span className="text-[10px] text-slate-300 dark:text-silver/25 tracking-wider">
-                    {placementsByYear[year].length} placements
-                  </span>
-                </div>
+          {/* Content */}
+          <div className="space-y-24">
+            {displayYears.map((year) => {
+              const allPlacements = placementsByYear[year] || [];
+              const fullTime = allPlacements.filter(p => p.type === "full-time");
+              const internships = allPlacements.filter(p => p.type === "internship");
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                  {placementsByYear[year].map((firm, index) => (
-                    <motion.div
-                      key={firm.name}
-                      initial={{ opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.04, duration: 0.4 }}
-                      className="group bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm p-6 flex items-center justify-center hover:-translate-y-2 hover:shadow-lg dark:hover:shadow-none hover:border-slate-200 dark:hover:border-white/15 transition-all duration-200"
-                    >
-                      <img
-                        src={`/companies/${encodeURIComponent(firm.filename)}`}
-                        alt={firm.name}
-                        className="max-h-14 max-w-full object-contain"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                          const fallback = document.createElement("span");
-                          fallback.className = "text-sm font-serif font-bold text-slate-400 dark:text-silver/50 text-center";
-                          fallback.textContent = firm.name;
-                          e.currentTarget.parentElement?.appendChild(fallback);
-                        }}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
+              if (allPlacements.length === 0) return null;
+
+              return (
+                <motion.div key={year} className="space-y-12">
+                  <div className="flex items-center gap-4">
+                    <h3 className="text-2xl font-serif text-slate-900 dark:text-silver">{year} Placements</h3>
+                    <div className="flex-1 h-px bg-slate-100 dark:bg-white/10" />
+                  </div>
+
+                  {/* Full-Time Section */}
+                  {fullTime.length > 0 && (
+                    <div className="space-y-6">
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Full-Time</h4>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                          {fullTime.map((firm, i) => (
+                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm p-6 flex items-center justify-center">
+                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="max-h-12 max-w-full object-contain" />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                              <tr className="border-b border-slate-200 dark:border-white/10">
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {fullTime.map((firm, i) => (
+                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
+                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
+                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Internships Section */}
+                  {internships.length > 0 && (
+                    <div className="space-y-6">
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Internships</h4>
+                      {viewMode === "grid" ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                          {internships.map((firm, i) => (
+                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm p-6 flex items-center justify-center">
+                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="max-h-12 max-w-full object-contain" />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left border-collapse min-w-[800px]">
+                            <thead>
+                              <tr className="border-b border-slate-200 dark:border-white/10">
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
+                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {internships.map((firm, i) => (
+                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
+                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
+                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
+                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
           </div>
-
         </div>
       </div>
     </section>

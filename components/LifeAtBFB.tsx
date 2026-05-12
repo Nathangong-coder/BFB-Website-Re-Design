@@ -118,11 +118,7 @@ export default function LifeAtBFB() {
 
             {/* Text half */}
             <div
-              className={`w-full md:w-[40%] px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-4 ${
-                index % 2 !== 0
-                  ? "bg-slate-50 dark:bg-bg-secondary"
-                  : "bg-white dark:bg-midnight"
-              }`}
+              className="w-full md:w-[40%] px-8 md:px-14 py-12 md:py-16 flex flex-col justify-center gap-4 bg-white dark:bg-midnight"
             >
               <h3 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver">
                 {block.title}

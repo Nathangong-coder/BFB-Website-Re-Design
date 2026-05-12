@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SpeakerSlideshowProps {
-  images: string[];
+  images: readonly string[];
 }
 
 export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images }) => {
