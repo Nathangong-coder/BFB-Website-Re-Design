@@ -50,7 +50,7 @@ export default function PlacementsTicker() {
           Our Placements
         </motion.h2>
         <p className="text-slate-500 dark:text-silver/50 text-sm mt-2 font-light">
-          PLACEHOLDER TEXT
+          By actively fostering a deep-rooted culture of mentorship and learning, BFB members continuously attain outstanding careers across all major fields of finance.   
         </p>
         <motion.div
           initial={{ opacity: 0, scaleX: 0 }}
@@ -62,7 +62,7 @@ export default function PlacementsTicker() {
       </div>
 
       {/* Marquee */}
-      <div className="relative">
+      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden relative">
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
 

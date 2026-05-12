@@ -32,7 +32,21 @@
       "Bash(browser-use screenshot *)",
       "Bash(git commit *)",
       "Bash(dir /s /b public)",
-      "Bash(findstr /i \"joshua\")"
+      "Bash(findstr /i \"joshua\")",
+      "Skill(agent-browser)",
+      "PowerShell(agent-browser *)",
+      "Bash(npm i *)",
+      "Bash(agent-browser install *)",
+      "Bash(agent-browser skills *)",
+      "PowerShell(npm run *)",
+      "Bash(agent-browser open *)",
+      "Bash(agent-browser screenshot *)",
+      "Bash(agent-browser snapshot *)",
+      "Bash(agent-browser scroll *)",
+      "mcp__ide__getDiagnostics",
+      "Bash(pip install *)",
+      "Bash(python -c \"import pandas as pd; df = pd.read_excel\\('public/placements/Placement.xlsx'\\); print\\(df.to_csv\\(index=False\\)\\)\")",
+      "Bash(python *)"
     ]
   }
 }
