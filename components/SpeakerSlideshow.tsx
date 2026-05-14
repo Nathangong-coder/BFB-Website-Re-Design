@@ -6,9 +6,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface SpeakerSlideshowProps {
   images: readonly string[];
+  captions?: readonly string[];
 }
 
-export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images }) => {
+export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, captions }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -68,19 +69,31 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images }) =>
         <ChevronRight size={24} />
       </button>
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => handleDotClick(index)}
-            className={`h-2 w-2 rounded-full transition-all duration-300 ${
-              currentIndex === index
-                ? "bg-[var(--bfb-blue)] scale-125"
-                : "bg-white/50 hover:bg-white/80"
-            }`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10 w-full px-4">
+        {captions && captions[currentIndex] && (
+          <motion.span
+            key={captions[currentIndex]}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/80 bg-black/40 px-2 py-1 rounded-sm backdrop-blur-sm"
+          >
+            {captions[currentIndex]}
+          </motion.span>
+        )}
+        <div className="flex gap-2">
+          {images.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handleDotClick(index)}
+              className={`h-2 w-2 rounded-full transition-all duration-300 ${
+                currentIndex === index
+                  ? "bg-[var(--bfb-blue)] scale-125"
+                  : "bg-white/50 hover:bg-white/80"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

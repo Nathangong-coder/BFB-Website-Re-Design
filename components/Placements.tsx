@@ -23,7 +23,7 @@ const placementsByYear: Record<number, { name: string; member: string; industry:
     { name: "JP Morgan Chase", member: "Charlotte Humphreys", industry: "Finance", group: "Risk Management", filename: "jp morgan.jpg", type: "full-time", location: "Newark, Delaware" },
     { name: "Charles Schwab", member: "Luke Garlick", industry: "Finance", group: "FP&A", filename: "charles-schwab.webp", type: "full-time", location: "Phoenix, AZ" },
     { name: "Deloitte", member: "Kartik Parab", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "full-time", location: "Los Angeles, CA" },
-    { name: "Georgia Tech", member: "Michael Thompson", industry: "Education", group: "Academic", filename: "georgia-tech.jpg", type: "full-time", location: "Atlanta, GA" },
+    { name: "Georgia Tech", member: "Michael Thompson", industry: "Education", group: "Academic", filename: "Georgia-Tech.png", type: "full-time", location: "Atlanta, GA" },
     { name: "Hilltop", member: "Oriana Van Den Handel", industry: "Finance", group: "Investment Banking", filename: "hilltop.png", type: "full-time", location: "Austin, TX" },
     { name: "Imperial College London", member: "Francesca Moulds", industry: "Education", group: "Academic", filename: "imperial-college.jpg", type: "full-time", location: "London, England" },
     { name: "JP Morgan", member: "Christopher Dolak", industry: "Finance", group: "Investment Banking", filename: "jp morgan.jpg", type: "full-time", location: "New York, NY" },
@@ -49,21 +49,20 @@ const placementsByYear: Record<number, { name: string; member: string; industry:
   2024: [
     { name: "JP Morgan", member: "Natalie Smith", industry: "Finance", group: "Commercial Banking", filename: "jp morgan.jpg", type: "full-time", location: "Houston, TX" },
     { name: "Max Banjamin Partners", member: "Sanjum Dhaliwal", industry: "Real Estate", group: "Investment", filename: "MBP Partners.webp", type: "full-time", location: "Los Angeles, CA" },
-    { name: "IEQ Capital", member: "Adit Gorawara", industry: "Finance", group: "Research", filename: "ieq capital.jpg", type: "full-time", location: "Foster City, CA" },
+    { name: "IEQ Capital", member: "Adit Gorawara", industry: "Finance", group: "Research", filename: "ieq-capital.png", type: "full-time", location: "Foster City, CA" },
     { name: "Morgan Stanley", member: "Kalani Seymore", industry: "Finance", group: "S&T", filename: "morgan stanley.jpg", type: "full-time", location: "New York, NY" },
     { name: "BMO", member: "Joanna Zhang", industry: "Finance", group: "Investment", filename: "bmo.jpg", type: "internship", location: "Los Angeles, CA" },
     { name: "KPMG", member: "Saksham Makin", industry: "Consulting", group: "Strategy", filename: "kpmg.jpg", type: "internship", location: "Los Angeles, CA" },
-    { name: "Clifford Swan", member: "Luke Garlick", industry: "Finance", group: "Wealth Management", filename: "clifford swan.jpg", type: "internship", location: "Pasadena, CA" },
+    { name: "Clifford Swan", member: "Luke Garlick", industry: "Finance", group: "Wealth Management", filename: "clifford-swan.webp", type: "internship", location: "Pasadena, CA" },
     { name: "Deloitte", member: "Kartik Parab", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "internship", location: "Los Angeles, CA" },
     { name: "Stifel", member: "Michael Thompson", industry: "Finance", group: "Investment Banking", filename: "stifel.jpg", type: "internship", location: "Century City, CA" },
-    { name: "Piper Sandler", member: "Oriana Van Den Handel", industry: "Finance", group: "Public Finance", filename: "piper-sandler.webp", type: "internship", location: "Minneapolis, MN" },
-    { name: "Avalerian Capital", member: "Francesca Moulds", industry: "Finance", group: "Private Equity", filename: "avalerian capital.jpg", type: "internship", location: "Remote" },
-    { name: "The O'Hagan Group", member: "Charlotte Humphreys", industry: "Finance", group: "Wealth Management", filename: "ohagan group.jpg", type: "internship", location: "Bethlehem, PA" },
+    { name: "Piper Sandler", member: "Oriana Van Den Handel", industry: "Finance", group: "Public Finance", filename: "piper-sandler.jpg", type: "internship", location: "Minneapolis, MN" },
+    { name: "Avalerian Capital", member: "Francesca Moulds", industry: "Finance", group: "Private Equity", filename: "avalerian.webp", type: "internship", location: "Remote" },
+    { name: "The O'Hagan Group", member: "Charlotte Humphreys", industry: "Finance", group: "Wealth Management", filename: "o-hagan-group.webp", type: "internship", location: "Bethlehem, PA" },
     { name: "JP Morgan", member: "Christopher Dolak", industry: "Finance", group: "Investment Banking", filename: "jp morgan.jpg", type: "internship", location: "New York, NY" },
     { name: "City National Bank", member: "Abel Mengistu", industry: "Finance", group: "FP&A", filename: "city-national-bank.png", type: "internship", location: "Los Angeles, CA" },
     { name: "Pimco", member: "Kyle Jurkowski", industry: "Finance", group: "Wealth Management", filename: "pimco.png", type: "internship", location: "Newport Beach, CA" },
     { name: "Deloitte", member: "Jacob Schultz", industry: "Consulting", group: "Consulting", filename: "deloitte.jpg", type: "internship", location: "Los Angeles, CA" },
-    { name: "JP Morgan", member: "Gursahil Sran", industry: "Finance", group: "Commercial Banking", filename: "jpmorgan.jpg", type: "internship", location: "New York, NY" },
     { name: "PWC", member: "Katelyn Pool", industry: "Finance", group: "Accounting", filename: "pwc.jpg", type: "internship", location: "Santa Cruz, Bolivia" },
   ],
 };
@@ -83,6 +82,27 @@ const Switch = ({ viewMode, setViewMode }: { viewMode: "grid" | "list"; setViewM
 
 const years = [2026, 2025, 2024];
 
+// Featured logos for Select Placements
+const featuredLogos = [
+  { name: "Goldman Sachs", filename: "goldman-sachs.webp" },
+  { name: "Guggenheim", filename: "guggenheim.webp" },
+  { name: "Perella-Weinberg", filename: "perella-weinberg.avif" },
+  { name: "Rothschild", filename: "rothschild.jpg" },
+  { name: "Wells Fargo", filename: "wells-fargo.webp" },
+  { name: "Pimco", filename: "pimco.png" },
+  { name: "Mizuho", filename: "mizuho.jpg" },
+  { name: "Morgan Stanley", filename: "morgan stanley.jpg" },
+  { name: "JP Morgan", filename: "jp morgan.jpg" },
+  { name: "Charles Schwab", filename: "charles-schwab.webp" },
+  { name: "HP", filename: "hp.jpg" },
+  { name: "PwC", filename: "pwc.jpg" },
+  { name: "Piper Sandler", filename: "piper-sandler.jpg" },
+  { name: "Barclays", filename: "barclays.jpg" },
+  { name: "Amazon", filename: "Amazon.png" },
+  { name: "Google", filename: "google.webp" },
+  { name: "UBS", filename: "ubs.jpg" },
+];
+
 export default function Placements() {
   const [activeYear, setActiveYear] = useState<number | "all">("all");
   const [activeType, setActiveType] = useState<"all" | "full-time" | "internship">("all");
@@ -90,53 +110,50 @@ export default function Placements() {
 
   const displayYears = activeYear === "all" ? years : [activeYear as number];
 
+  // Helper to get unique logos
+  const getUniquePlacements = (placements: typeof placementsByYear[2026]) => {
+    const seen = new Set();
+    return placements.filter(p => {
+      if (seen.has(p.filename)) return false;
+      seen.add(p.filename);
+      return true;
+    });
+  };
+
   const getFilteredPlacements = (year: number) => {
     return placementsByYear[year].filter((p) => activeType === "all" || p.type === activeType);
   };
 
   return (
-    <section id="placements" className="relative">
-      {/* Photo header block */}
-      <div className="relative h-[55vh] min-h-[400px] flex flex-col items-center justify-center overflow-hidden">
-        <img
-          src="/capstone/bfb-capstone.jpg"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover object-center"
+    <section id="placements" className="relative bg-white dark:bg-midnight">
+      {/* Simplistic Header */}
+      <div className="pt-32 pb-16 px-4 text-center">
+        <motion.span
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-5"
+        >
+          Career Outcomes
+        </motion.span>
+        <motion.h2
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-5xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-8"
+        >
+          Our Placements
+        </motion.h2>
+        <motion.div
+          initial={{ opacity: 0, scaleX: 0 }}
+          whileInView={{ opacity: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+          className="h-px w-12 bg-bfb-blue/30 mx-auto"
         />
-        <div className="absolute inset-0 bg-midnight/78" />
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white dark:from-midnight to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-white dark:from-midnight to-transparent" />
-
-        <div className="relative z-10 text-center px-4">
-          <motion.span
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue/70 mb-5"
-          >
-            Career Outcomes
-          </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-serif text-silver mb-6"
-            style={{ textWrap: "balance" } as React.CSSProperties}
-          >
-            Our Placements
-          </motion.h2>
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="h-px w-20 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto"
-          />
-        </div>
       </div>
 
-      <div className="bg-white dark:bg-midnight pt-16 pb-28 px-4 sm:px-6 lg:px-8">
+      <div className="pb-28 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           {/* Controls */}
           <div className="flex flex-col items-center gap-8 mb-16">
@@ -151,6 +168,28 @@ export default function Placements() {
 
           {/* Content */}
           <div className="space-y-24">
+            {/* Select Placements Sub-section (only in Grid mode) */}
+            {viewMode === "grid" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="space-y-12"
+              >
+                <div className="flex items-center gap-4">
+                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex-shrink-0">Select Placements</h3>
+                  <div className="flex-1 h-px bg-slate-100 dark:bg-white/10" />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                  {featuredLogos.map((logo, i) => (
+                    <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-40 flex items-center justify-center p-8">
+                      <img src={`/companies/${encodeURIComponent(logo.filename)}`} alt={logo.name} className="w-full h-full object-contain" />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
             {displayYears.map((year) => {
               const allPlacements = placementsByYear[year] || [];
               const fullTime = allPlacements.filter(p => p.type === "full-time");
@@ -171,9 +210,9 @@ export default function Placements() {
                       <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Full-Time</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                          {fullTime.map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm p-6 flex items-center justify-center">
-                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="max-h-12 max-w-full object-contain" />
+                          {getUniquePlacements(fullTime).map((firm, i) => (
+                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}
                         </div>
@@ -212,9 +251,9 @@ export default function Placements() {
                       <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Internships</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                          {internships.map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm p-6 flex items-center justify-center">
-                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="max-h-12 max-w-full object-contain" />
+                          {getUniquePlacements(internships).map((firm, i) => (
+                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                              <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}
                         </div>
@@ -249,6 +288,8 @@ export default function Placements() {
                 </motion.div>
               );
             })}
+
+
           </div>
         </div>
       </div>
