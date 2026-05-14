@@ -19,6 +19,9 @@ const libreBaskerville = Libre_Baskerville({
 export const metadata: Metadata = {
   title: "Bruins in Finance and Banking | BFB",
   description: "UCLA's Premier Finance Club.",
+  icons: {
+    icon: "/bfb_bear.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

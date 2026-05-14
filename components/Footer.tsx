@@ -5,7 +5,7 @@ import { Mail } from "lucide-react";
 export default function Footer() {
   return (
     <footer className="h-20 bg-slate-50 dark:bg-midnight border-t border-slate-100 dark:border-white/8 flex items-center">
-      <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+      <div className="max-w-[1400px] mx-auto w-full px-4 sm:px-6 lg:px-10 flex justify-between items-center">
         <div className="text-center md:text-left text-sm text-slate-500 dark:text-silver/50 font-light">
           © 2026 Bruins in Finance and Banking
         </div>

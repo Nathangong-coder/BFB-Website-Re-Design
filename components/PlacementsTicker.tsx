@@ -52,7 +52,7 @@ export default function PlacementsTicker() {
       </div>
 
       {/* Marquee */}
-      <div className="max-w-[1300px] mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden relative">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 overflow-hidden relative">
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
 
