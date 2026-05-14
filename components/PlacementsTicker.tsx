@@ -4,33 +4,23 @@ import React from "react";
 import { motion } from "framer-motion";
 
   const logoMap: Record<string, string> = {
+    "Goldman Sachs": "/companies/goldman-sachs.webp",
+    "Guggenheim": "/companies/guggenheim.webp",
+    "Perella-Weinberg": "/companies/perella-weinberg.avif",
+    "Rothschild": "/companies/rothschild.jpg",
+    "Wells Fargo": "/companies/wells-fargo.webp",
+    "Pimco": "/companies/pimco.png",
+    "Mizuho": "/companies/mizuho.jpg",
     "Morgan Stanley": "/companies/morgan stanley.jpg",
-    "Citi": "/companies/citi.jpg",
-    "Barclays": "/companies/barclays.jpg",
-    "UBS": "/companies/ubs.jpg",
-    "Ducera Partners": "/companies/ducera.jpg",
-    "Federal Reserve": "/companies/fed reserve.jpg",
-    "Mizuho Financial Group": "/companies/mizuho.jpg",
-    "Altman Solon": "/companies/altman solon.jpg",
-    "Waymo": "/companies/waymo.jpg",
-    "Siemens Healthineers": "/companies/siemens healthineers.jpg",
-    "JPMorgan": "/companies/jpmc.jpg",
-    "Scotiabank": "/companies/scotiabank.jpg",
-    "KeyBanc Capital Markets": "/companies/keybanc capital markets.jpg",
-    "GIC": "/companies/gic.jpg",
-    "TPG": "/companies/tpg.jpg",
-    "Almitas Capital": "/companies/almitas capital.jpg",
-    "TCW": "/companies/tcw.jpg",
-    "Deloitte": "/companies/deloitte.jpg",
-    "Lazard": "/companies/lazard.jpg",
-    "BMO": "/companies/bmo.jpg",
-    "Stifel": "/companies/stifel.jpg",
-    "Accenture": "/companies/accenture.jpg",
-    "KPMG": "/companies/kpmg.jpg",
-    "PwC": "/companies/pwc.jpg",
-    "Adobe": "/companies/adobe.jpg",
+    "JP Morgan": "/companies/jp morgan.jpg",
+    "Charles Schwab": "/companies/charles-schwab.webp",
     "HP": "/companies/hp.jpg",
-    "Lockton": "/companies/lockton.jpg",
+    "PwC": "/companies/pwc.jpg",
+    "Piper Sandler": "/companies/piper-sandler.jpg",
+    "Barclays": "/companies/barclays.jpg",
+    "Amazon": "/companies/Amazon.png",
+    "Google": "/companies/google.webp",
+    "UBS": "/companies/ubs.jpg",
   };
 
   const firms = Object.keys(logoMap);
@@ -70,12 +60,12 @@ export default function PlacementsTicker() {
           {doubled.map((firm, i) => (
             <div
               key={i}
-              className="flex items-center justify-center w-48 h-24 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-3 transition-transform duration-300 hover:scale-105"
+              className="flex items-center justify-center w-40 h-40 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-6 transition-transform duration-300 hover:scale-105"
             >
               <img
                 src={logoMap[firm]}
                 alt={firm}
-                className="max-w-full max-h-full object-contain"
+                className="w-full h-full object-contain"
               />
             </div>
           ))}

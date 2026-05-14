@@ -46,7 +46,8 @@
       "mcp__ide__getDiagnostics",
       "Bash(pip install *)",
       "Bash(python -c \"import pandas as pd; df = pd.read_excel\\('public/placements/Placement.xlsx'\\); print\\(df.to_csv\\(index=False\\)\\)\")",
-      "Bash(python *)"
+      "Bash(python *)",
+      "Bash(npm install *)"
     ]
   }
 }

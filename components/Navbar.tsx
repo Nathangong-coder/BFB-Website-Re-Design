@@ -15,6 +15,13 @@ type NavItem =
 const navItems: NavItem[] = [
   { name: "Home", href: "/" },
   {
+    name: "Tech",
+    children: [
+      { name: "BAI", href: "/tech/bai" },
+      { name: "Quant Accelerator", href: "/tech/quant" },
+    ],
+  },
+  {
     name: "Team",
     children: [
       { name: "Executive Board", href: "/team" },
@@ -28,6 +35,7 @@ const navItems: NavItem[] = [
     name: "Resources",
     children: [
       { name: "Training", href: "/training" },
+      { name: "Recruitment", href: "/join" },
       { name: "Contact", href: "/contact" },
     ],
   },
@@ -77,11 +85,18 @@ export default function Navbar() {
         <div className="flex justify-between h-20 items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img
-              src="/bfb_bear.png"
-              alt="BFB Logo"
-              className="h-10 w-auto object-contain"
-            />
+            <>
+              <img
+                src="/bfb-transparent.png"
+                alt="BFB Logo"
+                className="h-[70px] w-auto object-contain dark:hidden"
+              />
+              <img
+                src="/dark-blue-BFB-logo.png"
+                alt="BFB Logo"
+                className="h-[70px] w-auto object-contain hidden dark:block"
+              />
+            </>
           </Link>
 
           {/* Desktop Nav */}
@@ -123,10 +138,10 @@ export default function Navbar() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
-              href="/join"
+              href="/contact"
               className="hidden md:inline-flex items-center px-5 py-2.5 bg-bfb-blue text-white text-[15px] font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
             >
-              Join Us
+              Contact Us
             </Link>
             <button
               className="md:hidden p-1.5 text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"

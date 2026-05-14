@@ -10,7 +10,14 @@ export default function Footer() {
           © 2026 Bruins in Finance and Banking
         </div>
 
-        <div className="flex justify-center md:justify-end space-x-4">
+        <div className="flex items-center gap-6">
+          <Link
+            href="/join"
+            className="hidden sm:inline-flex items-center px-4 py-2 bg-bfb-blue text-white text-[13px] font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
+          >
+            Join Us
+          </Link>
+          <div className="flex justify-center md:justify-end space-x-4">
           <a
             href="https://instagram.com/bfbatucla"
             target="_blank"
@@ -42,6 +49,7 @@ export default function Footer() {
           >
             <Mail size={18} />
           </a>
+        </div>
         </div>
       </div>
     </footer>

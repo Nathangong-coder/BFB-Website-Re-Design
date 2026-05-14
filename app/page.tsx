@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import LifeAtBFB from "@/components/LifeAtBFB";
-import DiversePlacements from "@/components/DiversePlacements";
 import PlacementsTicker from "@/components/PlacementsTicker";
 
 export default function Home() {
@@ -9,7 +8,6 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <Hero />
       <LifeAtBFB />
-      <DiversePlacements />
       <PlacementsTicker />
 
       {/* Apply CTA */}
