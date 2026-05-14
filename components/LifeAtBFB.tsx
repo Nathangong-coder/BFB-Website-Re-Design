@@ -28,7 +28,15 @@ const blocks = [
   {
     title: "Professional Network",
     eyebrow: "Elite Access",
-    body: "Direct access to industry leaders — from New York hedge funds to LA private credit firms. Our alumni speaker series and extensive placement network bridge the gap between academic theory and professional practice, connecting members with some of the most competitive roles in the industry.",
+    body: "Joining BFB means tapping into a vast professional network, as BFB alumni go on to some of the most competitive roles in the industry across banking, markets, investments, and beyond.",
+    list: [
+      "Investment Banking",
+      "Sales & Trading",
+      "Economic Research",
+      "Asset Management",
+      "Consulting & Advisory",
+      "Private Equity",
+    ],
     images: [
       "/speakers/Horizontal Anderson Speaker Photo.jpeg",
       "/speakers/jpm speaker.jpeg",
@@ -118,9 +126,21 @@ export default function LifeAtBFB() {
                   {block.title}
                 </h3>
               </div>
-              <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-sm lg:text-base max-w-xl whitespace-pre-line">
-                {block.body}
-              </p>
+              <div className="flex flex-col gap-4">
+                <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-sm lg:text-base max-w-xl whitespace-pre-line">
+                  {block.body}
+                </p>
+                {"list" in block && block.list && (
+                  <ul className="space-y-2 text-slate-600 dark:text-silver/70 text-sm lg:text-base font-light">
+                    {block.list.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <span className="text-bfb-blue mt-1.5 h-1.5 w-1.5 rounded-full bg-bfb-blue flex-shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             </div>
           </motion.div>
         ))}
