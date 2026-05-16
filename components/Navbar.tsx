@@ -18,8 +18,8 @@ const navItems: NavItem[] = [
   {
     name: "Team",
     children: [
-      { name: "Executive Board", href: "/team" },
-      { name: "Members", href: "/team/members" },
+      { name: "Executive Board", href: "/executive-board" },
+      { name: "Members", href: "/members" },
       { name: "Placements", href: "/placements" },
     ],
   },
