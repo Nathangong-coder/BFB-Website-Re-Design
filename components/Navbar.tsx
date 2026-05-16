@@ -3,24 +3,18 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ThemeToggle from "./ThemeToggle";
 
-type NavChild = { name: string; href: string };
-type NavItem =
-  | { name: string; href: string; children?: undefined }
-  | { name: string; href?: undefined; children: NavChild[] };
+type NavItem = {
+  name: string;
+  href?: string;
+  children?: NavItem[];
+};
 
 const navItems: NavItem[] = [
   { name: "Home", href: "/" },
-  {
-    name: "Tech",
-    children: [
-      { name: "BAI", href: "/tech/bai" },
-      { name: "Quant Accelerator", href: "/tech/quant" },
-    ],
-  },
   {
     name: "Team",
     children: [
@@ -30,34 +24,77 @@ const navItems: NavItem[] = [
     ],
   },
   { name: "Clients", href: "/clients" },
-  { name: "Events", href: "/events" },
+  {
+    name: "Events",
+    children: [
+      { name: "Calendar", href: "/events" },
+      { name: "Recruitment", href: "/join" },
+    ],
+  },
   {
     name: "Resources",
     children: [
+      {
+        name: "Tech",
+        children: [
+          { name: "BAI", href: "/tech/bai" },
+          { name: "Quant Accelerator", href: "/tech/quant" },
+        ],
+      },
+      {
+        name: "Newsletters",
+        children: [
+          { name: "Hub", href: "/resources/newsletters" },
+          { name: "Archives", href: "/resources/newsletters-2" },
+        ],
+      },
       { name: "Training", href: "/training" },
-      { name: "Recruitment", href: "/join" },
       { name: "Contact", href: "/contact" },
     ],
   },
 ];
 
-function DropdownMenu({ items }: { items: NavChild[] }) {
+function DropdownMenu({ items }: { items: NavItem[] }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.15, ease: "easeOut" }}
-      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-44 bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg shadow-slate-200/60 dark:shadow-none py-1 z-50"
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg shadow-slate-200/60 dark:shadow-none py-1 z-50"
     >
-      {items.map((child) => (
-        <Link
-          key={child.name}
-          href={child.href}
-          className="block px-4 py-2.5 text-sm text-slate-600 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors"
-        >
-          {child.name}
-        </Link>
+      {items.map((item) => (
+        <div key={item.name} className="relative group">
+          {item.children ? (
+            <>
+              <button className="w-full flex items-center justify-between px-4 py-2.5 text-sm text-slate-600 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors">
+                {item.name}
+                <ChevronRight size={14} />
+              </button>
+              {/* Sub-dropdown - Only visible on hover of the parent group */}
+              <div className="absolute top-0 left-full pl-1 w-48 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0">
+                <div className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg py-1">
+                  {item.children.map((child) => (
+                    <Link
+                      key={child.name}
+                      href={child.href || "#"}
+                      className="block px-4 py-2.5 text-sm text-slate-600 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors"
+                    >
+                      {child.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <Link
+              href={item.href || "#"}
+              className="block px-4 py-2.5 text-sm text-slate-600 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors"
+            >
+              {item.name}
+            </Link>
+          )}
+        </div>
       ))}
     </motion.div>
   );
@@ -83,7 +120,6 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-white/92 dark:bg-midnight/90 backdrop-blur-md border-b border-slate-100 dark:border-white/8">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex justify-between h-20 items-center">
-          {/* Logo */}
           <Link href="/" className="flex items-center">
             <>
               <img
@@ -99,7 +135,6 @@ export default function Navbar() {
             </>
           </Link>
 
-          {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-6">
             {navItems.map((item) =>
               item.children ? (
@@ -121,7 +156,7 @@ export default function Navbar() {
               ) : (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  href={item.href || "#"}
                   className={`text-[15px] transition-colors ${
                     pathname === item.href
                       ? "text-bfb-blue font-medium"
@@ -134,7 +169,6 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Right side */}
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link
@@ -154,7 +188,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -187,14 +220,35 @@ export default function Navbar() {
                           className="overflow-hidden pl-4 border-l-2 border-bfb-blue/20 ml-3"
                         >
                           {item.children.map((child) => (
-                            <Link
-                              key={child.name}
-                              href={child.href}
-                              onClick={() => setMobileOpen(false)}
-                              className="block px-3 py-2.5 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
-                            >
-                              {child.name}
-                            </Link>
+                            child.children ? (
+                              <div key={child.name} className="py-2">
+                                <span className="block px-3 py-1 text-[11px] font-bold uppercase text-slate-400">
+                                  {child.name}
+                                </span>
+                                <div className="pl-4 space-y-1">
+                                  {child.children.map((subChild) => (
+                                    <Link
+                                      key={subChild.name}
+                                      href={subChild.href || "#"}
+                                      onClick={() => setMobileOpen(false)}
+                                      className="block px-3 py-2 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
+                                    >
+                                      {subChild.name}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              <Link
+                                key={child.name}
+                                href={child.href || "#"}
+                                onClick={() => setMobileOpen(false)}
+                                className="block px-3 py-2.5 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
+                                onClick={() => setMobileOpen(false)}
+                              >
+                                {child.name}
+                              </Link>
+                            )
                           ))}
                         </motion.div>
                       )}
@@ -203,7 +257,7 @@ export default function Navbar() {
                 ) : (
                   <Link
                     key={item.name}
-                    href={item.href}
+                    href={item.href || "#"}
                     onClick={() => setMobileOpen(false)}
                     className="block px-3 py-3 text-sm text-slate-700 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver transition-colors"
                   >

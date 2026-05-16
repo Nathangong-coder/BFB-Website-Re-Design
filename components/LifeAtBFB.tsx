@@ -9,7 +9,7 @@ const blocks = [
   {
     title: "Intensive Training",
     eyebrow: "Foundational Excellence",
-    body: "Our rigorous accelerator program equips members with the technical foundations of finance — from DCF modeling to complex valuation techniques. This culminates in intensive capstone projects, often spanning two quarters, and professional member presentations that mirror institutional standards.",
+    body: "We try to train our members in the fundamentals of finance. It starts with our 10-week accelerator program. Instead of simply learning theory, we focus on practical skills like real-time Excel modeling & a final capstone project, where recruits have to pitch a company of their choice. \n\nAfter graduating, members are required either to join a client project (see below) or present on a finance topic they’re passionate about. By either getting hands-on experience or learning to verbalize what they’ve learned, we try to reinforce their attained knowledge so they can use it in their future careers.",
     images: [
       "/capstone/bfb-capstone.jpg",
       "/assorted/bfb-general-meeting.jpg",
@@ -20,7 +20,7 @@ const blocks = [
   {
     title: "Experiential Learning",
     eyebrow: "Applied Practice",
-    body: "We bridge the gap between theory and practice through real-world applications. Members engage in high-stakes client projects and competitive stock pitches, applying quantitative frameworks to actual market data and industry challenges.",
+    body: "We believe that the best way to learn is with hands-on opportunities, which we offer via member-led quarterly & overarching projects. Overarching projects are major internal-facing year-long projects (like our algorithmic trading team), while quarterly projects are shorter, external-facing projects that include real-money pitch competitions & real client projects. \n\nWith all these opportunities, we try to have our members attain a hands-on understanding of the industry they’re interested in.",
     images: ["/capstone/bfb-capstone.jpg"],
     captions: ["Capstone Projects"],
     imageLeft: false,
@@ -55,7 +55,7 @@ const blocks = [
   {
     title: "Dynamic Community",
     eyebrow: "Culture & Connection",
-    body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. This spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we aim to create an environment where mentorship happens naturally and friendships run deep.\n\nOur goal isn't to just simply prepare you for the future of the industry; we are trying to build a lifelong community where every member has the support, confidence, and connection to thrive.",
+    body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. \n\nThis spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we aim to create an environment where mentorship happens naturally and friendships run deep.",
     images: ["/group-photo/joshua-tree-social.jpeg"],
     captions: ["Joshua Tree Retreat"],
     imageLeft: true,
