@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isTuesday, addWeeks, startOfToday, isAfter, isBefore } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isTuesday, addWeeks, startOfToday, isAfter, isBefore, getDay } from "date-fns";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -12,10 +12,15 @@ export default function EventsPage() {
   const minDate = new Date(2026, 0, 1);
   const maxHighlightDate = new Date(2026, 5, 5); // June 5th, 2026
 
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(currentDate);
   const daysInMonth = eachDayOfInterval({
-    start: startOfMonth(currentDate),
-    end: endOfMonth(currentDate),
+    start: monthStart,
+    end: monthEnd,
   });
+
+  // Calculate the offset to align the 1st of the month with the correct weekday
+  const startDayOfWeek = getDay(monthStart);
 
   const handlePrevMonth = () => {
     if (isBefore(currentDate, minDate)) return;
@@ -54,7 +59,6 @@ export default function EventsPage() {
           <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver">Calendar</h1>
         </header>
 
-        {/* Calendar */}
         <div className="bg-white dark:bg-glass border border-slate-100 dark:border-white/10 rounded-xl p-8 relative">
           <div className="flex justify-between items-center mb-8">
             <button
@@ -76,6 +80,12 @@ export default function EventsPage() {
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
               <div key={d} className="text-center text-xs font-bold text-slate-400 py-2">{d}</div>
             ))}
+
+            {/* Render empty slots for the start of the month */}
+            {Array.from({ length: startDayOfWeek }).map((_, i) => (
+              <div key={`empty-${i}`} className="p-4" />
+            ))}
+
             {daysInMonth.map((day, i) => {
               const highlighted = isEventDay(day);
               return (
@@ -94,7 +104,6 @@ export default function EventsPage() {
             })}
           </div>
 
-          {/* Event Detail Modal */}
           <AnimatePresence>
             {selectedEvent && (
               <motion.div
@@ -125,7 +134,6 @@ export default function EventsPage() {
           </AnimatePresence>
         </div>
 
-        {/* Lists */}
         <div className="grid md:grid-cols-2 gap-12">
             <section>
                 <div className="flex items-center gap-4 mb-8">

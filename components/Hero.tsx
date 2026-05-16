@@ -47,7 +47,7 @@ export default function Hero() {
   }, [text, deleting, idx, settled]);
 
   return (
-    <section className="relative h-[880px] flex flex-col items-center justify-center overflow-hidden pt-20 pb-8 bg-midnight">
+    <section className="relative min-h-[750px] h-[90vh] max-h-[1000px] flex flex-col items-center justify-center overflow-hidden pt-20 pb-8 bg-midnight">
       {/* Background Photo Section */}
       <div className="absolute inset-0 z-0">
         <img
