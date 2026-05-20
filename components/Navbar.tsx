@@ -18,8 +18,8 @@ const navItems: NavItem[] = [
   {
     name: "Team",
     children: [
-      { name: "Executive Board", href: "/team" },
-      { name: "Members", href: "/team/members" },
+      { name: "Executive Board", href: "/executive-board" },
+      { name: "Members", href: "/members" },
       { name: "Placements", href: "/placements" },
     ],
   },
@@ -244,7 +244,6 @@ export default function Navbar() {
                                 href={child.href || "#"}
                                 onClick={() => setMobileOpen(false)}
                                 className="block px-3 py-2.5 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
-                                onClick={() => setMobileOpen(false)}
                               >
                                 {child.name}
                               </Link>
