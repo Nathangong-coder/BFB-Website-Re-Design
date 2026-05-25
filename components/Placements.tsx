@@ -101,6 +101,9 @@ const featuredLogos = [
   { name: "Amazon", filename: "Amazon.png" },
   { name: "Google", filename: "google.webp" },
   { name: "UBS", filename: "ubs.jpg" },
+  { name: "BMO", filename: "bmo.jpg" },
+  { name: "Federal Reserve", filename: "fed reserve.jpg" },
+  { name: "Accenture", filename: "accenture.jpg" },
 ];
 
 export default function Placements() {
@@ -169,7 +172,7 @@ export default function Placements() {
           {/* Content */}
           <div className="space-y-24">
             {/* Select Placements Sub-section (only in Grid mode) */}
-            {viewMode === "grid" && (
+            {viewMode === "grid" && activeYear === "all" && (
               <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -180,7 +183,7 @@ export default function Placements() {
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest flex-shrink-0">Select Placements</h3>
                   <div className="flex-1 h-px bg-slate-100 dark:bg-white/10" />
                 </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {featuredLogos.map((logo, i) => (
                     <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-40 flex items-center justify-center p-8">
                       <img src={`/companies/${encodeURIComponent(logo.filename)}`} alt={logo.name} className="w-full h-full object-contain" />

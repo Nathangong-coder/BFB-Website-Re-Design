@@ -6,41 +6,52 @@ import { motion } from "framer-motion";
 const board = [
   { name: "Ashley Keller", role: "President", linkedin: "https://www.linkedin.com/in/keller-ashley/", image: "/team/ashley keller.jpg" },
   { name: "Leo Liu", role: "Vice President", linkedin: "https://www.linkedin.com/in/liuruogu/", image: "/team/leo.jpg" },
-  { name: "Angela Jiang", role: "Director of Professional Development", linkedin: "#", image: "/team/angela.jpg" },
-  { name: "Juju Zhao", role: "Director of Professional Events", linkedin: "#", image: "/team/juju.jpg" },
-  { name: "Eason Zhang", role: "Co-Director of Recruitment", linkedin: "#", image: "/team/eason.jpg" },
-  { name: "Rakshitha Akkala", role: "Co-Director of Recruitment", linkedin: "#", image: "/team/rakshitha.jpg" },
-  { name: "Nathan Gong", role: "Director of Marketing", linkedin: "#", image: "/team/nathan.jpg" },
-  { name: "Ryan Fue", role: "Director of Tech", linkedin: "#", image: "/team/ryan.jpg" },
+  { name: "Angela Jiang", role: "Director of Professional Development", linkedin: "https://www.linkedin.com/in/angela-leyi-jiang/", image: "/team/angela.jpg" },
+  { name: "Juju Zhao", role: "Director of Professional Events", linkedin: "http://linkedin.com/in/jujuzhao", image: "/team/juju.jpg" },
+  { name: "Eason Zhang", role: "Co-Director of Recruitment", linkedin: "https://www.linkedin.com/in/eason-zhang-b9a087328/", image: "/team/eason.jpg" },
+  { name: "Rakshitha Akkala", role: "Co-Director of Recruitment", linkedin: "http://linkedin.com/in/rakshitha-akkala-b2a417378", image: "/team/rakshitha.jpg" },
+  { name: "Nathan Gong", role: "Director of Marketing", linkedin: "http://linkedin.com/in/nathan-gong-796642259", image: "/team/nathan.jpg" },
+  { name: "Ryan Fue", role: "Director of Tech", linkedin: "https://www.linkedin.com/in/ryanfue/", image: "/team/ryan.jpg" },
   { name: "Nams Doan", role: "Co-Director of Internal Affairs", linkedin: "https://www.linkedin.com/in/nams-doan-628195259/", image: "/team/nams.jpg" },
-  { name: "Tomoya Tanaka", role: "Co-Director of Internal Affairs", linkedin: "#", image: "/team/tomoya.jpg" },
+  { name: "Tomoya Tanaka", role: "Co-Director of Internal Affairs", linkedin: "https://www.linkedin.com/in/tanaka-tomoya/", image: "/team/tomoya.jpg" },
 ];
 
 const advisors = [
-  { name: "Oliver Pohlenz", role: "Professional Advisor", linkedin: "#", image: "/team/oliver.jpg" },
-  { name: "Daron Simitian", role: "Professional Advisor", linkedin: "#", image: "/team/daron.jpg" },
-  { name: "Shveenita", role: "Professional Advisor", linkedin: "#", image: "/team/shveen.jpg" },
-  { name: "Nayan", role: "Professional Advisor", linkedin: "#", image: "/team/nayan.jpg" },
-  { name: "Sean Lu", role: "Professional Advisor", linkedin: "#", image: "/team/sean.jpg" },
+  { name: "Oliver Pohlenz", role: "Professional Advisor", linkedin: "https://www.linkedin.com/in/oliver-pohlenz8/", image: "/team/oliver.jpg" },
+  { name: "Daron Simitian", role: "Professional Advisor", linkedin: "https://www.linkedin.com/in/daronsimitian/", image: "/team/daron.jpg" },
+  { name: "Shveenita Kanapathy", role: "Professional Advisor", linkedin: "https://www.linkedin.com/in/shveenitakanapathy/", image: "/team/shveen.jpg" },
+  { name: "Nayan Petrime", role: "Professional Advisor", linkedin: "https://www.linkedin.com/in/nayanpetrime/", image: "/team/nayan.jpg" },
+  { name: "Sean Lu", role: "Professional Advisor", linkedin: "https://www.linkedin.com/in/sean-lu-4b24a333a/", image: "/team/sean.jpg" },
 ];
 
 const members = [
-  { name: "Zach Bush", linkedin: "#", image: "/team/zach.jpg" },
-  { name: "James Xu", linkedin: "#", image: "/team/james.jpg" },
-  { name: "Anant", linkedin: "#", image: "/team/anant.jpg" },
-  { name: "Kareina Zhao", linkedin: "#", image: "/team/kareina.jpg" },
-  { name: "Abhi", linkedin: "#", image: "/team/abhi.jpg" },
-  { name: "Annabelle", linkedin: "#", image: "/team/annabelle.jpg" },
-  { name: "Andrew Guan", linkedin: "#", image: "/team/andrew guan.jpg" },
-  { name: "Ana", linkedin: "#", image: "/team/ana.jpg" },
-  { name: "John", linkedin: "#", image: "/team/john.jpg" },
-  { name: "Jay", linkedin: "#", image: "/team/jay.jpg" },
-  { name: "Harris", linkedin: "#", image: "/team/harris.jpg" },
-  { name: "Emma", linkedin: "#", image: "/team/emma.jpg" },
-  { name: "Rosalind", linkedin: "#", image: "/team/rosalind.jpg" },
-  { name: "Viraj", linkedin: "#", image: "/team/viraj.jpg" },
-  { name: "Nikhil", linkedin: "#", image: "/team/nikhil.jpg" },
-  { name: "Keilee", linkedin: "#", image: "/team/keilee.jpg" },
+  { name: "Zach Bush", linkedin: "http://linkedin.com/in/zacharymbush", image: "/team/zach.jpg" },
+  { name: "James Xu", linkedin: "http://linkedin.com/in/jamesxu1", image: "/team/james.jpg" },
+  { name: "Anant Bhartia", linkedin: "https://www.linkedin.com/in/anant-bhartia-644aab28b/", image: "/team/anant.jpg" },
+  { name: "Kareina Zhao", linkedin: "https://www.linkedin.com/in/kareina-zhao-06a498269/", image: "/team/kareina.jpg" },
+  { name: "Abhi Kumar", linkedin: "https://www.linkedin.com/in/abhi-kumar-/", image: "/team/abhi.jpg" },
+  { name: "Annabelle Chen", linkedin: "https://www.linkedin.com/in/annabellechen01/", image: "/team/annabelle.jpg" },
+  { name: "Andrew Guan", linkedin: "http://linkedin.com/in/andrewguan30", image: "/team/andrew guan.jpg" },
+  { name: "Ana Santana", linkedin: "https://www.linkedin.com/in/ana-laura-santana-27a702279/", image: "/team/ana.jpg" },
+  { name: "John Diepenbrock", linkedin: "https://www.linkedin.com/in/john-diepenbrock/", image: "/team/john.jpg" },
+  { name: "Jay Lee", linkedin: "http://linkedin.com/in/jay-lee-kr", image: "/team/jay.jpg" },
+  { name: "Harris Song", linkedin: "https://www.linkedin.com/in/harris-song/", image: "/team/harris.jpg" },
+  { name: "Emma Luo", linkedin: "https://www.linkedin.com/in/emma-luo-221458318/", image: "/team/emma.jpg" },
+  { name: "Rosalind Goldman", linkedin: "https://www.linkedin.com/in/rosalind-goldman/", image: "/team/rosalind.jpg" },
+  { name: "Viraj Nigam", linkedin: "https://www.linkedin.com/in/viraj-nigam/", image: "/team/viraj.jpg" },
+  { name: "Nikhil Vijay", linkedin: "https://www.linkedin.com/in/nikhil-vijay-855b81270/", image: "/team/nikhil.jpg" },
+  { name: "Keilee Hane", linkedin: "https://www.linkedin.com/in/keilee-hane/", image: "/team/keilee hane.jpg" },
+  { name: "Ashley Hinkel", linkedin: "http://www.linkedin.com/in/ashleyhinkel", image: "/team/ashley-hinkel.jpg" },
+  { name: "Daniel Shahryari", linkedin: "https://www.linkedin.com/in/danielshahryari/", image: "/team/daniel.jpg" },
+  { name: "Henry McNamara", linkedin: "https://www.linkedin.com/in/hmac213/", image: "/team/henry.jpg" },
+  { name: "Jenaro Rodriguez", linkedin: "https://www.linkedin.com/in/jenaro-rodriquez/", image: "/team/jenaro.jpg" },
+  { name: "Michael Sun", linkedin: "https://www.linkedin.com/in/michael-sun-239a3b30a/", image: "/team/michael.jpg" },
+  { name: "Richard Tucholski", linkedin: "https://www.linkedin.com/in/richard-tucholski-931418211/", image: "/team/richard.jpg" },
+  { name: "Roshni Sen", linkedin: "https://www.linkedin.com/in/roshni-sen-ucla/", image: "/team/roshni.jpg" },
+  { name: "Samuel Oh", linkedin: "https://www.linkedin.com/in/samuel-oh-ucla/", image: "/team/samuel.jpg" },
+  { name: "Aarnav Yedla", linkedin: "https://www.linkedin.com/in/aarnav-yedla/", image: "/team/aarnav.jpg" },
+  { name: "Misheka Bhagat", linkedin: "https://www.linkedin.com/in/misheka-bhagat/", image: "/team/misheka.jpg" },
+  { name: "Annie Huang", linkedin: "https://www.linkedin.com/in/anniehuanng/", image: "/team/annie huang.jpg" },
 ];
 
 function MemberCard({ member, index }: { member: any, index: number }) {
@@ -130,8 +141,13 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-serif text-slate-900 dark:text-silver">Professional Advisors</h3>
               </div>
-              <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                {advisors.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+              <div className="max-w-7xl mx-auto space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center max-w-2xl mx-auto">
+                  {advisors.slice(0, 2).map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center max-w-4xl mx-auto">
+                  {advisors.slice(2).map((member, i) => <MemberCard key={member.name} member={member} index={i + 2} />)}
+                </div>
               </div>
             </div>
 
@@ -140,7 +156,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
               <div className="text-center mb-12">
                 <h3 className="text-3xl font-serif text-slate-900 dark:text-silver">General Members</h3>
               </div>
-              <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+              <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {members.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
               </div>
             </div>
