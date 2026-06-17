@@ -3,6 +3,7 @@ import { DM_Sans, Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Script from "next/script";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
