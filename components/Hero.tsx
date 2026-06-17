@@ -73,7 +73,7 @@ export default function Hero() {
             UCLA&apos;s Only All-Encompassing Finance Organization
           </span>
 
-          <h1 className="text-5xl md:text-7xl font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
+          <h1 className="text-4xl md:text-7xl font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
             <span>{text}</span>
             {!settled && (
               <span className="ml-1 inline-block w-[3px] h-[0.8em] bg-white align-middle animate-pulse" />
@@ -84,7 +84,7 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: settled ? 1 : 0 }}
             transition={{ duration: 0.7 }}
-            className="text-white/55 text-base leading-relaxed font-light max-w-2xl"
+            className="text-white/55 text-sm md:text-base leading-relaxed font-light max-w-2xl"
           >
             Preparing UCLA undergraduates for elite careers across finance — through
             technical rigor, real-world exposure, and an unmatched alumni network.

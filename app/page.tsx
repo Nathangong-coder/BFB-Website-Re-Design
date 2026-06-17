@@ -18,12 +18,12 @@ export default function Home() {
 
         <div className="relative z-10 max-w-2xl mx-auto text-center">
           <h2
-            className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
+            className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             Interested?
           </h2>
-          <p className="text-slate-500 dark:text-silver/50 text-lg mb-12 max-w-md mx-auto leading-relaxed font-light">
+          <p className="text-slate-500 dark:text-silver/50 text-base md:text-lg mb-12 max-w-md mx-auto leading-relaxed font-light">
             Whether you’re a student passionate about making real-world impact or a business looking to harness new opportunities, we’d love to learn more about you!
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

@@ -47,7 +47,10 @@
       "Bash(pip install *)",
       "Bash(python -c \"import pandas as pd; df = pd.read_excel\\('public/placements/Placement.xlsx'\\); print\\(df.to_csv\\(index=False\\)\\)\")",
       "Bash(python *)",
-      "Bash(npm install *)"
+      "Bash(npm install *)",
+      "WebFetch(domain:www.ibbatucla.com)",
+      "Bash(unzip -p \"client-projects/BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)",
+      "Bash(unzip -p \"client-projects\\\\BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)"
     ]
   }
 }

@@ -72,7 +72,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
+          className="inline-block text-[9px] md:text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
         >
           Our Philosophy
         </motion.span>
@@ -81,7 +81,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
+          className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
           style={{ textWrap: "balance" } as React.CSSProperties}
         >
           The BFB Approach
@@ -97,7 +97,7 @@ export default function LifeAtBFB() {
       </div>
 
       {/* Blocks */}
-      <div className="max-w-[1400px] mx-auto w-full flex flex-col gap-12 py-12 px-4 sm:px-6">
+      <div className="max-w-[1400px] mx-auto w-full flex flex-col gap-16 py-12 px-6 sm:px-6 lg:px-8">
         {blocks.map((block) => (
           <motion.div
             key={block.title}
@@ -110,7 +110,7 @@ export default function LifeAtBFB() {
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full md:w-[55%] lg:w-[60%] min-h-[300px] md:min-h-[450px] lg:min-h-[550px] overflow-hidden flex-shrink-0">
+            <div className="relative w-full mx-auto md:max-w-none md:w-[55%] lg:w-[60%] h-[300px] md:h-auto md:min-h-[450px] lg:min-h-[550px] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 
@@ -119,10 +119,10 @@ export default function LifeAtBFB() {
               className="w-full md:w-[45%] lg:w-[40%] px-8 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col justify-center gap-4 bg-white dark:bg-midnight"
             >
               <div className="space-y-2">
-                <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
+                <span className="text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
                   {block.eyebrow}
                 </span>
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-serif text-slate-900 dark:text-silver leading-tight">
+                <h3 className="text-xl md:text-3xl lg:text-4xl font-serif text-slate-900 dark:text-silver leading-tight">
                   {block.title}
                 </h3>
               </div>

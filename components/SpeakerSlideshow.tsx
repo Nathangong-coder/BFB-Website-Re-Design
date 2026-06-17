@@ -56,14 +56,14 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
       {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/40"
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/40"
         aria-label="Previous slide"
       >
         <ChevronLeft size={24} />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/40"
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/20 text-white opacity-60 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-black/40"
         aria-label="Next slide"
       >
         <ChevronRight size={24} />
