@@ -50,7 +50,8 @@
       "Bash(npm install *)",
       "WebFetch(domain:www.ibbatucla.com)",
       "Bash(unzip -p \"client-projects/BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)",
-      "Bash(unzip -p \"client-projects\\\\BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)"
+      "Bash(unzip -p \"client-projects\\\\BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)",
+      "Bash(where pdftoppm *)"
     ]
   }
 }
