@@ -39,6 +39,7 @@ const navItems: NavItem[] = [
         children: [
           { name: "BAI", href: "/tech/bai" },
           { name: "Quant Accelerator", href: "/tech/quant" },
+          { name: "smartComps", href: "/tech/smartcomps" },
         ],
       },
       {
