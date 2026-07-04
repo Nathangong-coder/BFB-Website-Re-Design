@@ -10,6 +10,9 @@
   --accent: #5b9cd4;
   --silver: #e1e1e1;
   --glass: rgba(255, 255, 255, 0.03);
+  /* Fluid base spacing unit — makes every numbered gap/margin/padding
+     (gap-4, mb-6, p-8, space-y-2, …) scale with the viewport. */
+  --spacing: clamp(0.2rem, 0.235vw, 0.25rem);
 }
 
 .dark {
@@ -32,20 +35,20 @@
   --breakpoint-lap: 600px;
 
   /* Fluid type scale — anchored so each hits its Aero@1152px size */
-  --text-eyebrow: clamp(0.625rem, 0.87vw, 0.75rem);   /* 10px @1152 */
-  --text-body: clamp(0.9rem, 1.05vw, 1rem);           /* body text */
-  --text-body-lg: clamp(0.95rem, 1.3vw, 1.0625rem);   /* lead paragraphs */
-  --text-h3: clamp(1.15rem, 2.5vw, 1.875rem);         /* block/card titles */
-  --text-h2: clamp(1.6rem, 3.9vw, 3.25rem);           /* section headings */
-  --text-hero: clamp(1.75rem, 4.3vw, 3.5rem);         /* hero / page titles — sized down for 13" laptops */
+  --text-eyebrow: clamp(0.625rem, 0.8vw, 0.7rem);     /* kicker labels */
+  --text-body: clamp(0.875rem, 0.95vw, 0.9375rem);    /* ~14-15px body */
+  --text-body-lg: clamp(0.9rem, 1.1vw, 1rem);         /* ~15-16px lead */
+  --text-h3: clamp(1.1rem, 2.2vw, 1.75rem);           /* block/card titles */
+  --text-h2: clamp(1.5rem, 3.4vw, 2.75rem);           /* section headings */
+  --text-hero: clamp(1.6rem, 3.9vw, 3.25rem);         /* hero / page titles */
 
-  /* Fluid spacing/structural scale — mins kept low so the 600-800px range scales, not floors */
-  --spacing-nav: clamp(3.25rem, 6.95vw, 5rem);        /* caps 80 */
-  --spacing-logo: clamp(2.25rem, 6.1vw, 4.375rem);    /* caps 70 */
+  /* Fluid spacing/structural scale */
+  --spacing-nav: clamp(3rem, 5vw, 4rem);              /* 48-64px navbar */
+  --spacing-logo: clamp(2rem, 4.6vw, 3.25rem);        /* 32-52px logo */
   --spacing-gutter: clamp(1rem, 4vw, 2.5rem);         /* page side padding */
-  --spacing-section: clamp(2.5rem, 7vw, 7rem);        /* section vertical padding */
-  --spacing-block: clamp(2rem, 4.5vw, 3.5rem);        /* gap between blocks */
-  --spacing-card: clamp(1.5rem, 4.5vw, 3.5rem);       /* card inner padding */
+  --spacing-section: clamp(2rem, 5.5vw, 5.5rem);      /* section vertical padding */
+  --spacing-block: clamp(1.75rem, 4vw, 3rem);         /* gap between blocks */
+  --spacing-card: clamp(1.25rem, 3.5vw, 2.75rem);     /* card inner padding */
 }
 
 body {
