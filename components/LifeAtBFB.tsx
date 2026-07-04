@@ -80,7 +80,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
+          className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-3"
         >
           Our Philosophy
         </motion.span>
@@ -89,7 +89,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-h2 font-serif text-slate-900 dark:text-silver mb-6"
+          className="text-h2 font-serif text-slate-900 dark:text-silver mb-4"
           style={{ textWrap: "balance" } as React.CSSProperties}
         >
           The BFB Approach
@@ -118,12 +118,12 @@ export default function LifeAtBFB() {
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full mx-auto lap:w-[55%] h-[38svh] lap:h-auto lap:min-h-[clamp(13rem,30vw,26rem)] overflow-hidden">
+            <div className="relative w-full mx-auto lap:w-[55%] lap:self-center h-[38svh] lap:h-auto lap:aspect-[3/2] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 
             {/* Text half */}
-            <div className="w-full lap:w-[45%] p-card flex flex-col justify-center gap-4 bg-white dark:bg-midnight">
+            <div className="w-full lap:w-[45%] p-card flex flex-col justify-center gap-3 bg-white dark:bg-midnight">
               <div className="space-y-2">
                 <span className="text-eyebrow font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
                   {block.eyebrow}

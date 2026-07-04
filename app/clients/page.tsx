@@ -114,7 +114,7 @@
 	  return (
 	    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
 	      {/* Hero Section */}
-	      <section className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden pt-32 pb-20 px-6 text-center bg-white dark:bg-midnight">
+	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-14 px-6 text-center bg-white dark:bg-midnight">
 	        <div className="absolute inset-0 z-0">
 	          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.03] via-transparent to-transparent" />
 	          <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl opacity-50" />
@@ -126,7 +126,7 @@
 	            variants={fadeInUp}
 	            initial="hidden"
 	            animate="visible"
-	            className="flex flex-col items-center gap-8"
+	            className="flex flex-col items-center gap-4"
 	          >
 	            <div className="flex flex-col items-center gap-3">
 	              <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-bfb-blue/70">
