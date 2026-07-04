@@ -80,15 +80,15 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
             {captions[currentIndex]}
           </motion.span>
         )}
-        <div className="flex gap-2">
+        <div className="flex gap-2 bg-black/15 px-2 py-1 rounded-full">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => handleDotClick(index)}
               className={`h-2 w-2 rounded-full transition-all duration-300 ${
                 currentIndex === index
-                  ? "bg-[var(--bfb-blue)] scale-125"
-                  : "bg-white/50 hover:bg-white/80"
+                  ? "bg-white scale-125"
+                  : "bg-white/60 hover:bg-white/90"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

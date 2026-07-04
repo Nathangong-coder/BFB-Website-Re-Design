@@ -66,7 +66,14 @@
       "Bash(curl -s -o /dev/null -w \"clients:%{http_code}\\\\n\" http://localhost:3000/clients)",
       "Bash(curl -s -o /dev/null -w \"home:%{http_code}\\\\n\" http://localhost:3000/)",
       "Bash(curl -s http://localhost:3000/)",
-      "Bash(grep -oE \"pl-\\\\\\\\\\\\[0\\\\.3em\\\\\\\\\\\\]\" /tmp/allcss.css)"
+      "Bash(grep -oE \"pl-\\\\\\\\\\\\[0\\\\.3em\\\\\\\\\\\\]\" /tmp/allcss.css)",
+      "Bash(curl -s http://localhost:3000/placements)",
+      "Bash(ls -1 group-photo)",
+      "Bash(ls -1 \"group photo\")",
+      "Bash(ls -1 assorted)",
+      "Bash(ls -1 quant)",
+      "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"clients: %{http_code}\\\\n\" http://localhost:3000/clients)"
     ]
   }
 }
