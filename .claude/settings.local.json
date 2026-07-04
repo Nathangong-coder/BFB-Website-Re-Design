@@ -51,7 +51,16 @@
       "WebFetch(domain:www.ibbatucla.com)",
       "Bash(unzip -p \"client-projects/BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)",
       "Bash(unzip -p \"client-projects\\\\BFB x Charles Schwab - Statement of Work.docx\" word/document.xml)",
-      "Bash(where pdftoppm *)"
+      "Bash(where pdftoppm *)",
+      "Bash(cat \"$\\(git rev-parse --show-toplevel\\)/.superpowers/sdd/progress.md\")",
+      "Bash(ls \"C:/Users/nagon/.claude/plugins/cache/claude-plugins-official/superpowers/6.1.1/skills/subagent-driven-development/scripts/\")",
+      "Bash(cat eslint.config.mjs)",
+      "Bash(cat .eslintrc.json)",
+      "Bash(cat .eslintrc.js)",
+      "Bash(git stash *)",
+      "Bash(tee /tmp/lint_before.txt)",
+      "Bash(tee \"C:\\\\Users\\\\nagon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-nagon-OneDrive-Documents-Coding-BFB-Website-Re-Design\\\\1e45bf01-cd0e-4daf-8955-45cfd2a0b777\\\\scratchpad\\\\lint-before.txt\")",
+      "Bash(tee \"C:\\\\Users\\\\nagon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-nagon-OneDrive-Documents-Coding-BFB-Website-Re-Design\\\\1e45bf01-cd0e-4daf-8955-45cfd2a0b777\\\\scratchpad\\\\lint-after.txt\")"
     ]
   }
 }
