@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { staggerContainer, fadeInUp } from "@/lib/animations";
 import ThemeToggle from "./ThemeToggle";
 
 type NavItem = {
@@ -106,6 +107,20 @@ export default function Navbar() {
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const pathname = usePathname();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const reduceMotion = useReducedMotion();
+
+  // Close the overlay on navigation and lock body scroll while it is open
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- resetting UI state on route change is intentional, not derived render state
+    setMobileOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   const handleMouseEnter = (name: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -118,19 +133,19 @@ export default function Navbar() {
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/92 dark:bg-midnight/90 backdrop-blur-md border-b border-slate-100 dark:border-white/8">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
-        <div className="flex justify-between h-20 items-center">
+      <div className="max-w-[1400px] mx-auto px-gutter">
+        <div className="flex justify-between h-nav items-center">
           <Link href="/" className="flex items-center">
             <>
               <img
                 src="/bfb-transparent.png"
                 alt="BFB Logo"
-                className="h-[70px] w-auto object-contain dark:hidden"
+                className="h-logo w-auto object-contain dark:hidden"
               />
               <img
                 src="/dark-blue-BFB-logo.png"
                 alt="BFB Logo"
-                className="h-[70px] w-auto object-contain hidden dark:block"
+                className="h-logo w-auto object-contain hidden dark:block"
               />
             </>
           </Link>
@@ -191,88 +206,120 @@ export default function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="md:hidden overflow-hidden border-t border-slate-100 dark:border-white/5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-0 z-[60] bg-white dark:bg-[#080C18] flex flex-col"
           >
-            <div className="px-4 py-4 space-y-0.5 bg-white dark:bg-[#080C18]">
-              {navItems.map((item) =>
-                item.children ? (
-                  <div key={item.name}>
-                    <button
-                      onClick={() =>
-                        setMobileExpanded(
-                          mobileExpanded === item.name ? null : item.name
-                        )
-                      }
-                      className="flex items-center justify-between w-full px-3 py-3 text-sm text-slate-700 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver transition-colors"
-                    >
-                      {item.name}
-                    </button>
-                    <AnimatePresence>
-                      {mobileExpanded === item.name && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="overflow-hidden pl-4 border-l-2 border-bfb-blue/20 ml-3"
-                        >
-                          {item.children.map((child) => (
-                            child.children ? (
-                              <div key={child.name} className="py-2">
-                                <span className="block px-3 py-1 text-[11px] font-bold uppercase text-slate-400">
-                                  {child.name}
-                                </span>
-                                <div className="pl-4 space-y-1">
-                                  {child.children.map((subChild) => (
+            {/* Overlay header */}
+            <div className="flex items-center justify-between h-nav px-gutter border-b border-slate-100 dark:border-white/8 flex-shrink-0">
+              <img
+                src="/bfb-transparent.png"
+                alt="BFB Logo"
+                className="h-logo w-auto object-contain dark:hidden"
+              />
+              <img
+                src="/dark-blue-BFB-logo.png"
+                alt="BFB Logo"
+                className="h-logo w-auto object-contain hidden dark:block"
+              />
+              <button
+                onClick={() => setMobileOpen(false)}
+                aria-label="Close menu"
+                className="p-2 -mr-2 text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"
+              >
+                <X size={26} />
+              </button>
+            </div>
+
+            {/* Scrollable nav list */}
+            <motion.nav
+              variants={reduceMotion ? undefined : staggerContainer}
+              initial={reduceMotion ? undefined : "hidden"}
+              animate={reduceMotion ? undefined : "visible"}
+              className="flex-1 overflow-y-auto px-gutter py-6 flex flex-col gap-1"
+            >
+              {navItems.map((item) => (
+                <motion.div key={item.name} variants={reduceMotion ? undefined : fadeInUp}>
+                  {item.children ? (
+                    <div>
+                      <button
+                        onClick={() =>
+                          setMobileExpanded(mobileExpanded === item.name ? null : item.name)
+                        }
+                        className="flex items-center justify-between w-full min-h-[52px] px-2 text-lg text-slate-800 dark:text-silver"
+                      >
+                        {item.name}
+                        <ChevronDown
+                          size={20}
+                          className={`transition-transform duration-200 ${
+                            mobileExpanded === item.name ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                      <AnimatePresence>
+                        {mobileExpanded === item.name && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="overflow-hidden pl-4 border-l border-bfb-blue/20 ml-2"
+                          >
+                            {item.children.map((child) =>
+                              child.children ? (
+                                <div key={child.name} className="py-1">
+                                  <span className="block px-2 pt-3 pb-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                                    {child.name}
+                                  </span>
+                                  {child.children.map((sub) => (
                                     <Link
-                                      key={subChild.name}
-                                      href={subChild.href || "#"}
+                                      key={sub.name}
+                                      href={sub.href || "#"}
                                       onClick={() => setMobileOpen(false)}
-                                      className="block px-3 py-2 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
+                                      className="flex items-center min-h-[48px] px-2 text-base text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
                                     >
-                                      {subChild.name}
+                                      {sub.name}
                                     </Link>
                                   ))}
                                 </div>
-                              </div>
-                            ) : (
-                              <Link
-                                key={child.name}
-                                href={child.href || "#"}
-                                onClick={() => setMobileOpen(false)}
-                                className="block px-3 py-2.5 text-sm text-slate-500 dark:text-silver/60 hover:text-bfb-blue dark:hover:text-silver transition-colors"
-                              >
-                                {child.name}
-                              </Link>
-                            )
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    key={item.name}
-                    href={item.href || "#"}
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-3 py-3 text-sm text-slate-700 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                )
-              )}
-              <div className="pt-3 pb-1 px-3">
-                <Link
-                  href="/join"
-                  onClick={() => setMobileOpen(false)}
-                  className="block w-full text-center bg-bfb-blue text-white px-5 py-3 rounded-sm text-sm font-semibold hover:bg-bfb-blue/90 transition-colors"
-                >
-                  Join Us
-                </Link>
-              </div>
+                              ) : (
+                                <Link
+                                  key={child.name}
+                                  href={child.href || "#"}
+                                  onClick={() => setMobileOpen(false)}
+                                  className="flex items-center min-h-[48px] px-2 text-base text-slate-600 dark:text-silver/70 hover:text-bfb-blue dark:hover:text-silver transition-colors"
+                                >
+                                  {child.name}
+                                </Link>
+                              )
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <Link
+                      href={item.href || "#"}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center min-h-[52px] px-2 text-lg text-slate-800 dark:text-silver hover:text-bfb-blue transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
+                </motion.div>
+              ))}
+            </motion.nav>
+
+            {/* Pinned primary CTA */}
+            <div className="flex-shrink-0 px-gutter py-5 border-t border-slate-100 dark:border-white/8">
+              <Link
+                href="/join"
+                onClick={() => setMobileOpen(false)}
+                className="block w-full text-center bg-bfb-blue text-white py-4 rounded-sm text-base font-semibold hover:bg-bfb-blue/90 transition-colors"
+              >
+                Join Us
+              </Link>
             </div>
           </motion.div>
         )}
