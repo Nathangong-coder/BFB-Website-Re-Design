@@ -7,23 +7,27 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <Hero />
-      <LifeAtBFB />
-      <PlacementsTicker />
+      <div className="order-2 lap:order-none flex flex-col">
+        <LifeAtBFB />
+      </div>
+      <div className="order-1 lap:order-none flex flex-col">
+        <PlacementsTicker />
+      </div>
 
       {/* Apply CTA */}
-      <section id="apply" className="relative py-36 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <section id="apply" className="relative order-3 lap:order-none py-section px-gutter overflow-hidden">
         <div className="absolute inset-0 bg-white dark:bg-midnight" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-bfb-blue/25 to-transparent" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-bfb-blue/[0.05] dark:bg-bfb-blue/[0.07] rounded-full blur-[100px] pointer-events-none" />
 
         <div className="relative z-10 max-w-2xl mx-auto text-center">
           <h2
-            className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
+            className="text-h2 font-serif text-slate-900 dark:text-silver mb-6 leading-tight"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             Interested?
           </h2>
-          <p className="text-slate-500 dark:text-silver/50 text-base md:text-lg mb-12 max-w-md mx-auto leading-relaxed font-light">
+          <p className="text-slate-500 dark:text-silver/50 text-body-lg mb-12 max-w-md mx-auto leading-relaxed font-light">
             Whether you’re a student passionate about making real-world impact or a business looking to harness new opportunities, we’d love to learn more about you!
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

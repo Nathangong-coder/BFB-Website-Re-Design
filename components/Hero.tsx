@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
+import Link from "next/link";
 
 const phrases = [
   "Real Clients.",
@@ -47,7 +48,7 @@ export default function Hero() {
   }, [text, deleting, idx, settled]);
 
   return (
-    <section className="relative min-h-[750px] h-[90vh] max-h-[1000px] flex flex-col items-center justify-center overflow-hidden pt-20 pb-8 bg-midnight">
+    <section className="relative min-h-[100svh] lap:min-h-0 lap:h-[88svh] max-h-[1000px] flex flex-col items-center justify-center overflow-hidden pt-nav pb-8 bg-midnight">
       {/* Background Photo Section */}
       <div className="absolute inset-0 z-0">
         <img
@@ -69,11 +70,11 @@ export default function Hero() {
           animate="visible"
           className="flex flex-col items-center gap-10"
         >
-          <span className="text-xs font-bold tracking-[0.3em] uppercase text-white/60">
+          <span className="text-eyebrow font-bold tracking-[0.3em] uppercase text-white/60">
             UCLA&apos;s Only All-Encompassing Finance Organization
           </span>
 
-          <h1 className="text-4xl md:text-7xl font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
+          <h1 className="text-hero font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
             <span>{text}</span>
             {!settled && (
               <span className="ml-1 inline-block w-[3px] h-[0.8em] bg-white align-middle animate-pulse" />
@@ -84,11 +85,24 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: settled ? 1 : 0 }}
             transition={{ duration: 0.7 }}
-            className="text-white/55 text-sm md:text-base leading-relaxed font-light max-w-2xl"
+            className="text-white/55 text-body leading-relaxed font-light max-w-2xl"
           >
             Preparing UCLA undergraduates for elite careers across finance — through
             technical rigor, real-world exposure, and an unmatched alumni network.
           </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: settled ? 1 : 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+          >
+            <Link
+              href="/join"
+              className="inline-flex items-center justify-center min-h-[48px] px-10 py-3 bg-bfb-blue text-white text-body font-semibold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20"
+            >
+              Join BFB
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
 
