@@ -72,7 +72,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="inline-block text-eyebrow font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
+          className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
         >
           Our Philosophy
         </motion.span>
@@ -110,7 +110,7 @@ export default function LifeAtBFB() {
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full mx-auto lap:w-[58%] h-[40svh] lap:h-auto lap:min-h-[clamp(22rem,42vw,34rem)] overflow-hidden">
+            <div className="relative w-full mx-auto lap:w-[54%] h-[38svh] lap:h-auto lap:min-h-[clamp(14rem,34vw,28rem)] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 

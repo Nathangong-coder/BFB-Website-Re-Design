@@ -48,7 +48,7 @@ export default function Hero() {
   }, [text, deleting, idx, settled]);
 
   return (
-    <section className="relative min-h-[100svh] lap:min-h-0 lap:h-[88svh] max-h-[1000px] flex flex-col items-center justify-center overflow-hidden pt-nav pb-8 bg-midnight">
+    <section className="relative min-h-[100svh] lap:min-h-[86svh] flex flex-col items-center justify-center overflow-hidden pt-nav pb-10 bg-midnight">
       {/* Background Photo Section */}
       <div className="absolute inset-0 z-0">
         <img
@@ -63,14 +63,14 @@ export default function Hero() {
       </div>
 
       {/* Text Section - Centered Overlay */}
-      <div className="relative z-10 flex flex-col items-center justify-center px-6 py-12 text-center">
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 py-8 sm:py-12 text-center">
         <motion.div
           variants={fadeInUp}
           initial="hidden"
           animate="visible"
-          className="flex flex-col items-center gap-10"
+          className="flex flex-col items-center gap-5 sm:gap-8 lap:gap-10 w-full"
         >
-          <span className="text-eyebrow font-bold tracking-[0.3em] uppercase text-white/60">
+          <span className="hidden sm:block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-white/60">
             UCLA&apos;s Only All-Encompassing Finance Organization
           </span>
 

@@ -220,7 +220,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.2 }}
-            className="md:hidden fixed inset-0 z-[60] bg-white dark:bg-[#080C18] flex flex-col"
+            className="md:hidden fixed top-0 left-0 w-screen h-[100dvh] z-[70] bg-white dark:bg-[#080C18] flex flex-col"
           >
             {/* Overlay header */}
             <div className="flex items-center justify-between h-nav px-gutter border-b border-slate-100 dark:border-white/8 flex-shrink-0">

@@ -60,7 +60,13 @@
       "Bash(git stash *)",
       "Bash(tee /tmp/lint_before.txt)",
       "Bash(tee \"C:\\\\Users\\\\nagon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-nagon-OneDrive-Documents-Coding-BFB-Website-Re-Design\\\\1e45bf01-cd0e-4daf-8955-45cfd2a0b777\\\\scratchpad\\\\lint-before.txt\")",
-      "Bash(tee \"C:\\\\Users\\\\nagon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-nagon-OneDrive-Documents-Coding-BFB-Website-Re-Design\\\\1e45bf01-cd0e-4daf-8955-45cfd2a0b777\\\\scratchpad\\\\lint-after.txt\")"
+      "Bash(tee \"C:\\\\Users\\\\nagon\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\C--Users-nagon-OneDrive-Documents-Coding-BFB-Website-Re-Design\\\\1e45bf01-cd0e-4daf-8955-45cfd2a0b777\\\\scratchpad\\\\lint-after.txt\")",
+      "Bash(curl -s -o /dev/null -w \"home:%{http_code} \" http://localhost:3000/)",
+      "Bash(curl -s -o /dev/null -w \"clients:%{http_code}\" http://localhost:3000/clients)",
+      "Bash(curl -s -o /dev/null -w \"clients:%{http_code}\\\\n\" http://localhost:3000/clients)",
+      "Bash(curl -s -o /dev/null -w \"home:%{http_code}\\\\n\" http://localhost:3000/)",
+      "Bash(curl -s http://localhost:3000/)",
+      "Bash(grep -oE \"pl-\\\\\\\\\\\\[0\\\\.3em\\\\\\\\\\\\]\" /tmp/allcss.css)"
     ]
   }
 }

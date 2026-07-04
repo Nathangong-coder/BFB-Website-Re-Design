@@ -100,7 +100,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue/70 mb-5"
+            className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue/70 mb-5"
           >
             {mode === "board" ? "Leadership" : "Our Community"}
           </motion.span>
@@ -108,7 +108,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-5xl md:text-7xl font-serif text-slate-900 dark:text-silver mb-6"
+            className="text-hero font-serif text-slate-900 dark:text-silver mb-6"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             {mode === "board" ? "Executive Board" : "The Team"}
@@ -123,11 +123,11 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
         </div>
       </div>
 
-      <div className="bg-white dark:bg-midnight pt-16 pb-28 px-4 sm:px-6 lg:px-8 space-y-32">
+      <div className="bg-white dark:bg-midnight pt-16 pb-28 px-4 sm:px-6 lg:px-8 space-y-20">
         {/* Executive Board */}
         <div>
           <div className="text-center mb-12">
-            <h3 className="text-3xl font-serif text-slate-900 dark:text-silver">Executive Board</h3>
+            <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Executive Board</h3>
           </div>
           <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {board.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
@@ -139,7 +139,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
             {/* Professional Advisors */}
             <div>
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-serif text-slate-900 dark:text-silver">Professional Advisors</h3>
+                <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Professional Advisors</h3>
               </div>
               <div className="max-w-7xl mx-auto space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center max-w-2xl mx-auto">
@@ -154,7 +154,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
             {/* General Members */}
             <div>
               <div className="text-center mb-12">
-                <h3 className="text-3xl font-serif text-slate-900 dark:text-silver">General Members</h3>
+                <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">General Members</h3>
               </div>
               <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {members.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
