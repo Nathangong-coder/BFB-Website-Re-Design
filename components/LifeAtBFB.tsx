@@ -118,7 +118,7 @@ export default function LifeAtBFB() {
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full mx-auto lap:w-[55%] lap:self-center h-[38svh] lap:h-auto lap:aspect-[3/2] overflow-hidden">
+            <div className="relative w-full mx-auto lap:w-[55%] lap:self-center h-[34svh] lap:h-auto lap:aspect-[16/10] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 

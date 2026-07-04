@@ -61,7 +61,7 @@ function MemberCard({ member, index }: { member: any, index: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative bg-white dark:bg-glass border border-slate-200 dark:border-white/8 p-5 rounded-sm hover:border-bfb-blue/40 dark:hover:border-bfb-blue/30 shadow-sm dark:shadow-none transition-all duration-300"
+      className="group relative bg-white dark:bg-glass border border-slate-200 dark:border-white/8 p-4 rounded-sm hover:border-bfb-blue/40 dark:hover:border-bfb-blue/30 shadow-sm dark:shadow-none transition-all duration-300"
     >
       <a
         href={member.linkedin}
@@ -69,7 +69,7 @@ function MemberCard({ member, index }: { member: any, index: number }) {
         rel="noopener noreferrer"
         className="block h-full w-full"
       >
-        <div className="aspect-square mb-5 overflow-hidden rounded-sm border border-slate-100 dark:border-white/8">
+        <div className="aspect-square mb-4 overflow-hidden rounded-sm border border-slate-100 dark:border-white/8">
           <img
             src={member.image}
             alt={member.name}
@@ -129,7 +129,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
           <div className="text-center mb-12">
             <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Executive Board</h3>
           </div>
-          <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {board.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
           </div>
         </div>
@@ -142,10 +142,10 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
                 <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Professional Advisors</h3>
               </div>
               <div className="max-w-7xl mx-auto space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center max-w-2xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 justify-center max-w-xl mx-auto">
                   {advisors.slice(0, 2).map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center max-w-4xl mx-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 justify-center max-w-3xl mx-auto">
                   {advisors.slice(2).map((member, i) => <MemberCard key={member.name} member={member} index={i + 2} />)}
                 </div>
               </div>
@@ -156,7 +156,7 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
               <div className="text-center mb-12">
                 <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">General Members</h3>
               </div>
-              <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {members.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
               </div>
             </div>

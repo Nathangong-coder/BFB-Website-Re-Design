@@ -35,9 +35,9 @@ export default function NewslettersHub() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-gutter pb-24 w-full">
+      <div className="max-w-4xl mx-auto px-gutter pb-24 w-full">
         {/* Featured: Annual Review - Now at the top for maximum impact */}
-        <div className="relative group p-6 lap:p-8 bg-slate-900 dark:bg-midnight rounded-3xl border border-slate-800 overflow-hidden shadow-xl mb-16">
+        <div className="relative group p-5 lap:p-6 bg-slate-900 dark:bg-midnight rounded-3xl border border-slate-800 overflow-hidden shadow-xl mb-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-bfb-blue/10 via-transparent to-transparent" />
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl text-center lg:text-left">
@@ -89,7 +89,7 @@ export default function NewslettersHub() {
             {/* Member Presentations */}
             <motion.div
               whileHover={{ y: -5 }}
-              className="p-6 lap:p-8 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group"
+              className="p-5 lap:p-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6 text-bfb-blue">
                 <Presentation size={24} />
@@ -108,7 +108,7 @@ export default function NewslettersHub() {
             {/* Quarterly Briefings */}
             <motion.div
               whileHover={{ y: -5 }}
-              className="p-6 lap:p-8 bg-white dark:bg-midnight border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group shadow-sm"
+              className="p-5 lap:p-6 bg-white dark:bg-midnight border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group shadow-sm"
             >
               <div className="flex items-center gap-3 mb-6 text-bfb-blue">
                 <Calendar size={24} />
