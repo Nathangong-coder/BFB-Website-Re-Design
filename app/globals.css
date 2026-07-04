@@ -35,17 +35,17 @@
   --text-eyebrow: clamp(0.625rem, 0.87vw, 0.75rem);   /* 10px @1152 */
   --text-body: clamp(0.9375rem, 1.4vw, 1.0625rem);    /* 16px @1152 */
   --text-body-lg: clamp(1rem, 1.6vw, 1.1875rem);      /* 18px @1152 */
-  --text-h3: clamp(1.5rem, 3.1vw, 2.375rem);          /* 36px @1152 */
-  --text-h2: clamp(2rem, 5.2vw, 4rem);                /* 60px @1152 */
-  --text-hero: clamp(2.25rem, 6.25vw, 5rem);          /* 72px @1152 */
+  --text-h3: clamp(1.25rem, 2.9vw, 2.25rem);          /* block titles — lower floor so ~700px laptops scale down */
+  --text-h2: clamp(1.75rem, 4.6vw, 3.75rem);          /* section headings — smaller on mid widths */
+  --text-hero: clamp(2rem, 5.2vw, 4.25rem);           /* ~60px @1152 — brought down from the old 72px */
 
-  /* Fluid spacing/structural scale */
-  --spacing-nav: clamp(3.5rem, 6.95vw, 5rem);         /* 80px @1152, caps 80 */
-  --spacing-logo: clamp(2.5rem, 6.1vw, 4.375rem);     /* 70px @1152, caps 70 */
+  /* Fluid spacing/structural scale — mins kept low so the 600-800px range scales, not floors */
+  --spacing-nav: clamp(3.25rem, 6.95vw, 5rem);        /* caps 80 */
+  --spacing-logo: clamp(2.25rem, 6.1vw, 4.375rem);    /* caps 70 */
   --spacing-gutter: clamp(1rem, 4vw, 2.5rem);         /* page side padding */
-  --spacing-section: clamp(3.5rem, 9vw, 8rem);        /* section vertical padding */
-  --spacing-block: clamp(2.5rem, 5.55vw, 4rem);       /* 64px @1152 */
-  --spacing-card: clamp(1.75rem, 5.5vw, 4rem);        /* card inner padding */
+  --spacing-section: clamp(2.5rem, 7vw, 7rem);        /* section vertical padding */
+  --spacing-block: clamp(2rem, 4.5vw, 3.5rem);        /* gap between blocks */
+  --spacing-card: clamp(1.5rem, 4.5vw, 3.5rem);       /* card inner padding */
 }
 
 body {

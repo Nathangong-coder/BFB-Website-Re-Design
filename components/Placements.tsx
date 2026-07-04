@@ -135,7 +135,7 @@ export default function Placements() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-5"
+          className="block w-full text-center text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-5"
         >
           Career Outcomes
         </motion.span>

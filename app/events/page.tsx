@@ -55,7 +55,7 @@ export default function EventsPage() {
     <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4">
       <div className="max-w-4xl mx-auto space-y-16">
         <header className="text-center">
-          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">Events</span>
+          <span className="block w-full text-center text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">Events</span>
           <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver">Calendar</h1>
         </header>
 

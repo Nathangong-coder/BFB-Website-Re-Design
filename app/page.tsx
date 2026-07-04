@@ -33,13 +33,13 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/join"
-              className="inline-block px-12 py-5 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20 w-full sm:w-auto"
+              className="inline-flex items-center justify-center min-h-[52px] px-10 sm:px-12 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20 w-full sm:w-auto"
             >
               Students
             </Link>
             <Link
               href="/clients"
-              className="inline-block px-12 py-5 border border-bfb-blue text-bfb-blue dark:text-gold font-bold rounded-sm hover:bg-bfb-blue/5 dark:hover:bg-gold/5 transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
+              className="inline-flex items-center justify-center min-h-[52px] px-10 sm:px-12 py-4 border border-bfb-blue text-bfb-blue dark:text-accent font-bold rounded-sm hover:bg-bfb-blue/5 dark:hover:bg-accent/5 transition-all duration-300 hover:-translate-y-1 w-full sm:w-auto"
             >
               Clients
             </Link>

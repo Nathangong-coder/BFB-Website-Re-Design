@@ -2,7 +2,7 @@ export default function JoinPage() {
   return (
     <div className="min-h-screen bg-white dark:bg-midnight flex items-center justify-center px-4 pt-16">
       <div className="text-center max-w-sm">
-        <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-6">
+        <span className="block w-full text-center text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-6">
           Recruitment
         </span>
         <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4">
