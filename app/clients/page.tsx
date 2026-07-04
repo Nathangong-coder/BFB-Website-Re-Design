@@ -171,7 +171,7 @@
 	            </motion.p>
 	          </div>
 
-	          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+	          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
 	            {[
 	              {
 	                title: "Financial Modeling",
@@ -209,7 +209,7 @@
 	                initial={{ opacity: 0, y: 20 }}
 	                whileInView={{ opacity: 1, y: 0 }}
 	                transition={{ delay: i * 0.1 }}
-	                className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-bfb-blue/50 transition-colors group"
+	                className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-bfb-blue/50 transition-colors group"
 	              >
 	                <div className="mb-4 p-3 bg-white dark:bg-midnight rounded-lg w-fit shadow-sm group-hover:scale-110 transition-transform">
 	                  {item.icon}
@@ -235,9 +235,9 @@
 	          </div>
 
 	          <div className="relative overflow-x-auto pb-12">
-	            <div className="flex items-center gap-12 px-12 min-w-max relative">
+	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
 	              {/* Horizontal Line */}
-	              <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0" />
+	              <div className="hidden" />
 
 	              {[
 	                {
@@ -261,7 +261,7 @@
 	                  desc: "Presentation of high-fidelity deliverables and strategic recommendations."
 	                },
 	              ].map((item, i) => (
-	                <div key={i} className="relative z-10 flex flex-col items-center gap-8 shrink-0 w-72">
+	                <div key={i} className="relative z-10 flex flex-col-reverse items-center gap-3">
 	                  <motion.div
 	                    initial={{ opacity: 0, y: 10 }}
 	                    whileInView={{ opacity: 1, y: 0 }}
@@ -277,8 +277,7 @@
 	                      <span className="text-bfb-blue font-bold text-xs">{item.step}</span>
 	                    </div>
 	                  </div>
-	                  <div className="h-24" /> {/* Spacer to balance the layout */}
-	                </div>
+		                </div>
 	              ))}
 	            </div>
 	          </div>
@@ -306,8 +305,8 @@
 	          </div>
 
 	          <div className="flex flex-col items-center gap-12">
-	            <div className="relative w-full max-w-5xl group">
-	              <div className="relative aspect-[16/10] bg-white dark:bg-midnight rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+	            <div className="relative w-full max-w-3xl group">
+	              <div className="relative aspect-[16/9] bg-white dark:bg-midnight rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
 	                <AnimatePresence mode="wait">
 	                  <motion.img
 	                    key={currentSlide}

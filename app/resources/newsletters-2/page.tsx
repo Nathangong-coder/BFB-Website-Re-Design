@@ -13,7 +13,7 @@ export default function NewslettersArchive() {
       {/* Header Section */}
       <section className="pt-32 pb-12 px-6 text-center border-b border-slate-100 dark:border-white/5">
         <div className="max-w-4xl mx-auto">
-          <span className="block w-full text-center text-xs font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
+          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
             Knowledge Base
           </span>
           <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">
