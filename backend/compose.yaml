@@ -1,0 +1,10 @@
+services:
+  backend:
+    build: .
+    ports:
+      - 5001:5001
+    volumes:
+      - ./tools/smartcomps/data:/app/tools/smartcomps/data
+      - ./tools/smartcomps/models:/app/tools/smartcomps/models
+    env_file: 
+      - .env
