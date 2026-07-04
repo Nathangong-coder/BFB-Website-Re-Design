@@ -66,13 +66,13 @@ export default function LifeAtBFB() {
   return (
     <section id="approach" className="bg-white dark:bg-midnight">
       {/* Section header */}
-      <div className="py-16 px-4 text-center">
+      <div className="py-section px-gutter text-center">
         <motion.span
           variants={fadeInUp}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="inline-block text-[9px] md:text-[10px] font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
+          className="inline-block text-eyebrow font-bold tracking-[0.3em] uppercase text-[var(--accent)] mb-5"
         >
           Our Philosophy
         </motion.span>
@@ -81,7 +81,7 @@ export default function LifeAtBFB() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
+          className="text-h2 font-serif text-slate-900 dark:text-silver mb-6"
           style={{ textWrap: "balance" } as React.CSSProperties}
         >
           The BFB Approach
@@ -97,7 +97,7 @@ export default function LifeAtBFB() {
       </div>
 
       {/* Blocks */}
-      <div className="max-w-[1400px] mx-auto w-full flex flex-col gap-16 py-12 px-6 sm:px-6 lg:px-8">
+      <div className="max-w-[1400px] mx-auto w-full flex flex-col gap-block py-section px-gutter">
         {blocks.map((block) => (
           <motion.div
             key={block.title}
@@ -105,33 +105,31 @@ export default function LifeAtBFB() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className={`flex flex-col border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden md:flex-row ${
-              !block.imageLeft ? "md:flex-row-reverse" : ""
+            className={`flex flex-col border border-slate-100 dark:border-white/10 rounded-xl overflow-hidden lap:flex-row ${
+              !block.imageLeft ? "lap:flex-row-reverse" : ""
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full mx-auto md:max-w-none md:w-[55%] lg:w-[60%] h-[300px] md:h-auto md:min-h-[450px] lg:min-h-[550px] overflow-hidden">
+            <div className="relative w-full mx-auto lap:w-[58%] h-[40svh] lap:h-auto lap:min-h-[clamp(22rem,42vw,34rem)] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 
             {/* Text half */}
-            <div
-              className="w-full md:w-[45%] lg:w-[40%] px-8 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col justify-center gap-4 bg-white dark:bg-midnight"
-            >
+            <div className="w-full lap:w-[42%] p-card flex flex-col justify-center gap-4 bg-white dark:bg-midnight">
               <div className="space-y-2">
-                <span className="text-[9px] md:text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
+                <span className="text-eyebrow font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
                   {block.eyebrow}
                 </span>
-                <h3 className="text-xl md:text-3xl lg:text-4xl font-serif text-slate-900 dark:text-silver leading-tight">
+                <h3 className="text-h3 font-serif text-slate-900 dark:text-silver leading-tight">
                   {block.title}
                 </h3>
               </div>
               <div className="flex flex-col gap-4">
-                <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-sm lg:text-base max-w-xl whitespace-pre-line">
+                <p className="text-slate-500 dark:text-silver/55 leading-relaxed font-light text-body max-w-xl whitespace-pre-line">
                   {block.body}
                 </p>
                 {"list" in block && block.list && (
-                  <ul className="space-y-2 text-slate-600 dark:text-silver/70 text-sm lg:text-base font-light">
+                  <ul className="space-y-2 text-slate-600 dark:text-silver/70 text-body font-light">
                     {block.list.map((item) => (
                       <li key={item} className="flex items-start gap-2">
                         <span className="text-bfb-blue mt-1.5 h-1.5 w-1.5 rounded-full bg-bfb-blue flex-shrink-0" />

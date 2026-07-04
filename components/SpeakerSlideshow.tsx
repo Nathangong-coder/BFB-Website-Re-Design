@@ -75,7 +75,7 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
             key={captions[currentIndex]}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/80 bg-black/40 px-2 py-1 rounded-sm backdrop-blur-sm"
+            className="text-eyebrow font-bold tracking-[0.2em] uppercase text-white/80 bg-black/40 px-2 py-1 rounded-sm backdrop-blur-sm"
           >
             {captions[currentIndex]}
           </motion.span>
