@@ -33,11 +33,11 @@
 
   /* Fluid type scale — anchored so each hits its Aero@1152px size */
   --text-eyebrow: clamp(0.625rem, 0.87vw, 0.75rem);   /* 10px @1152 */
-  --text-body: clamp(0.9375rem, 1.4vw, 1.0625rem);    /* 16px @1152 */
-  --text-body-lg: clamp(1rem, 1.6vw, 1.1875rem);      /* 18px @1152 */
-  --text-h3: clamp(1.25rem, 2.9vw, 2.25rem);          /* block titles — lower floor so ~700px laptops scale down */
-  --text-h2: clamp(1.75rem, 4.6vw, 3.75rem);          /* section headings — smaller on mid widths */
-  --text-hero: clamp(2rem, 5.2vw, 4.25rem);           /* ~60px @1152 — brought down from the old 72px */
+  --text-body: clamp(0.9rem, 1.05vw, 1rem);           /* body text */
+  --text-body-lg: clamp(0.95rem, 1.3vw, 1.0625rem);   /* lead paragraphs */
+  --text-h3: clamp(1.15rem, 2.5vw, 1.875rem);         /* block/card titles */
+  --text-h2: clamp(1.6rem, 3.9vw, 3.25rem);           /* section headings */
+  --text-hero: clamp(1.75rem, 4.3vw, 3.5rem);         /* hero / page titles — sized down for 13" laptops */
 
   /* Fluid spacing/structural scale — mins kept low so the 600-800px range scales, not floors */
   --spacing-nav: clamp(3.25rem, 6.95vw, 5rem);        /* caps 80 */

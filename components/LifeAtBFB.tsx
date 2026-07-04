@@ -21,8 +21,16 @@ const blocks = [
     title: "Experiential Learning",
     eyebrow: "Applied Practice",
     body: "We believe that the best way to learn is with hands-on opportunities, which we offer via member-led quarterly & overarching projects. Overarching projects are major internal-facing year-long projects (like our algorithmic trading team), while quarterly projects are shorter, external-facing projects that include real-money pitch competitions & real client projects. \n\nWith all these opportunities, we try to have our members attain a hands-on understanding of the industry they’re interested in.",
-    images: ["/capstone/bfb-capstone.jpg"],
-    captions: ["Capstone Projects"],
+    images: [
+      "/group-photo/Berkshire Hathaway.jpg",
+      "/assorted/Quarterly Project - Private Credit.jpeg",
+      "/assorted/Quarterly Project - Stock Pitch.jpeg",
+    ],
+    captions: [
+      "Annual Berkshire Hathaway Trip",
+      "Quarterly Project - Private Credit",
+      "Quarterly Project - Stock Pitch",
+    ],
     imageLeft: false,
   },
   {
@@ -47,17 +55,17 @@ const blocks = [
   {
     title: "Quantitative Rigor",
     eyebrow: "Advanced Analytics",
-    body: "Pushing the boundaries of traditional finance, our quantitative track focuses on Bayesian Analysis and Investing (BAI) and algorithmic strategies. Members compete in quant trading competitions, developing the mathematical rigor necessary for modern electronic markets.",
-    images: ["/quant/quant-photo.jpg"],
-    captions: ["Quantitative Analysis"],
+    body: "For those interested in diving deeper into quantitative finance, the Bruin Algorithmic Insights (BAI) Team is a perfect fit. From hands-on, year-long projects like smartComps (a ML-based valuation tool) to our annual algorithmic trading competition, there is a project perfect for everyone. \n\nWe take pride in fostering a culture of innovation and learning, where both novices and experts can contribute and grow. So, no matter where you're at, there is plenty of opportunity to challenge yourself in quantitative finance.",
+    images: ["/quant/quant-photo.jpg", "/quant/smartComps-photo.png"],
+    captions: ["AI Overview Presentation", "'25/'26 Project - smartComps"],
     imageLeft: false,
   },
   {
     title: "Dynamic Community",
     eyebrow: "Culture & Connection",
     body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. \n\nThis spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we aim to create an environment where mentorship happens naturally and friendships run deep.",
-    images: ["/group-photo/joshua-tree-social.jpeg"],
-    captions: ["Joshua Tree Retreat"],
+    images: ["/group-photo/joshua-tree-social.jpeg", "/group-photo/TopGolf-group-photo.jpeg"],
+    captions: ["Joshua Tree Retreat", "Top Golf"],
     imageLeft: true,
   },
 ] as const;
@@ -110,12 +118,12 @@ export default function LifeAtBFB() {
             }`}
           >
             {/* Image half */}
-            <div className="relative w-full mx-auto lap:w-[54%] h-[38svh] lap:h-auto lap:min-h-[clamp(14rem,34vw,28rem)] overflow-hidden">
+            <div className="relative w-full mx-auto lap:w-[55%] h-[38svh] lap:h-auto lap:min-h-[clamp(13rem,30vw,26rem)] overflow-hidden">
               <SpeakerSlideshow images={block.images} captions={block.captions} />
             </div>
 
             {/* Text half */}
-            <div className="w-full lap:w-[42%] p-card flex flex-col justify-center gap-4 bg-white dark:bg-midnight">
+            <div className="w-full lap:w-[45%] p-card flex flex-col justify-center gap-4 bg-white dark:bg-midnight">
               <div className="space-y-2">
                 <span className="text-eyebrow font-bold tracking-[0.2em] uppercase text-bfb-blue/70">
                   {block.eyebrow}

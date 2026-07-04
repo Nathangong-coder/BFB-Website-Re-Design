@@ -70,9 +70,14 @@ export default function Hero() {
           animate="visible"
           className="flex flex-col items-center gap-5 sm:gap-8 lap:gap-10 w-full"
         >
-          <span className="hidden sm:block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-white/60">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={{ opacity: settled ? 1 : 0 }}
+            transition={{ duration: 0.7 }}
+            className="hidden sm:block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-white/60"
+          >
             UCLA&apos;s Only All-Encompassing Finance Organization
-          </span>
+          </motion.span>
 
           <h1 className="text-hero font-serif text-white leading-[1.1] min-h-[1.2em] flex items-center justify-center max-w-6xl mx-auto">
             <span>{text}</span>
