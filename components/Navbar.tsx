@@ -209,7 +209,7 @@ export default function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: reduceMotion ? 0 : 0.2 }}
             className="md:hidden fixed inset-0 z-[60] bg-white dark:bg-[#080C18] flex flex-col"
           >
             {/* Overlay header */}
@@ -227,7 +227,7 @@ export default function Navbar() {
               <button
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
-                className="p-2 -mr-2 text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"
+                className="p-2 -mr-2 text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
               >
                 <X size={26} />
               </button>
@@ -264,6 +264,7 @@ export default function Navbar() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: reduceMotion ? 0 : 0.2 }}
                             className="overflow-hidden pl-4 border-l border-bfb-blue/20 ml-2"
                           >
                             {item.children.map((child) =>
