@@ -122,6 +122,16 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
+  // Release the mobile overlay if the viewport crosses into the desktop breakpoint
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const handler = (e: MediaQueryListEvent) => {
+      if (e.matches) setMobileOpen(false);
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
   const handleMouseEnter = (name: string) => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setOpenDropdown(name);
@@ -193,7 +203,7 @@ export default function Navbar() {
               Contact Us
             </Link>
             <button
-              className="md:hidden p-1.5 text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"
+              className="md:hidden p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
             >
