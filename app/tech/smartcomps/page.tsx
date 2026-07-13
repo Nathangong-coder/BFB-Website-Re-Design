@@ -224,9 +224,6 @@ export default function SmartCompsPage() {
         
         {/* Header Section */}
         <div className="text-center mb-12">
-          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
-            AI Quant Toolkit
-          </span>
           <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4 flex items-center justify-center gap-3">
             smartComps Valuator
             <button
