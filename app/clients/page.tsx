@@ -114,7 +114,7 @@
 	  return (
 	    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
 	      {/* Hero Section */}
-	      <section className="relative min-h-[70vh] flex flex-col items-center justify-center overflow-hidden pt-32 pb-20 px-6 text-center bg-white dark:bg-midnight">
+	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-14 px-6 text-center bg-white dark:bg-midnight">
 	        <div className="absolute inset-0 z-0">
 	          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.03] via-transparent to-transparent" />
 	          <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl opacity-50" />
@@ -126,22 +126,22 @@
 	            variants={fadeInUp}
 	            initial="hidden"
 	            animate="visible"
-	            className="flex flex-col items-center gap-8"
+	            className="flex flex-col items-center gap-4"
 	          >
 	            <div className="flex flex-col items-center gap-3">
-	              <span className="text-xs font-bold tracking-[0.3em] uppercase text-bfb-blue dark:text-bfb-blue/70">
+	              <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-bfb-blue/70">
 	                Institutional Partnerships
 	              </span>
 	            </div>
 
-	            <h1 className="text-4xl md:text-7xl font-serif text-slate-900 dark:text-silver leading-tight text-center">
+	            <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
 	              Work With Us
 	            </h1>
 
 	            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
 
-	            <div className="max-w-7xl mx-auto p-6 md:p-8 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
-	              <p className="text-sm md:text-xl font-light leading-relaxed">
+	            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
+	              <p className="text-body-lg font-light leading-relaxed">
 	                With members specialized in all fields of finance, our club brings together a powerhouse of student talent specializing in all types of finance, creating an intellectual hub ready to tackle any challenge with fresh, innovative perspectives. Backed by advanced financial modeling skills and a strict standard of professionalism, this blend of technical expertise and diverse viewpoints uniquely positions us to provide premier pro bono financial and strategic support to firms navigating today&apos;s economic landscape.
 	              </p>
 	            </div>
@@ -150,14 +150,14 @@
 	      </section>
 
 	      {/* Capabilities Section */}
-	      <section className="py-20 px-6 sm:px-6 lg:px-8 bg-white dark:bg-midnight">
+	      <section className="py-section px-gutter bg-white dark:bg-midnight">
 	        <div className="max-w-7xl mx-auto">
-	          <div className="text-center mb-20">
+	          <div className="text-center mb-12">
 	            <motion.h2
 	              variants={fadeInUp}
 	              initial="hidden"
 	              whileInView="visible"
-	              className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6"
+	              className="text-h2 font-serif text-slate-900 dark:text-silver mb-6"
 	            >
 	              Our Capabilities
 	            </motion.h2>
@@ -165,13 +165,13 @@
 	              variants={fadeInUp}
 	              initial="hidden"
 	              whileInView="visible"
-	              className="text-slate-500 dark:text-silver/60 text-base md:text-lg max-w-2xl mx-auto"
+	              className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto"
 	            >
 	              We provide high-impact financial and strategic support across diverse domains.
 	            </motion.p>
 	          </div>
 
-	          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+	          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
 	            {[
 	              {
 	                title: "Financial Modeling",
@@ -209,12 +209,12 @@
 	                initial={{ opacity: 0, y: 20 }}
 	                whileInView={{ opacity: 1, y: 0 }}
 	                transition={{ delay: i * 0.1 }}
-	                className="p-8 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-bfb-blue/50 transition-colors group"
+	                className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 hover:border-bfb-blue/50 transition-colors group"
 	              >
 	                <div className="mb-4 p-3 bg-white dark:bg-midnight rounded-lg w-fit shadow-sm group-hover:scale-110 transition-transform">
 	                  {item.icon}
 	                </div>
-	                <h3 className="text-lg md:text-xl font-serif font-bold text-slate-900 dark:text-silver mb-3 text-center md:text-left">{item.title}</h3>
+	                <h3 className="text-body-lg font-serif font-bold text-slate-900 dark:text-silver mb-3 text-center md:text-left">{item.title}</h3>
 	                <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-center md:text-left">{item.desc}</p>
 	              </motion.div>
 	            ))}
@@ -223,21 +223,21 @@
 	      </section>
 
 	      {/* Process Timeline Section */}
-	      <section className="py-32 px-6 sm:px-6 lg:px-8 bg-white dark:bg-midnight">
+	      <section className="py-section px-gutter bg-white dark:bg-midnight">
 	        <div className="max-w-7xl mx-auto">
-	          <div className="text-center mb-24">
-	            <h2 className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">
+	          <div className="text-center mb-16">
+	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
 	              Engagement Process
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-base md:text-lg max-w-2xl mx-auto">
+	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto">
 	              Our structured approach ensures institutional-grade results from kickoff to final delivery.
 	            </p>
 	          </div>
 
 	          <div className="relative overflow-x-auto pb-12">
-	            <div className="flex items-center gap-12 px-12 min-w-max relative">
+	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
 	              {/* Horizontal Line */}
-	              <div className="absolute top-1/2 left-0 right-0 h-px bg-slate-200 dark:bg-slate-800 -translate-y-1/2 z-0" />
+	              <div className="hidden" />
 
 	              {[
 	                {
@@ -261,7 +261,7 @@
 	                  desc: "Presentation of high-fidelity deliverables and strategic recommendations."
 	                },
 	              ].map((item, i) => (
-	                <div key={i} className="relative z-10 flex flex-col items-center gap-8 shrink-0 w-72">
+	                <div key={i} className="relative z-10 flex flex-col-reverse items-center gap-3">
 	                  <motion.div
 	                    initial={{ opacity: 0, y: 10 }}
 	                    whileInView={{ opacity: 1, y: 0 }}
@@ -277,8 +277,7 @@
 	                      <span className="text-bfb-blue font-bold text-xs">{item.step}</span>
 	                    </div>
 	                  </div>
-	                  <div className="h-24" /> {/* Spacer to balance the layout */}
-	                </div>
+		                </div>
 	              ))}
 	            </div>
 	          </div>
@@ -286,19 +285,19 @@
 	      </section>
 
 	      {/* Featured Work Section */}
-	      <section className="py-32 px-6 sm:px-6 lg:px-8 bg-white dark:bg-midnight overflow-hidden">
+	      <section className="py-section px-gutter bg-white dark:bg-midnight overflow-hidden">
 	        <div className="max-w-7xl mx-auto">
 	          <div className="text-center mb-6">
-	            <h2 className="text-3xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">
+	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
 	              Featured Work
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-base md:text-lg max-w-2xl mx-auto mb-12">
+	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto mb-12">
 	              A look at how we translate technical expertise into strategic value.
 	            </p>
-	            <div className="flex flex-col items-center gap-6 max-w-7xl mx-auto mb-4">
-	              <div className="p-8 rounded-3xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 w-full">
-	                <h4 className="font-bold uppercase tracking-wider text-sm text-bfb-blue mb-3">Project Overview</h4>
-	                <p className="text-xs md:text-base text-slate-600 dark:text-silver/70 leading-relaxed">
+	            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto mb-4">
+	              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 w-full">
+	                <h4 className="font-bold uppercase tracking-wider text-sm text-bfb-blue mb-3 text-center">Project Overview</h4>
+	                <p className="text-body text-slate-600 dark:text-silver/70 leading-relaxed">
 	                  High-net-worth clients often perceive alternative investments as overly speculative. BFB developed an institutional-grade educational framework to demystify these complex assets and provide a clear, technical rationale for their inclusion in a diversified portfolio.
 	                </p>
 	              </div>
@@ -306,8 +305,8 @@
 	          </div>
 
 	          <div className="flex flex-col items-center gap-12">
-	            <div className="relative w-full max-w-5xl group">
-	              <div className="relative aspect-[16/10] bg-white dark:bg-midnight rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+	            <div className="relative w-full max-w-3xl group">
+	              <div className="relative aspect-[16/9] bg-white dark:bg-midnight rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
 	                <AnimatePresence mode="wait">
 	                  <motion.img
 	                    key={currentSlide}

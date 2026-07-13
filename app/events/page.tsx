@@ -53,13 +53,13 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4">
-      <div className="max-w-4xl mx-auto space-y-16">
+      <div className="max-w-3xl mx-auto space-y-12">
         <header className="text-center">
-          <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">Events</span>
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver">Calendar</h1>
+          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">Events</span>
+          <h1 className="text-hero font-serif text-slate-900 dark:text-silver">Calendar</h1>
         </header>
 
-        <div className="bg-white dark:bg-glass border border-slate-100 dark:border-white/10 rounded-xl p-8 relative">
+        <div className="bg-white dark:bg-glass border border-slate-100 dark:border-white/10 rounded-xl p-6 relative">
           <div className="flex justify-between items-center mb-8">
             <button
               onClick={handlePrevMonth}
@@ -83,7 +83,7 @@ export default function EventsPage() {
 
             {/* Render empty slots for the start of the month */}
             {Array.from({ length: startDayOfWeek }).map((_, i) => (
-              <div key={`empty-${i}`} className="p-4" />
+              <div key={`empty-${i}`} className="p-2.5" />
             ))}
 
             {daysInMonth.map((day, i) => {
@@ -92,7 +92,7 @@ export default function EventsPage() {
                 <div
                   key={i}
                   onClick={() => highlighted && setSelectedEvent(day)}
-                  className={`p-4 text-center text-sm cursor-pointer transition-all duration-200 relative
+                  className={`p-2.5 text-center text-sm cursor-pointer transition-all duration-200 relative
                     ${highlighted
                       ? "bg-bfb-blue text-white rounded-full hover:scale-110 shadow-lg shadow-bfb-blue/30"
                       : "hover:bg-slate-50 dark:hover:bg-white/[0.02] rounded-full"

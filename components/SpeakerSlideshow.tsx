@@ -75,20 +75,20 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
             key={captions[currentIndex]}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] font-bold tracking-[0.2em] uppercase text-white/80 bg-black/40 px-2 py-1 rounded-sm backdrop-blur-sm"
+            className="text-eyebrow font-bold tracking-[0.2em] uppercase text-white/80 bg-black/40 px-2 py-1 rounded-sm backdrop-blur-sm"
           >
             {captions[currentIndex]}
           </motion.span>
         )}
-        <div className="flex gap-2">
+        <div className="flex gap-2 bg-black/15 px-2 py-1 rounded-full">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => handleDotClick(index)}
               className={`h-2 w-2 rounded-full transition-all duration-300 ${
                 currentIndex === index
-                  ? "bg-[var(--bfb-blue)] scale-125"
-                  : "bg-white/50 hover:bg-white/80"
+                  ? "bg-white scale-125"
+                  : "bg-white/60 hover:bg-white/90"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />

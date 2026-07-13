@@ -47,7 +47,7 @@ export default function ContactPage() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="text-center mb-12">
-            <span className="inline-block text-[10px] font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
+            <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
               Get In Touch
             </span>
             <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4">

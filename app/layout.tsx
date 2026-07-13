@@ -3,6 +3,7 @@ import { DM_Sans, Libre_Baskerville } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MotionProvider from "@/components/MotionProvider";
 import Script from "next/script";
 
 const dmSans = DM_Sans({
@@ -40,9 +41,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <MotionProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </MotionProvider>
       </body>
     </html>
   );

@@ -22,22 +22,22 @@ export default function NewslettersHub() {
             animate="visible"
             className="flex flex-col items-center gap-6"
           >
-            <span className="text-xs font-bold tracking-[0.3em] uppercase text-bfb-blue">
+            <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue">
               Insights & Intelligence
             </span>
-            <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver leading-tight">
+            <h1 className="text-h2 font-serif text-slate-900 dark:text-silver leading-tight">
               BFB Newsletters
             </h1>
-            <p className="text-slate-500 dark:text-silver/60 text-lg font-light leading-relaxed">
+            <p className="text-slate-500 dark:text-silver/60 text-body-lg font-light leading-relaxed">
               From quarterly strategic syntheses to our comprehensive annual review, stay informed on the institutional strategies shaping the future of finance.
             </p>
           </motion.div>
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 pb-32 w-full">
+      <div className="max-w-4xl mx-auto px-gutter pb-24 w-full">
         {/* Featured: Annual Review - Now at the top for maximum impact */}
-        <div className="relative group p-10 bg-slate-900 dark:bg-midnight rounded-3xl border border-slate-800 overflow-hidden shadow-xl mb-24">
+        <div className="relative group p-5 lap:p-6 bg-slate-900 dark:bg-midnight rounded-3xl border border-slate-800 overflow-hidden shadow-xl mb-16">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-bfb-blue/10 via-transparent to-transparent" />
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="max-w-2xl text-center lg:text-left">
@@ -45,10 +45,10 @@ export default function NewslettersHub() {
                 <BookOpen size={24} />
                 <span className="text-xs font-bold uppercase tracking-widest">Annual Review</span>
               </div>
-              <h2 className="text-3xl md:text-4xl font-serif text-white mb-6 leading-tight">
+              <h2 className="text-h3 font-serif text-white mb-6 leading-tight">
                 The State of Institutional Finance
               </h2>
-              <p className="text-white/60 text-lg mb-10 font-light leading-relaxed">
+              <p className="text-white/60 text-body-lg mb-10 font-light leading-relaxed">
                 Our most comprehensive annual analysis of market shifts, talent trends, and the emerging intersection of AI and quantitative strategy.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -89,14 +89,14 @@ export default function NewslettersHub() {
             {/* Member Presentations */}
             <motion.div
               whileHover={{ y: -5 }}
-              className="p-10 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group"
+              className="p-5 lap:p-6 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group"
             >
               <div className="flex items-center gap-3 mb-6 text-bfb-blue">
                 <Presentation size={24} />
                 <span className="text-xs font-bold uppercase tracking-widest">Member Presentations</span>
               </div>
-              <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">Strategic Deep Dives</h2>
-              <p className="text-slate-500 dark:text-silver/60 text-lg mb-10 font-light leading-relaxed">
+              <h2 className="text-h3 font-serif text-slate-900 dark:text-silver mb-4">Strategic Deep Dives</h2>
+              <p className="text-slate-500 dark:text-silver/60 text-body mb-10 font-light leading-relaxed">
                 Detailed technical presentations developed by our analysts on emerging market trends and institutional frameworks.
               </p>
               <div className="flex items-center gap-3 text-slate-400 font-medium italic">
@@ -108,14 +108,14 @@ export default function NewslettersHub() {
             {/* Quarterly Briefings */}
             <motion.div
               whileHover={{ y: -5 }}
-              className="p-10 bg-white dark:bg-midnight border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group shadow-sm"
+              className="p-5 lap:p-6 bg-white dark:bg-midnight border border-slate-200 dark:border-slate-800 rounded-3xl transition-all duration-300 group shadow-sm"
             >
               <div className="flex items-center gap-3 mb-6 text-bfb-blue">
                 <Calendar size={24} />
                 <span className="text-xs font-bold uppercase tracking-widest">Quarterly Briefings</span>
               </div>
-              <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">Strategic Reviews</h2>
-              <p className="text-slate-500 dark:text-silver/60 text-lg mb-10 font-light leading-relaxed">
+              <h2 className="text-h3 font-serif text-slate-900 dark:text-silver mb-4">Strategic Reviews</h2>
+              <p className="text-slate-500 dark:text-silver/60 text-body mb-10 font-light leading-relaxed">
                 Comprehensive quarterly syntheses of institutional trends and BFB research.
               </p>
               <div className="flex items-center gap-3 text-slate-400 font-medium italic">

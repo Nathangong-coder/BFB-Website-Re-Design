@@ -28,18 +28,18 @@ import { motion } from "framer-motion";
 
 export default function PlacementsTicker() {
   return (
-    <section className="py-16 border-t border-slate-100 dark:border-white/8 bg-white dark:bg-midnight overflow-hidden">
+    <section className="py-section border-t border-slate-100 dark:border-white/8 bg-white dark:bg-midnight overflow-hidden">
       {/* Header */}
       <div className="text-center mb-10 px-4">
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver"
+          className="text-h2 font-serif text-slate-900 dark:text-silver"
         >
           Our Placements
         </motion.h2>
-        <p className="text-slate-500 dark:text-silver/50 text-sm mt-2 font-light">
+        <p className="text-slate-500 dark:text-silver/50 text-body mt-2 font-light max-w-2xl mx-auto">
           By actively fostering a deep-rooted culture of mentorship and learning, BFB members continuously attain outstanding careers across all major fields of finance.   
         </p>
         <motion.div
@@ -52,7 +52,7 @@ export default function PlacementsTicker() {
       </div>
 
       {/* Marquee */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 overflow-hidden relative">
+      <div className="max-w-[1400px] mx-auto px-gutter overflow-hidden relative">
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-midnight to-transparent z-10 pointer-events-none" />
 
@@ -60,7 +60,7 @@ export default function PlacementsTicker() {
           {doubled.map((firm, i) => (
             <div
               key={i}
-              className="flex items-center justify-center w-40 h-40 bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-6 transition-transform duration-300 hover:scale-105"
+              className="flex items-center justify-center w-[clamp(6rem,12vw,10rem)] h-[clamp(6rem,12vw,10rem)] bg-white dark:bg-glass border border-slate-200 dark:border-white/8 rounded-sm overflow-hidden p-[clamp(0.75rem,2vw,1.5rem)] transition-transform duration-300 hover:scale-105"
             >
               <img
                 src={logoMap[firm]}
