@@ -8,6 +8,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+# Keep the HF model cache inside /app so it's baked into the image and
+# owned by appuser (avoids a live download from HF Hub on every cold start).
+ENV HF_HOME=/app/.cache/huggingface
+
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
@@ -33,6 +37,10 @@ RUN pip install --no-cache-dir poetry && \
 COPY app.py ./
 COPY tools/ ./tools/
 
+# Pre-download the sentence-transformers model at build time so cold starts
+# don't have to fetch ~420MB from HF Hub before the app can serve a request.
+RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('all-mpnet-base-v2')"
+
 # Ensure the appuser owns the directories for write permissions
 RUN chown -R appuser:appuser /app
 
@@ -43,4 +51,4 @@ USER appuser
 EXPOSE 5001
 
 # Run the application.
-CMD ["gunicorn", "app:app", "--bind=0.0.0.0:5001", "--workers=1", "--timeout=120"]
+CMD ["gunicorn", "app:app", "--bind=0.0.0.0:5001", "--workers=1", "--timeout=240"]
