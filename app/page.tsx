@@ -32,7 +32,7 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              href="/join"
+              href="/recruitment"
               className="inline-flex items-center justify-center min-h-[52px] px-10 sm:px-12 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20 w-full sm:w-auto"
             >
               Students

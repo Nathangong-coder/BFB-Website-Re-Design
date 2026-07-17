@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Mail } from "lucide-react";
+import { Mail, ArrowUpRight } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -12,10 +12,14 @@ export default function Footer() {
 
         <div className="flex items-center gap-6">
           <Link
-            href="/join"
-            className="inline-flex items-center min-h-[44px] px-5 py-2 bg-bfb-blue text-white text-body font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
+            href="/recruitment"
+            className="group inline-flex items-center gap-1.5 min-h-[44px] px-5 py-2 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 text-body font-semibold rounded-none hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors"
           >
             Join Us
+            <ArrowUpRight
+              size={14}
+              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
           </Link>
           <div className="flex justify-center md:justify-end space-x-4">
           <a
