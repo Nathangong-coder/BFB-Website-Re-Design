@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useEffect, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrainingStore } from "@/lib/store";
 import { FINANCE_MODULES } from "@/lib/questions";
-import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle, Timer } from "lucide-react";
+import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle, Timer, X } from "lucide-react";
 import Link from "next/link";
 import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
 
@@ -12,8 +12,8 @@ import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
 
 function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset: () => void }) {
   const [pending, startTransition] = useTransition();
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [sent, setSent] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -146,9 +146,9 @@ function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset
   );
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+// ─── Training Quiz ────────────────────────────────────────────────────────────
 
-export default function TrainingPage() {
+export default function TrainingQuiz() {
   const {
     currentModule,
     currentQuestionIndex,
@@ -172,6 +172,13 @@ export default function TrainingPage() {
     }
   }, [quizStatus, tickTimer]);
 
+  // Stop the quiz if the person navigates away or closes the page mid-attempt.
+  useEffect(() => {
+    return () => {
+      resetQuiz();
+    };
+  }, [resetQuiz]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -181,15 +188,15 @@ export default function TrainingPage() {
   // 1. Module selection
   if (quizStatus === "idle") {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center gap-3 mb-8 text-bfb-blue dark:text-gold">
             <Terminal size={24} />
             <span className="text-xs font-bold tracking-widest uppercase">BFB Knowledge Assessment</span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h1>
-          <p className="text-slate-500 dark:text-silver/60 text-lg mb-12 max-w-2xl">
+          <h2 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h2>
+          <p className="text-slate-500 dark:text-silver/60 text-base md:text-lg mb-12 max-w-2xl">
             Select a module to test your technical proficiency.
           </p>
 
@@ -230,7 +237,7 @@ export default function TrainingPage() {
     const isAnswerCorrect = hasSubmitted && selectedAnswer === question.correctIndex;
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <div className="flex items-center gap-3 text-bfb-blue dark:text-gold">
@@ -245,6 +252,13 @@ export default function TrainingPage() {
               <div className="text-slate-400 dark:text-silver/40 text-xs font-mono">
                 Question {currentQuestionIndex + 1} of {currentModule.questions.length}
               </div>
+              <button
+                onClick={resetQuiz}
+                aria-label="Exit quiz and return to module selection"
+                className="flex items-center gap-1.5 text-slate-400 dark:text-silver/40 hover:text-red-500 dark:hover:text-red-400 text-xs font-bold uppercase tracking-widest transition-colors"
+              >
+                <X size={14} /> Exit
+              </button>
             </div>
           </div>
 
@@ -349,7 +363,7 @@ export default function TrainingPage() {
     // Perfect score → show contact form
     if (isPerfect) {
       return (
-        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
           <PerfectScoreForm moduleName={currentModule.title} onReset={resetQuiz} />
         </div>
       );
@@ -358,7 +372,7 @@ export default function TrainingPage() {
     // Non-perfect completion
     const percentage = (score / currentModule.questions.length) * 100;
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

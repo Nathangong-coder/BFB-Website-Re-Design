@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Download, BookOpen, Presentation, Calendar } from "lucide-react";
+import { ArrowRight, Download, BookOpen, Presentation, Calendar, ArrowUpRight } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
 export default function NewslettersHub() {
@@ -124,6 +125,20 @@ export default function NewslettersHub() {
               </div>
             </motion.div>
           </div>
+        </div>
+
+        {/* Archives Link */}
+        <div className="mt-16 text-center">
+          <Link
+            href="/resources/newsletters-2"
+            className="group inline-flex items-center gap-1.5 text-sm font-semibold text-bfb-blue hover:text-bfb-blue/80 transition-colors"
+          >
+            Browse the Full Archives
+            <ArrowUpRight
+              size={15}
+              className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+            />
+          </Link>
         </div>
       </div>
     </div>

@@ -102,7 +102,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.1 }}
           >
             <Link
-              href="/join"
+              href="/recruitment"
               className="inline-flex items-center justify-center min-h-[48px] px-10 py-3 bg-bfb-blue text-white text-body font-semibold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20"
             >
               Join BFB
