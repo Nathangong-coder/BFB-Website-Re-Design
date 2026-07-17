@@ -129,8 +129,13 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
           <div className="text-center mb-12">
             <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Executive Board</h3>
           </div>
-          <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {board.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+          <div className="max-w-5xl mx-auto space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-md mx-auto">
+              {board.slice(0, 2).map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {board.slice(2).map((member, i) => <MemberCard key={member.name} member={member} index={i + 2} />)}
+            </div>
           </div>
         </div>
 

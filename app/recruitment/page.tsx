@@ -103,7 +103,7 @@ export default function RecruitmentPage() {
                     transition={{ duration: 0.5, delay: i * 0.1 }}
                     className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm hover:border-bfb-blue/30 dark:hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 text-center h-full w-full"
                   >
-                    <h3 className="text-h3 font-serif font-bold text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
+                    <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
                     <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
                   </motion.div>
                 </div>

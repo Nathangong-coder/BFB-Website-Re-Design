@@ -14,7 +14,7 @@
 	      src: "/decks/schwab/charles-schwab-title.png",
 	      title: "Overview",
 	      purpose: "Establish the need for a professional framework to bridge the gap between HNW client interest and the technical complexity of crypto.",
-	      problemSolution: "Problem: Charles Schwab's high-net-worth clients are increasingly interested in alternative assets but find them too complex to navigate safely. Solution: BFB developed an institutional-grade education framework to demystify crypto, translating technical jargon into strategic insights for portfolio integration."
+	      problemSolution: "Problem: Charles Schwab's high-net-worth clients are increasingly interested in alternative assets but find them too complex to navigate safely. Solution: BFB developed a rigorous education framework to demystify crypto, translating technical jargon into strategic insights for portfolio integration."
 	    },
 	    {
 	      src: "/decks/schwab/charles-schwab-contents.png",
@@ -89,7 +89,7 @@
 	    {
 	      src: "/decks/schwab/charles-schwab-thank-you.png",
 	      title: "Conclusion",
-	      purpose: "Synthesizing the core thesis into a final professional call to action, emphasizing BFB's role in delivering institutional-grade strategic value."
+	      purpose: "Synthesizing the core thesis into a final professional call to action, emphasizing BFB's role in delivering real strategic value."
 	    },
 	  ];
 
@@ -142,7 +142,7 @@
 
 	            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
 	              <p className="text-body-lg font-light leading-relaxed">
-	                With members specialized in all fields of finance, our club brings together a powerhouse of student talent specializing in all types of finance, creating an intellectual hub ready to tackle any challenge with fresh, innovative perspectives. Backed by advanced financial modeling skills and a strict standard of professionalism, this blend of technical expertise and diverse viewpoints uniquely positions us to provide premier pro bono financial and strategic support to firms navigating today&apos;s economic landscape.
+	                With members pursuing careers across every corner of finance, our diverse community is prepared to contribute a multitude of fresh and innovative solutions to any situation. Along with this multifaceted vantage point, we possess strong analytical skills and professionalism, developed through our varied industry experiences, and the fusion of these attributes makes us uniquely positioned to offer high-quality, pro bono consulting services to any firm.
 	              </p>
 	            </div>
 	          </motion.div>
@@ -167,7 +167,7 @@
 	              whileInView="visible"
 	              className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto"
 	            >
-	              We provide high-impact financial and strategic support across diverse domains.
+	              We provide hands-on financial and strategic support across diverse domains.
 	            </motion.p>
 	          </div>
 
@@ -226,16 +226,13 @@
 	      <section className="py-section px-gutter bg-white dark:bg-midnight">
 	        <div className="max-w-7xl mx-auto">
 	          <div className="text-center mb-16">
-	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
+	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver">
 	              Engagement Process
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto">
-	              Our structured approach ensures institutional-grade results from kickoff to final delivery.
-	            </p>
 	          </div>
 
 	          <div className="relative overflow-x-auto pb-12">
-	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-fr gap-5 max-w-5xl mx-auto">
 	              {/* Horizontal Line */}
 	              <div className="hidden" />
 
@@ -261,12 +258,12 @@
 	                  desc: "Presentation of high-fidelity deliverables and strategic recommendations."
 	                },
 	              ].map((item, i) => (
-	                <div key={i} className="relative z-10 flex flex-col-reverse items-center gap-3">
+	                <div key={i} className="relative z-10 flex flex-col-reverse items-stretch gap-3 h-full">
 	                  <motion.div
 	                    initial={{ opacity: 0, y: 10 }}
 	                    whileInView={{ opacity: 1, y: 0 }}
 	                    transition={{ duration: 0.5, delay: i * 0.1 }}
-	                    className="p-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 shadow-sm text-center"
+	                    className="flex-1 flex flex-col justify-center p-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 shadow-sm text-center"
 	                  >
 	                    <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-silver mb-2">{item.title}</h3>
 	                    <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
@@ -291,14 +288,11 @@
 	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
 	              Featured Work
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto mb-12">
-	              A look at how we translate technical expertise into strategic value.
-	            </p>
-	            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto mb-4">
+	            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto mt-6 mb-4">
 	              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 w-full">
 	                <h4 className="font-bold uppercase tracking-wider text-sm text-bfb-blue mb-3 text-center">Project Overview</h4>
 	                <p className="text-body text-slate-600 dark:text-silver/70 leading-relaxed">
-	                  High-net-worth clients often perceive alternative investments as overly speculative. BFB developed an institutional-grade educational framework to demystify these complex assets and provide a clear, technical rationale for their inclusion in a diversified portfolio.
+	                  Many high-net-worth clients see alternative investments as too complex or risky. We built a simple, easy-to-follow framework that breaks down these assets and shows how they can fit into a diversified portfolio.
 	                </p>
 	              </div>
 	            </div>

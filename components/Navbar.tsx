@@ -19,26 +19,30 @@ const navItems: NavItem[] = [
   {
     name: "Team",
     children: [
-      { name: "Executive Board", href: "/executive-board" },
       { name: "Members", href: "/members" },
       { name: "Placements", href: "/placements" },
     ],
   },
   { name: "Clients", href: "/clients" },
-  { name: "Recruitment", href: "/recruitment" },
+  {
+    name: "Events",
+    children: [
+      { name: "Recruitment", href: "/recruitment" },
+      { name: "Calendar", href: "/events" },
+    ],
+  },
   {
     name: "Resources",
     children: [
       {
         name: "Tech",
         children: [
-          { name: "BAI", href: "/tech/bai" },
-          { name: "Quant Accelerator", href: "/tech/quant" },
+          { name: "BAI & Quant Accelerator", href: "/tech/bai" },
           { name: "smartComps", href: "/tech/smartcomps" },
         ],
       },
       { name: "Newsletters", href: "/resources/newsletters" },
-      { name: "Calendar", href: "/events" },
+      { name: "Training", href: "/recruitment/training" },
     ],
   },
 ];

@@ -73,7 +73,18 @@
       "Bash(ls -1 assorted)",
       "Bash(ls -1 quant)",
       "Bash(curl -s -o /dev/null -w \"home: %{http_code}\\\\n\" http://localhost:3000/)",
-      "Bash(curl -s -o /dev/null -w \"clients: %{http_code}\\\\n\" http://localhost:3000/clients)"
+      "Bash(curl -s -o /dev/null -w \"clients: %{http_code}\\\\n\" http://localhost:3000/clients)",
+      "Bash(git checkout *)",
+      "Bash(powershell -Command \"Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess\" 2>/dev/null)",
+      "Bash(taskkill //F //PID 47740)",
+      "Bash(awk 'NR==294{print; for\\(i=1;i<=length\\($0\\);i++\\){c=substr\\($0,i,1\\); if\\(c!=\" \"\\) {print \"first non-space at col \"i\" char code \"sprintf\\(\"%d\",index\\(\"\\\\t\",c\\)?9:0\\); break}}}' app/clients/page.tsx)",
+      "Bash(curl -s http://localhost:3000/clients)",
+      "Bash(curl -s http://localhost:3000/resources/newsletters)",
+      "Bash(jobs -l)",
+      "Bash(curl *)",
+      "Bash(gcloud config *)",
+      "PowerShell(gcloud config list *)",
+      "PowerShell(Get-ChildItem *)"
     ]
   }
 }

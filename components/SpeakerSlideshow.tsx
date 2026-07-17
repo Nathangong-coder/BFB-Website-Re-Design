@@ -17,7 +17,7 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
 
     const timer = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
+    }, 8000);
 
     return () => clearInterval(timer);
   }, [images.length, currentIndex]);
@@ -40,7 +40,7 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
 
   return (
     <div className="relative w-full h-full overflow-hidden group">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.img
           key={currentIndex}
           src={images[currentIndex]}
@@ -48,7 +48,7 @@ export const SpeakerSlideshow: React.FC<SpeakerSlideshowProps> = ({ images, capt
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1.2, ease: "easeInOut" }}
+          transition={{ duration: 2.2, ease: "easeInOut" }}
           className="absolute inset-0 w-full h-full object-cover opacity-80"
         />
       </AnimatePresence>
