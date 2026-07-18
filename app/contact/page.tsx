@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Mail } from "lucide-react";
 import { sendContactEmail } from "@/app/actions/contact";
 
 export default function ContactPage() {
@@ -39,8 +39,14 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4">
-      <div className="max-w-xl mx-auto">
+    <div className="relative min-h-screen bg-white dark:bg-midnight pt-page pb-section px-gutter overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+      </div>
+
+      <div className="relative z-10 max-w-xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,13 +56,72 @@ export default function ContactPage() {
             <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
               Get In Touch
             </span>
-            <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4">
+            <h1 className="text-hero font-serif text-slate-900 dark:text-silver mb-4">
               Contact Us
             </h1>
             <div className="h-px w-16 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto mb-6" />
-            <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">
+            <p className="italic font-light text-slate-400 dark:text-silver/40 leading-relaxed text-sm max-w-sm mx-auto">
               Have a question or want to learn more? We&apos;d love to hear from you.
             </p>
+          </div>
+
+          <div className="mb-12">
+            <span className="block text-center text-xs font-bold tracking-[0.25em] uppercase text-bfb-blue mb-5">
+              Connect With Us
+            </span>
+            <div className="flex justify-center items-center gap-4">
+              <a
+                href="mailto:bfbatucla@gmail.com"
+                aria-label="Email"
+                className="p-2 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-silver/60 hover:text-bfb-blue hover:border-bfb-blue/40 dark:hover:text-silver transition-all duration-200"
+              >
+                <Mail size={18} />
+              </a>
+              <a
+                href="https://instagram.com/bfbatucla"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="p-2 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-silver/60 hover:text-bfb-blue hover:border-bfb-blue/40 dark:hover:text-silver transition-all duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/company/bruins-in-finance-and-banking"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="p-2 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-silver/60 hover:text-bfb-blue hover:border-bfb-blue/40 dark:hover:text-silver transition-all duration-200"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                  <rect x="2" y="4" width="4" height="16" rx="2"></rect>
+                  <path d="M2 8h4"></path>
+                  <path d="M2 16h4"></path>
+                </svg>
+              </a>
+            </div>
+
+            <div className="mt-4 text-center text-sm text-slate-500 dark:text-silver/60 space-x-3">
+              <a href="mailto:bfbatucla@gmail.com" className="hover:text-bfb-blue transition-colors">
+                bfbatucla@gmail.com
+              </a>
+              <span className="text-slate-300 dark:text-silver/20">|</span>
+              <a href="tel:+14253943467" className="hover:text-bfb-blue transition-colors">
+                (425) 394-3467
+              </a>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <span className="block text-center text-xs font-bold tracking-[0.25em] uppercase text-bfb-blue mb-1">
+              Send a Message
+            </span>
+            <div className="h-px w-16 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto" />
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">

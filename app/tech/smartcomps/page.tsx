@@ -219,12 +219,21 @@ export default function SmartCompsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        
+    <div className="relative min-h-screen bg-white dark:bg-midnight pt-page pb-section px-gutter overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4 flex items-center justify-center gap-3">
+        <div className="flex flex-col items-center gap-4 mb-12 text-center">
+          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue">
+            Proprietary Tech
+          </span>
+          <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center flex items-center justify-center gap-3">
             smartComps Valuator
             <button
               onClick={() => setActiveModal("about")}
@@ -234,8 +243,8 @@ export default function SmartCompsPage() {
               <Info size={24} />
             </button>
           </h1>
-          <div className="h-px w-16 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto mb-6" />
-          <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm max-w-xl mx-auto">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+          <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-xl mx-auto">
             A hybrid quantitative valuation engine fusing standard financial multiples with high-dimensional qualitative NLP embeddings from company summaries.
           </p>
         </div>
@@ -387,7 +396,7 @@ export default function SmartCompsPage() {
                     className="text-center cursor-help"
                     title="Median Absolute Percentage Error: Lower is better. Measures the average percentage difference between the model's estimate and the true value."
                   >
-                    <div className="text-2xl md:text-3xl font-serif text-slate-800 dark:text-silver">
+                    <div className="text-h2 font-serif text-slate-800 dark:text-silver">
                       {(metrics.mdape * 100).toFixed(1)}%
                     </div>
                     <div className="text-[10px] text-slate-400 dark:text-silver/40 font-bold uppercase mt-1">MDAPE</div>
@@ -397,7 +406,7 @@ export default function SmartCompsPage() {
                     className="text-center cursor-help"
                     title="Coefficient of Determination (R-squared): Higher is better (max 1.0). Indicates the proportion of valuation variance explained by the model features."
                   >
-                    <div className="text-2xl md:text-3xl font-serif text-slate-800 dark:text-silver">
+                    <div className="text-h2 font-serif text-slate-800 dark:text-silver">
                       {metrics.r2.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 dark:text-silver/40 font-bold uppercase mt-1">R² Score</div>
@@ -527,7 +536,7 @@ export default function SmartCompsPage() {
                     Estimated {getDisplayLabel(target)}
                   </span>
                   
-                  <div className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-silver">
+                  <div className="text-hero font-serif font-bold text-slate-900 dark:text-silver">
                     {predictionResult.valuation}
                   </div>
 

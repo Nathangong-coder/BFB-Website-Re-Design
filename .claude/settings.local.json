@@ -84,7 +84,20 @@
       "Bash(curl *)",
       "Bash(gcloud config *)",
       "PowerShell(gcloud config list *)",
-      "PowerShell(Get-ChildItem *)"
+      "PowerShell(Get-ChildItem *)",
+      "Bash(grep -i \"recruitment\\\\\\\\\\\\\\\\v\")",
+      "Bash(agent-browser resize *)",
+      "Bash(agent-browser --help)",
+      "Bash(agent-browser viewport *)",
+      "Bash(agent-browser set *)",
+      "Bash(agent-browser close *)",
+      "Bash(agent-browser find *)",
+      "Bash(pkill -f \"next-server\")",
+      "Bash(pkill -f \"3001\")",
+      "Bash(taskkill //F //IM node.exe //T)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill *)",
+      "Bash(agent-browser wait *)"
     ]
   }
 }

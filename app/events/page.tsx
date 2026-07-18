@@ -52,11 +52,17 @@ export default function EventsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4">
-      <div className="max-w-3xl mx-auto space-y-12">
-        <header className="text-center">
-          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">Events</span>
-          <h1 className="text-hero font-serif text-slate-900 dark:text-silver">Calendar</h1>
+    <div className="relative min-h-screen bg-white dark:bg-midnight pt-page pb-section px-gutter overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+      </div>
+
+      <div className="relative z-10 max-w-3xl mx-auto space-y-12">
+        <header className="flex flex-col items-center gap-4 text-center">
+          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue">Events</span>
+          <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">Calendar</h1>
         </header>
 
         <div className="bg-white dark:bg-glass border border-slate-100 dark:border-white/10 rounded-xl p-6 relative">

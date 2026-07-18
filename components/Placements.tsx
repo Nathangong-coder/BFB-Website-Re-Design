@@ -130,33 +130,34 @@ export default function Placements() {
   return (
     <section id="placements" className="relative bg-white dark:bg-midnight">
       {/* Simplistic Header */}
-      <div className="pt-32 pb-16 px-4 text-center">
-        <motion.span
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-5"
-        >
-          Career Outcomes
-        </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-5xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-8"
-        >
-          Our Placements
-        </motion.h2>
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="h-px w-12 bg-bfb-blue/30 mx-auto"
-        />
+      <div className="relative pt-page pb-section px-gutter text-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
+
+        <div className="relative z-10">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue"
+          >
+            Career Outcomes
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-hero font-serif text-slate-900 dark:text-silver mt-4"
+          >
+            Our Placements
+          </motion.h2>
+        </div>
       </div>
 
-      <div className="pb-28 px-4 sm:px-6 lg:px-8">
+      <div className="pb-28 px-gutter">
         <div className="max-w-6xl mx-auto">
           {/* Controls */}
           <div className="flex flex-col items-center gap-8 mb-16">

@@ -114,7 +114,7 @@
 	  return (
 	    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
 	      {/* Hero Section */}
-	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-14 px-6 text-center bg-white dark:bg-midnight">
+	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-page pb-section px-gutter text-center bg-white dark:bg-midnight">
 	        <div className="absolute inset-0 z-0">
 	          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.03] via-transparent to-transparent" />
 	          <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl opacity-50" />
@@ -140,11 +140,9 @@
 
 	            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
 
-	            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
-	              <p className="text-body-lg font-light leading-relaxed">
-	                With members pursuing careers across every corner of finance, our diverse community is prepared to contribute a multitude of fresh and innovative solutions to any situation. Along with this multifaceted vantage point, we possess strong analytical skills and professionalism, developed through our varied industry experiences, and the fusion of these attributes makes us uniquely positioned to offer high-quality, pro bono consulting services to any firm.
-	              </p>
-	            </div>
+	            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-2xl mx-auto">
+	            With members interested in all corners of finance, our club is prepared for any financial challenge. Our strength in diversity, paired with real industry experience, lets us offer high-quality services to any firm.
+	          </p>
 	          </motion.div>
 	        </div>
 	      </section>
@@ -395,7 +393,7 @@
 	                  className="space-y-2 text-center lg:text-left"
 	                >
 	                  <span className="text-bfb-blue font-bold uppercase tracking-widest text-xs">Case Study Analysis</span>
-	                  <h3 className="text-2xl md:text-3xl font-serif font-bold">{slides[currentSlide].title}</h3>
+	                  <h3 className="text-h2 font-serif font-bold">{slides[currentSlide].title}</h3>
 	                </motion.div>
 	                <div className="space-y-6">
 	                  <motion.div
@@ -410,7 +408,7 @@
 	                        {currentSlide === 0 ? "Strategic Problem & Solution" : "Strategic Reasoning"}
 	                      </span>
 	                    </div>
-	                    <p className="text-sm md:text-lg text-white/80 leading-relaxed font-light text-center lg:text-left">
+	                    <p className="text-body-lg text-white/80 leading-relaxed font-light text-center lg:text-left">
 	                      {currentSlide === 0
 	                        ? (slides[currentSlide] as any).problemSolution
 	                        : slides[currentSlide].purpose}
