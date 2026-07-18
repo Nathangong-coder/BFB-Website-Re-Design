@@ -14,7 +14,7 @@
 	      src: "/decks/schwab/charles-schwab-title.png",
 	      title: "Overview",
 	      purpose: "Establish the need for a professional framework to bridge the gap between HNW client interest and the technical complexity of crypto.",
-	      problemSolution: "Problem: Charles Schwab's high-net-worth clients are increasingly interested in alternative assets but find them too complex to navigate safely. Solution: BFB developed an institutional-grade education framework to demystify crypto, translating technical jargon into strategic insights for portfolio integration."
+	      problemSolution: "Problem: Charles Schwab's high-net-worth clients are increasingly interested in alternative assets but find them too complex to navigate safely. Solution: BFB developed a rigorous education framework to demystify crypto, translating technical jargon into strategic insights for portfolio integration."
 	    },
 	    {
 	      src: "/decks/schwab/charles-schwab-contents.png",
@@ -89,7 +89,7 @@
 	    {
 	      src: "/decks/schwab/charles-schwab-thank-you.png",
 	      title: "Conclusion",
-	      purpose: "Synthesizing the core thesis into a final professional call to action, emphasizing BFB's role in delivering institutional-grade strategic value."
+	      purpose: "Synthesizing the core thesis into a final professional call to action, emphasizing BFB's role in delivering real strategic value."
 	    },
 	  ];
 
@@ -114,7 +114,7 @@
 	  return (
 	    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
 	      {/* Hero Section */}
-	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-14 px-6 text-center bg-white dark:bg-midnight">
+	      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-page pb-section px-gutter text-center bg-white dark:bg-midnight">
 	        <div className="absolute inset-0 z-0">
 	          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.03] via-transparent to-transparent" />
 	          <div className="absolute -top-24 -right-24 w-96 h-96 bg-gold/10 rounded-full blur-3xl opacity-50" />
@@ -140,11 +140,9 @@
 
 	            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
 
-	            <div className="max-w-2xl mx-auto p-6 md:p-8 rounded-[2rem] bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm border border-slate-200/50 dark:border-slate-800/50">
-	              <p className="text-body-lg font-light leading-relaxed">
-	                With members specialized in all fields of finance, our club brings together a powerhouse of student talent specializing in all types of finance, creating an intellectual hub ready to tackle any challenge with fresh, innovative perspectives. Backed by advanced financial modeling skills and a strict standard of professionalism, this blend of technical expertise and diverse viewpoints uniquely positions us to provide premier pro bono financial and strategic support to firms navigating today&apos;s economic landscape.
-	              </p>
-	            </div>
+	            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-2xl mx-auto">
+	            With members interested in all corners of finance, our club is prepared for any financial challenge. Our strength in diversity, paired with real industry experience, lets us offer high-quality services to any firm.
+	          </p>
 	          </motion.div>
 	        </div>
 	      </section>
@@ -167,7 +165,7 @@
 	              whileInView="visible"
 	              className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto"
 	            >
-	              We provide high-impact financial and strategic support across diverse domains.
+	              We provide hands-on financial and strategic support across diverse domains.
 	            </motion.p>
 	          </div>
 
@@ -226,16 +224,13 @@
 	      <section className="py-section px-gutter bg-white dark:bg-midnight">
 	        <div className="max-w-7xl mx-auto">
 	          <div className="text-center mb-16">
-	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
+	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver">
 	              Engagement Process
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto">
-	              Our structured approach ensures institutional-grade results from kickoff to final delivery.
-	            </p>
 	          </div>
 
 	          <div className="relative overflow-x-auto pb-12">
-	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+	            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-fr gap-5 max-w-5xl mx-auto">
 	              {/* Horizontal Line */}
 	              <div className="hidden" />
 
@@ -261,12 +256,12 @@
 	                  desc: "Presentation of high-fidelity deliverables and strategic recommendations."
 	                },
 	              ].map((item, i) => (
-	                <div key={i} className="relative z-10 flex flex-col-reverse items-center gap-3">
+	                <div key={i} className="relative z-10 flex flex-col-reverse items-stretch gap-3 h-full">
 	                  <motion.div
 	                    initial={{ opacity: 0, y: 10 }}
 	                    whileInView={{ opacity: 1, y: 0 }}
 	                    transition={{ duration: 0.5, delay: i * 0.1 }}
-	                    className="p-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 shadow-sm text-center"
+	                    className="flex-1 flex flex-col justify-center p-6 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-900/30 shadow-sm text-center"
 	                  >
 	                    <h3 className="text-xl font-serif font-bold text-slate-900 dark:text-silver mb-2">{item.title}</h3>
 	                    <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
@@ -291,14 +286,11 @@
 	            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-6">
 	              Featured Work
 	            </h2>
-	            <p className="text-slate-500 dark:text-silver/60 text-body max-w-2xl mx-auto mb-12">
-	              A look at how we translate technical expertise into strategic value.
-	            </p>
-	            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto mb-4">
+	            <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto mt-6 mb-4">
 	              <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 w-full">
 	                <h4 className="font-bold uppercase tracking-wider text-sm text-bfb-blue mb-3 text-center">Project Overview</h4>
 	                <p className="text-body text-slate-600 dark:text-silver/70 leading-relaxed">
-	                  High-net-worth clients often perceive alternative investments as overly speculative. BFB developed an institutional-grade educational framework to demystify these complex assets and provide a clear, technical rationale for their inclusion in a diversified portfolio.
+	                  Many high-net-worth clients see alternative investments as too complex or risky. We built a simple, easy-to-follow framework that breaks down these assets and shows how they can fit into a diversified portfolio.
 	                </p>
 	              </div>
 	            </div>
@@ -401,7 +393,7 @@
 	                  className="space-y-2 text-center lg:text-left"
 	                >
 	                  <span className="text-bfb-blue font-bold uppercase tracking-widest text-xs">Case Study Analysis</span>
-	                  <h3 className="text-2xl md:text-3xl font-serif font-bold">{slides[currentSlide].title}</h3>
+	                  <h3 className="text-h2 font-serif font-bold">{slides[currentSlide].title}</h3>
 	                </motion.div>
 	                <div className="space-y-6">
 	                  <motion.div
@@ -416,7 +408,7 @@
 	                        {currentSlide === 0 ? "Strategic Problem & Solution" : "Strategic Reasoning"}
 	                      </span>
 	                    </div>
-	                    <p className="text-sm md:text-lg text-white/80 leading-relaxed font-light text-center lg:text-left">
+	                    <p className="text-body-lg text-white/80 leading-relaxed font-light text-center lg:text-left">
 	                      {currentSlide === 0
 	                        ? (slides[currentSlide] as any).problemSolution
 	                        : slides[currentSlide].purpose}

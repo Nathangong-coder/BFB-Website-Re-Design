@@ -19,26 +19,30 @@ const navItems: NavItem[] = [
   {
     name: "Team",
     children: [
-      { name: "Executive Board", href: "/executive-board" },
       { name: "Members", href: "/members" },
       { name: "Placements", href: "/placements" },
     ],
   },
   { name: "Clients", href: "/clients" },
-  { name: "Recruitment", href: "/recruitment" },
+  {
+    name: "Events",
+    children: [
+      { name: "Recruitment", href: "/recruitment" },
+      { name: "Calendar", href: "/events" },
+    ],
+  },
   {
     name: "Resources",
     children: [
       {
         name: "Tech",
         children: [
-          { name: "BAI", href: "/tech/bai" },
-          { name: "Quant Accelerator", href: "/tech/quant" },
+          { name: "BAI & Quant Accelerator", href: "/tech/bai" },
           { name: "smartComps", href: "/tech/smartcomps" },
         ],
       },
       { name: "Newsletters", href: "/resources/newsletters" },
-      { name: "Calendar", href: "/events" },
+      { name: "Training", href: "/recruitment/training" },
     ],
   },
 ];
@@ -132,8 +136,8 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-white dark:bg-midnight border-b border-slate-100 dark:border-slate-800">
       <div className="max-w-[1400px] mx-auto px-gutter">
-        <div className="flex justify-between h-nav items-center">
-          <Link href="/" className="flex items-center">
+        <div className="grid grid-cols-[1fr_auto_1fr] h-nav items-center">
+          <Link href="/" className="flex items-center justify-self-start">
             <>
               <img
                 src="/bfb-transparent.png"
@@ -148,7 +152,7 @@ export default function Navbar() {
             </>
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 justify-self-center">
             {navItems.map((item) =>
               item.children ? (
                 <div
@@ -182,7 +186,7 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-self-end">
             <ThemeToggle />
             <Link
               href="/contact"

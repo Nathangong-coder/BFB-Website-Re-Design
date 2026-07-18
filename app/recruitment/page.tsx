@@ -38,26 +38,32 @@ export default function RecruitmentPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
       {/* Hero Section */}
-      <section className="relative py-section px-gutter text-center overflow-hidden">
+      <section className="relative min-h-[60vh] flex flex-col items-center justify-center overflow-hidden pt-page pb-section px-gutter text-center bg-white dark:bg-midnight">
         <div className="absolute inset-0 z-0">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
           <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
           <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
         </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto">
+        <div className="relative z-10 max-w-4xl mx-auto">
           <motion.div
             variants={fadeInUp}
             initial="hidden"
             animate="visible"
-            className="flex flex-col items-center gap-6"
+            className="flex flex-col items-center gap-4"
           >
-            <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight">
+            <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-bfb-blue/70">
+              Get Involved
+            </span>
+
+            <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
               Recruitment
             </h1>
-            <div className="h-px w-16 bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-40" />
-            <p className="text-slate-500 dark:text-silver/60 text-body-lg font-light leading-relaxed max-w-2xl">
-              Recruitment is a highly competitive process designed to prepare students for the fast-paced investment banking and other finance recruiting timelines, with a focus on technical preparation, networking strategy, and professional communication. We ultimately seek individuals who are driven and collaborative, while also being genuine, trustworthy, and positive contributors to our club&apos;s community and culture.
+
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+
+            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-2xl mx-auto">
+              Although recruitment may seem daunting, we&apos;re just seeing if you&apos;ll be a fit for the club on a professional and personal level. At the end of the day, we&apos;re looking for people who are willing to put in the work to study for interviews and will fit into our club culture of excellence and belonging.
             </p>
           </motion.div>
         </div>
@@ -73,9 +79,6 @@ export default function RecruitmentPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <span className="block text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-4">
-              The Process
-            </span>
             <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-4">
               Recruiting Timeline
             </h2>
@@ -103,7 +106,7 @@ export default function RecruitmentPage() {
                     transition={{ duration: 0.5, delay: i * 0.1 }}
                     className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm hover:border-bfb-blue/30 dark:hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 text-center h-full w-full"
                   >
-                    <h3 className="text-h3 font-serif font-bold text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
+                    <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
                     <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
                   </motion.div>
                 </div>

@@ -7,6 +7,7 @@ import { FINANCE_MODULES } from "@/lib/questions";
 import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle, Timer, X } from "lucide-react";
 import Link from "next/link";
 import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
+import { fadeInUp } from "@/lib/animations";
 
 // ─── Perfect Score Form ───────────────────────────────────────────────────────
 
@@ -60,7 +61,7 @@ function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset
         <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-6">
           <Award size={32} className="text-green-600 dark:text-green-400" />
         </div>
-        <h2 className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-silver mb-3">
+        <h2 className="text-h3 font-serif text-slate-900 dark:text-silver mb-3">
           Perfect Score!
         </h2>
         <p className="text-slate-500 dark:text-silver/60 text-sm leading-relaxed max-w-sm mx-auto">
@@ -188,17 +189,35 @@ export default function TrainingQuiz() {
   // 1. Module selection
   if (quizStatus === "idle") {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-3 mb-8 text-bfb-blue dark:text-gold">
-            <Terminal size={24} />
-            <span className="text-xs font-bold tracking-widest uppercase">BFB Knowledge Assessment</span>
-          </div>
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
 
-          <h2 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h2>
-          <p className="text-slate-500 dark:text-silver/60 text-base md:text-lg mb-12 max-w-2xl">
-            Select a module to test your technical proficiency.
-          </p>
+        <div className="relative z-10 max-w-5xl mx-auto pt-page pb-section px-gutter">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 text-center mb-16"
+          >
+            <span className="flex items-center gap-2 text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-bfb-blue/70">
+              <Terminal size={16} />
+              BFB Knowledge Assessment
+            </span>
+
+            <h2 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
+              Knowledge Assessment
+            </h2>
+
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+
+            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-2xl mx-auto">
+              Select a module to test your technical proficiency.
+            </p>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {FINANCE_MODULES.map((module) => (
@@ -237,7 +256,7 @@ export default function TrainingQuiz() {
     const isAnswerCorrect = hasSubmitted && selectedAnswer === question.correctIndex;
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-page pb-section px-gutter">
         <div className="max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <div className="flex items-center gap-3 text-bfb-blue dark:text-gold">
@@ -279,7 +298,7 @@ export default function TrainingQuiz() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <h2 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver leading-snug">
+              <h2 className="text-h2 font-serif text-slate-900 dark:text-silver leading-snug">
                 {question.question}
               </h2>
 
@@ -363,7 +382,7 @@ export default function TrainingQuiz() {
     // Perfect score → show contact form
     if (isPerfect) {
       return (
-        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-page pb-section px-gutter flex items-center justify-center">
           <PerfectScoreForm moduleName={currentModule.title} onReset={resetQuiz} />
         </div>
       );
@@ -372,7 +391,7 @@ export default function TrainingQuiz() {
     // Non-perfect completion
     const percentage = (score / currentModule.questions.length) * 100;
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-page pb-section px-gutter flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}

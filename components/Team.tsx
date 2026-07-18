@@ -94,13 +94,19 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
   return (
     <section id="team" className="relative">
       {/* Section header */}
-      <div className="pt-32 pb-16 flex flex-col items-center justify-center bg-white dark:bg-midnight">
-        <div className="text-center px-4">
+      <div className="relative pt-page pb-section px-gutter flex flex-col items-center justify-center overflow-hidden bg-white dark:bg-midnight">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
+
+        <div className="relative z-10 text-center">
           <motion.span
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue/70 mb-5"
+            className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue"
           >
             {mode === "board" ? "Leadership" : "Our Community"}
           </motion.span>
@@ -108,29 +114,27 @@ export default function Team({ mode = "all" }: { mode?: "board" | "all" }) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-hero font-serif text-slate-900 dark:text-silver mb-6"
+            className="text-hero font-serif text-slate-900 dark:text-silver mt-4"
             style={{ textWrap: "balance" } as React.CSSProperties}
           >
             {mode === "board" ? "Executive Board" : "The Team"}
           </motion.h2>
-          <motion.div
-            initial={{ opacity: 0, scaleX: 0 }}
-            whileInView={{ opacity: 1, scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="h-px w-20 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto"
-          />
         </div>
       </div>
 
-      <div className="bg-white dark:bg-midnight pt-16 pb-28 px-4 sm:px-6 lg:px-8 space-y-20">
+      <div className="bg-white dark:bg-midnight pt-16 pb-28 px-gutter space-y-20">
         {/* Executive Board */}
         <div>
           <div className="text-center mb-12">
             <h3 className="text-h3 font-serif text-slate-900 dark:text-silver">Executive Board</h3>
           </div>
-          <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {board.map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+          <div className="max-w-5xl mx-auto space-y-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-md mx-auto">
+              {board.slice(0, 2).map((member, i) => <MemberCard key={member.name} member={member} index={i} />)}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {board.slice(2).map((member, i) => <MemberCard key={member.name} member={member} index={i + 2} />)}
+            </div>
           </div>
         </div>
 
