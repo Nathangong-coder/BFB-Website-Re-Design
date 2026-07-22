@@ -97,7 +97,9 @@
       "Bash(taskkill //F //IM node.exe //T)",
       "Bash(netstat -ano)",
       "Bash(taskkill *)",
-      "Bash(agent-browser wait *)"
+      "Bash(agent-browser wait *)",
+      "Bash(git mv *)",
+      "Bash(npx eslint *)"
     ]
   }
 }

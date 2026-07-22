@@ -8,7 +8,7 @@ import { SpeakerSlideshow } from "./SpeakerSlideshow";
 const blocks = [
   {
     title: "Intensive Training",
-    body: "We try to train our members in the fundamentals of finance. It starts with our 10-week accelerator program. Instead of simply learning theory, we focus on practical skills like real-time Excel modeling & a final capstone project, where recruits have to pitch a company of their choice. \n\nAfter graduating, members are required either to join a client project (see below) or present on a finance topic they’re passionate about. By either getting hands-on experience or learning to verbalize what they’ve learned, we try to reinforce their attained knowledge so they can use it in their future careers.",
+    body: "We train our members in the fundamentals of finance. It starts with our 10-week accelerator program. Instead of simply learning theory, we focus on practical skills like real-time Excel modeling & a final capstone project, where recruits have to pitch a company of their choice. \n\nAfter graduating, members are required either to join a client project (see below) or present on a finance topic they’re passionate about. Through getting hands-on experience and learning to verbalize what they’ve learned, we reinforce their attained knowledge so they can use it in their future careers.",
     images: [
       "/capstone/bfb-capstone.jpg",
       "/assorted/bfb-general-meeting.jpg",
@@ -18,7 +18,7 @@ const blocks = [
   },
   {
     title: "Experiential Learning",
-    body: "We believe that the best way to learn is with hands-on opportunities, which we offer via member-led quarterly & overarching projects. Overarching projects are major internal-facing year-long projects (like our algorithmic trading team), while quarterly projects are shorter, external-facing projects that include real-money pitch competitions & real client projects. \n\nWith all these opportunities, we try to have our members attain a hands-on understanding of the industry they’re interested in.",
+    body: "We believe that the best way to learn is with hands-on opportunities, which we offer via member-led quarterly & overarching projects. Overarching projects are major internal-facing year-long projects (like our algorithmic trading team), while quarterly projects are shorter, external-facing projects that include real-money pitch competitions & real client projects. \n\nWith all these opportunities, our members attain a hands-on understanding of the industry they’re interested in.",
     images: [
       "/group-photo/Berkshire Hathaway.jpg",
       "/assorted/Quarterly Project - Private Credit.jpeg",
@@ -58,7 +58,7 @@ const blocks = [
   },
   {
     title: "Dynamic Community",
-    body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. \n\nThis spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we aim to create an environment where mentorship happens naturally and friendships run deep.",
+    body: "At BFB, we believe that our greatest strengths are found in our collective community. We prioritize the development of the person behind the professional, ensuring that every member is backed by a network of peers who are as invested in each other's success as they are in their own. \n\nThis spirit of camaraderie is the heartbeat of our organization. Through collaborative group projects, big-little pairings, weekly social events, and quarterly retreats, we create an environment where mentorship happens naturally and friendships run deep.",
     images: ["/group-photo/joshua-tree-social.jpeg", "/group-photo/TopGolf-group-photo.jpeg"],
     captions: ["Joshua Tree Retreat", "Top Golf"],
     imageLeft: true,
