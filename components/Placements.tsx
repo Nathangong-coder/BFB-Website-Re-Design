@@ -82,6 +82,49 @@ const Switch = ({ viewMode, setViewMode }: { viewMode: "grid" | "list"; setViewM
 
 const years = [2026, 2025, 2024];
 
+// Shared column widths so every spreadsheet table (Full-Time/Internships, any year) lines up identically.
+const TABLE_COLUMNS = [
+  { key: "member", label: "Member", width: "18%" },
+  { key: "name", label: "Company", width: "20%" },
+  { key: "industry", label: "Industry", width: "15%" },
+  { key: "group", label: "Group", width: "27%" },
+  { key: "location", label: "Location", width: "20%" },
+] as const;
+
+function PlacementsTable({ rows }: { rows: { name: string; member: string; industry: string; group: string; location: string }[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse table-fixed min-w-[800px]">
+        <colgroup>
+          {TABLE_COLUMNS.map((col) => (
+            <col key={col.key} style={{ width: col.width }} />
+          ))}
+        </colgroup>
+        <thead>
+          <tr className="border-b border-slate-200 dark:border-white/10">
+            {TABLE_COLUMNS.map((col) => (
+              <th key={col.key} className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((firm, i) => (
+            <tr key={i} className="border-b border-slate-100 dark:border-white/5">
+              <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
+              <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.group}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.location}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 // Featured logos for Select Placements
 const featuredLogos = [
   { name: "Goldman Sachs", filename: "goldman-sachs.webp" },
@@ -221,30 +264,7 @@ export default function Placements() {
                           ))}
                         </div>
                       ) : (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left border-collapse min-w-[800px]">
-                            <thead>
-                              <tr className="border-b border-slate-200 dark:border-white/10">
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {fullTime.map((firm, i) => (
-                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                        <PlacementsTable rows={fullTime} />
                       )}
                     </div>
                   )}
@@ -262,30 +282,7 @@ export default function Placements() {
                           ))}
                         </div>
                       ) : (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left border-collapse min-w-[800px]">
-                            <thead>
-                              <tr className="border-b border-slate-200 dark:border-white/10">
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {internships.map((firm, i) => (
-                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                        <PlacementsTable rows={internships} />
                       )}
                     </div>
                   )}

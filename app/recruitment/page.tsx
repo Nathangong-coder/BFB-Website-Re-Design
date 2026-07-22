@@ -30,7 +30,7 @@ const timeline = [
   {
     step: "05",
     title: "Final Round Interviews",
-    desc: "Selected candidates participate in a 90 minute interview covering market knowledge, a case study, and financial technicals.",
+    desc: "Selected candidates participate in a final interview covering market knowledge, a case study, and financial technicals.",
   },
 ];
 
@@ -140,7 +140,7 @@ export default function RecruitmentPage() {
                 Knowledge Assessment
               </h2>
               <p className="text-slate-500 dark:text-silver/60 text-body-lg max-w-xl mx-auto mb-10">
-                Think you have what it takes? Put your technical knowledge to the test with our finance modules on DCF, LBO, and accounting.
+                Put your technical knowledge to the test with our finance modules on DCF, LBO, and accounting.
               </p>
 
               <Link
