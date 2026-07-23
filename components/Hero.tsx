@@ -55,10 +55,13 @@ export default function Hero() {
           src="/group-photo/bfb-group-photo.jpg"
           alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-[center_20%] opacity-60 grayscale-[0.35] blur-[1px] scale-105"
+          className="w-full h-full object-cover object-[center_20%] opacity-40 grayscale-[0.5] dark:opacity-60 dark:grayscale-[0.35] dark:blur-[1px] dark:scale-105"
         />
-        {/* Solid midnight at the top/bottom edges (matches navbar & next section); a translucent hero-navy tint through the body lets the photo show through */}
-        <div className="absolute inset-0 bg-gradient-to-b from-midnight via-hero-navy/75 to-midnight" />
+        {/* Light mode: original flat navy + brand-blue wash */}
+        <div className="absolute inset-0 bg-midnight/70 dark:hidden" />
+        <div className="absolute inset-0 bg-bfb-blue/30 dark:hidden" />
+        {/* Dark mode: solid midnight at the top/bottom edges (matches navbar & next section); a translucent hero-navy tint through the body lets the photo show through */}
+        <div className="hidden dark:block absolute inset-0 bg-gradient-to-b from-midnight via-hero-navy/75 to-midnight" />
       </div>
 
       {/* Text Section - Centered Overlay */}
