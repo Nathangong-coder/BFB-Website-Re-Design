@@ -8,7 +8,7 @@ import { SpeakerSlideshow } from "./SpeakerSlideshow";
 const blocks = [
   {
     title: "Intensive Training",
-    body: "We train our members in the fundamentals of finance. It starts with our 10-week accelerator program. Instead of simply learning theory, we focus on practical skills like real-time Excel modeling & a final capstone project, where recruits have to pitch a company of their choice. \n\nAfter graduating, members are required either to join a client project (see below) or present on a finance topic they’re passionate about. Through getting hands-on experience and learning to verbalize what they’ve learned, we reinforce their attained knowledge so they can use it in their future careers.",
+    body: "We train our members on the fundamentals of finance. It starts with our 10-week accelerator program. Instead of simply learning theory, we focus on practical skills like real-time Excel modeling & a final capstone project, where recruits have to pitch a company of their choice. \n\nAfter graduating, members are required either to join a client project (see below) or present on a finance topic they’re passionate about. Through getting hands-on experience and learning to verbalize what they’ve learned, we reinforce their attained knowledge so they can use it in their future careers.",
     images: [
       "/capstone/bfb-capstone.jpg",
       "/assorted/bfb-general-meeting.jpg",

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isTuesday, addWeeks, startOfToday, isAfter, isBefore, getDay } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths, isTuesday, startOfToday, isAfter, isBefore, getDay } from "date-fns";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -41,11 +41,11 @@ export default function EventsPage() {
 
   const allTuesdays = eachDayOfInterval({
     start: minDate,
-    end: addWeeks(today, 3)
+    end: maxHighlightDate
   });
 
   allTuesdays.forEach(d => {
-    if (isTuesday(d)) {
+    if (isEventDay(d)) {
       if (isBefore(d, today)) pastEvents.push(d);
       else upcomingEvents.push(d);
     }

@@ -23,7 +23,7 @@ export default function Footer() {
           </Link>
           <div className="flex justify-center md:justify-end space-x-4">
           <a
-            href="https://instagram.com/bfbatucla"
+            href="https://instagram.com/bfbatucla/"
             target="_blank"
             rel="noopener noreferrer"
             className="p-2 rounded-full border border-slate-200 dark:border-white/10 text-slate-500 dark:text-silver/60 hover:text-bfb-blue hover:border-bfb-blue/40 dark:hover:text-silver transition-all duration-200"
