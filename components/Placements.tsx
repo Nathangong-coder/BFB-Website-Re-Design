@@ -7,17 +7,17 @@ import { motion } from "framer-motion";
 // Verify and reorder within each year array as needed.
 const placementsByYear: Record<number, { name: string; member: string; industry: string; group: string; filename: string; type: "full-time" | "internship"; location: string }[]> = {
   2026: [
-    { name: "Mizuho", member: "Jack Ren", industry: "Finance", group: "Investment Banking", filename: "mizuho.jpg", type: "full-time", location: "TBD" },
+    { name: "Mizuho", member: "Jack Ren", industry: "Finance", group: "Investment Banking", filename: "mizuho.jpg", type: "full-time", location: "San Francisco, CA" },
     { name: "Federal Reserve", member: "Jordan Lee", industry: "Economics", group: "Research", filename: "fed reserve.jpg", type: "full-time", location: "New York, NY" },
     { name: "UBS", member: "Miguel Quinones", industry: "Finance", group: "Investment Banking", filename: "ubs.jpg", type: "full-time", location: "New York, NY" },
     { name: "World Bank Group", member: "Zachary Pelikh", industry: "Finance", group: "Development", filename: "world-bank-group.webp", type: "internship", location: "Los Angeles, CA" },
-    { name: "Google", member: "Harris Song", industry: "Tech", group: "Software Engineering", filename: "google.webp", type: "internship", location: "TBD" },
-    { name: "Accenture", member: "Nams Doan", industry: "Consulting", group: "Consulting", filename: "accenture.jpg", type: "internship", location: "TBD" },
+    { name: "Google", member: "Harris Song", industry: "Tech", group: "Software Engineering", filename: "google.webp", type: "internship", location: "San Francisco, CA" },
+    { name: "Accenture", member: "Nams Doan", industry: "Consulting", group: "Consulting", filename: "accenture.jpg", type: "internship", location: "Singapore, SG" },
     { name: "BMO Capital Markets", member: "Jenaro Rodriguez", industry: "Finance", group: "Investment Banking", filename: "bmo.jpg", type: "internship", location: "New York, NY" },
-    { name: "Amazon", member: "Alain Izawa", industry: "Tech", group: "Product Management", filename: "Amazon.png", type: "internship", location: "TBD" },
-    { name: "Siemens Healthineers", member: "Kareina Zhao", industry: "Healthcare", group: "Financial Development", filename: "siemens healthineers.jpg", type: "internship", location: "TBD" },
-    { name: "Barclays", member: "Ashley Hinkel", industry: "Finance", group: "Sales & Trading", filename: "barclays.jpg", type: "internship", location: "TBD" },
-    { name: "Waymo", member: "Henry McNamara", industry: "Tech", group: "Software Engineering", filename: "waymo.jpg", type: "internship", location: "TBD" },
+    { name: "Amazon", member: "Alain Izawa", industry: "Tech", group: "Product Management", filename: "Amazon.png", type: "internship", location: "Seattle, WA" },
+    { name: "Siemens Healthineers", member: "Kareina Zhao", industry: "Healthcare", group: "Financial Development", filename: "siemens healthineers.jpg", type: "internship", location: "San Francisco, CA" },
+    { name: "Barclays", member: "Ashley Hinkel", industry: "Finance", group: "Sales & Trading", filename: "barclays.jpg", type: "internship", location: "New York, NY" },
+    { name: "Waymo", member: "Henry McNamara", industry: "Tech", group: "Software Engineering", filename: "waymo.jpg", type: "internship", location: "San Francisco, CA" },
   ],
   2025: [
     { name: "JP Morgan Chase", member: "Charlotte Humphreys", industry: "Finance", group: "Risk Management", filename: "jp morgan.jpg", type: "full-time", location: "Newark, Delaware" },
@@ -69,14 +69,14 @@ const placementsByYear: Record<number, { name: string; member: string; industry:
 
 const Switch = ({ viewMode, setViewMode }: { viewMode: "grid" | "list"; setViewMode: (mode: "grid" | "list") => void }) => (
   <div className="flex items-center gap-3">
-    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-bfb-blue' : 'text-slate-400'}`}>Logos</span>
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-bfb-blue' : 'text-slate-400 dark:text-bfb-blue/30'}`}>Logos</span>
     <button
       onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
       className="w-12 h-6 bg-slate-200 dark:bg-white/10 rounded-full relative transition-colors focus:outline-none"
     >
       <div className={`absolute top-1 w-4 h-4 bg-white dark:bg-silver rounded-full shadow transition-all duration-300 ${viewMode === 'list' ? 'left-7' : 'left-1'}`} />
     </button>
-    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'list' ? 'text-bfb-blue' : 'text-slate-400'}`}>Spreadsheet</span>
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'list' ? 'text-bfb-blue' : 'text-slate-400 dark:text-bfb-blue/30'}`}>Spreadsheet</span>
   </div>
 );
 
@@ -229,7 +229,7 @@ export default function Placements() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {featuredLogos.map((logo, i) => (
-                    <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-40 flex items-center justify-center p-8">
+                    <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-40 flex items-center justify-center p-8">
                       <img src={`/companies/${encodeURIComponent(logo.filename)}`} alt={logo.name} className="w-full h-full object-contain" />
                     </div>
                   ))}
@@ -254,11 +254,11 @@ export default function Placements() {
                   {/* Full-Time Section */}
                   {fullTime.length > 0 && (
                     <div className="space-y-6">
-                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Full-Time</h4>
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70 dark:text-white">Full-Time</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {getUniquePlacements(fullTime).map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                            <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-32 flex items-center justify-center p-6">
                               <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}
@@ -272,11 +272,11 @@ export default function Placements() {
                   {/* Internships Section */}
                   {internships.length > 0 && (
                     <div className="space-y-6">
-                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Internships</h4>
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70 dark:text-white">Internships</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {getUniquePlacements(internships).map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                            <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-32 flex items-center justify-center p-6">
                               <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}

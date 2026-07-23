@@ -99,7 +99,9 @@
       "Bash(taskkill *)",
       "Bash(agent-browser wait *)",
       "Bash(git mv *)",
-      "Bash(npx eslint *)"
+      "Bash(npx eslint *)",
+      "Bash(magick -version)",
+      "Bash(python3 *)"
     ]
   }
 }

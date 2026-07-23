@@ -138,18 +138,16 @@ export default function Navbar() {
       <div className="max-w-[1400px] mx-auto px-gutter">
         <div className="grid grid-cols-[1fr_auto_1fr] h-nav items-center">
           <Link href="/" className="flex items-center justify-self-start">
-            <>
-              <img
-                src="/bfb-transparent.png"
-                alt="BFB Logo"
-                className="h-logo w-auto object-contain dark:hidden"
-              />
-              <img
-                src="/dark-blue-BFB-logo.png"
-                alt="BFB Logo"
-                className="h-logo w-auto object-contain hidden dark:block"
-              />
-            </>
+            <img
+              src="/bfb-transparent.png"
+              alt="BFB Logo"
+              className="h-logo w-auto object-contain dark:hidden"
+            />
+            <img
+              src="/bfb-transparent-white.png"
+              alt="BFB Logo"
+              className="h-logo w-auto object-contain hidden dark:block"
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-6 justify-self-center">
@@ -226,7 +224,7 @@ export default function Navbar() {
                 className="h-logo w-auto object-contain dark:hidden"
               />
               <img
-                src="/dark-blue-BFB-logo.png"
+                src="/bfb-transparent-white.png"
                 alt="BFB Logo"
                 className="h-logo w-auto object-contain hidden dark:block"
               />
