@@ -46,7 +46,7 @@ const blocks = [
       "/speakers/Horizontal Anderson Speaker Photo.jpeg",
       "/speakers/jpm speaker.jpeg",
     ],
-    captions: ["Anderson Professor", "JP Morgan Alumni"],
+    captions: ["Anderson Professor", "Goldman Sachs Speaker"],
     imageLeft: true,
   },
   {
