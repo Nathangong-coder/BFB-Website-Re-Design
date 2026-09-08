@@ -7,17 +7,29 @@ import { motion } from "framer-motion";
 // Verify and reorder within each year array as needed.
 const placementsByYear: Record<number, { name: string; member: string; industry: string; group: string; filename: string; type: "full-time" | "internship"; location: string }[]> = {
   2026: [
-    { name: "Mizuho", member: "Jack Ren", industry: "Finance", group: "Investment Banking", filename: "mizuho.jpg", type: "full-time", location: "TBD" },
+    { name: "Mizuho", member: "Jack Ren", industry: "Finance", group: "Investment Banking", filename: "mizuho.jpg", type: "full-time", location: "San Francisco, CA" },
     { name: "Federal Reserve", member: "Jordan Lee", industry: "Economics", group: "Research", filename: "fed reserve.jpg", type: "full-time", location: "New York, NY" },
     { name: "UBS", member: "Miguel Quinones", industry: "Finance", group: "Investment Banking", filename: "ubs.jpg", type: "full-time", location: "New York, NY" },
     { name: "World Bank Group", member: "Zachary Pelikh", industry: "Finance", group: "Development", filename: "world-bank-group.webp", type: "internship", location: "Los Angeles, CA" },
-    { name: "Google", member: "Harris Song", industry: "Tech", group: "Software Engineering", filename: "google.webp", type: "internship", location: "TBD" },
-    { name: "Accenture", member: "Nams Doan", industry: "Consulting", group: "Consulting", filename: "accenture.jpg", type: "internship", location: "TBD" },
+    { name: "Google", member: "Harris Song", industry: "Tech", group: "Software Engineering", filename: "google.webp", type: "internship", location: "San Francisco, CA" },
+    { name: "Accenture", member: "Nams Doan", industry: "Consulting", group: "Consulting", filename: "accenture.jpg", type: "internship", location: "Singapore, SG" },
     { name: "BMO Capital Markets", member: "Jenaro Rodriguez", industry: "Finance", group: "Investment Banking", filename: "bmo.jpg", type: "internship", location: "New York, NY" },
-    { name: "Amazon", member: "Alain Izawa", industry: "Tech", group: "Product Management", filename: "Amazon.png", type: "internship", location: "TBD" },
-    { name: "Siemens Healthineers", member: "Kareina Zhao", industry: "Healthcare", group: "Financial Development", filename: "siemens healthineers.jpg", type: "internship", location: "TBD" },
-    { name: "Barclays", member: "Ashley Hinkel", industry: "Finance", group: "Sales & Trading", filename: "barclays.jpg", type: "internship", location: "TBD" },
-    { name: "Waymo", member: "Henry McNamara", industry: "Tech", group: "Software Engineering", filename: "waymo.jpg", type: "internship", location: "TBD" },
+    { name: "Amazon", member: "Alain Izawa", industry: "Tech", group: "Product Management", filename: "Amazon.png", type: "internship", location: "Seattle, WA" },
+    { name: "Siemens Healthineers", member: "Kareina Zhao", industry: "Healthcare", group: "Financial Development", filename: "siemens healthineers.jpg", type: "internship", location: "San Francisco, CA" },
+    { name: "Barclays", member: "Ashley Hinkel", industry: "Finance", group: "Sales & Trading", filename: "barclays.jpg", type: "internship", location: "New York, NY" },
+    { name: "Waymo", member: "Henry McNamara", industry: "Tech", group: "Software Engineering", filename: "waymo.jpg", type: "internship", location: "San Francisco, CA" },
+    { name: "Goldman Sachs", member: "Nike Broughton", industry: "Finance", group: "Investment Banking", filename: "goldman-sachs.webp", type: "full-time", location: "New York, NY" },
+    { name: "Deutsche Bank", member: "Stewart Fang", industry: "Finance", group: "Investment Banking", filename: "deustche bank.png", type: "full-time", location: "New York, NY" },
+    { name: "GLC Advisors & Co", member: "Heschel Fernando", industry: "Finance", group: "Investment Banking", filename: "glc advisors.png", type: "full-time", location: "Los Angeles, CA" },
+    { name: "Columbia University", member: "Joanna Zhang", industry: "Education", group: "Academic", filename: "columbia university.png", type: "full-time", location: "New York, NY" },
+    { name: "New York University", member: "Maria Bozhkova", industry: "Education", group: "Academic", filename: "nyu.png", type: "full-time", location: "New York, NY" },
+    { name: "BBVA", member: "Alan Whitmoyer", industry: "Finance", group: "Investment Banking", filename: "bbva.png", type: "full-time", location: "New York, NY" },
+    { name: "First Citizens Bank", member: "Rosalind Goldman", industry: "Finance", group: "Project Finance", filename: "first citizens bank.png", type: "internship", location: "Los Angeles, CA" },
+    { name: "Morgan Stanley", member: "Shveenita Kanapathy", industry: "Finance", group: "Investment Banking", filename: "morgan stanley.jpg", type: "internship", location: "New York, NY" },
+    { name: "PwC", member: "Annie Huang", industry: "Finance", group: "Audit", filename: "pwc.jpg", type: "internship", location: "Irvine, CA" },
+    { name: "Franklin Templeton", member: "Abhi Kumar", industry: "Finance", group: "Trading", filename: "franklin templeton.png", type: "internship", location: "Chicago, IL" },
+    { name: "Altman Solon", member: "Viraj Nigam", industry: "Consulting", group: "Consulting", filename: "altman solon.jpg", type: "internship", location: "New York, NY" },
+    { name: "Pulice Nervell", member: "Keilee Hane", industry: "Legal", group: "Legal Clerk", filename: "public nervell.png", type: "internship", location: "Honolulu, HI" },
   ],
   2025: [
     { name: "JP Morgan Chase", member: "Charlotte Humphreys", industry: "Finance", group: "Risk Management", filename: "jp morgan.jpg", type: "full-time", location: "Newark, Delaware" },
@@ -69,18 +81,61 @@ const placementsByYear: Record<number, { name: string; member: string; industry:
 
 const Switch = ({ viewMode, setViewMode }: { viewMode: "grid" | "list"; setViewMode: (mode: "grid" | "list") => void }) => (
   <div className="flex items-center gap-3">
-    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-bfb-blue' : 'text-slate-400'}`}>Logos</span>
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'grid' ? 'text-bfb-blue' : 'text-slate-400 dark:text-bfb-blue/30'}`}>Logos</span>
     <button
       onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
       className="w-12 h-6 bg-slate-200 dark:bg-white/10 rounded-full relative transition-colors focus:outline-none"
     >
       <div className={`absolute top-1 w-4 h-4 bg-white dark:bg-silver rounded-full shadow transition-all duration-300 ${viewMode === 'list' ? 'left-7' : 'left-1'}`} />
     </button>
-    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'list' ? 'text-bfb-blue' : 'text-slate-400'}`}>Spreadsheet</span>
+    <span className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors ${viewMode === 'list' ? 'text-bfb-blue' : 'text-slate-400 dark:text-bfb-blue/30'}`}>Spreadsheet</span>
   </div>
 );
 
 const years = [2026, 2025, 2024];
+
+// Shared column widths so every spreadsheet table (Full-Time/Internships, any year) lines up identically.
+const TABLE_COLUMNS = [
+  { key: "member", label: "Member", width: "18%" },
+  { key: "name", label: "Company", width: "20%" },
+  { key: "industry", label: "Industry", width: "15%" },
+  { key: "group", label: "Group", width: "27%" },
+  { key: "location", label: "Location", width: "20%" },
+] as const;
+
+function PlacementsTable({ rows }: { rows: { name: string; member: string; industry: string; group: string; location: string }[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse table-fixed min-w-[800px]">
+        <colgroup>
+          {TABLE_COLUMNS.map((col) => (
+            <col key={col.key} style={{ width: col.width }} />
+          ))}
+        </colgroup>
+        <thead>
+          <tr className="border-b border-slate-200 dark:border-white/10">
+            {TABLE_COLUMNS.map((col) => (
+              <th key={col.key} className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">
+                {col.label}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((firm, i) => (
+            <tr key={i} className="border-b border-slate-100 dark:border-white/5">
+              <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
+              <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.group}</td>
+              <td className="py-4 text-sm text-slate-500">{firm.location}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
 
 // Featured logos for Select Placements
 const featuredLogos = [
@@ -130,33 +185,34 @@ export default function Placements() {
   return (
     <section id="placements" className="relative bg-white dark:bg-midnight">
       {/* Simplistic Header */}
-      <div className="pt-32 pb-16 px-4 text-center">
-        <motion.span
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="block w-full text-center text-eyebrow font-bold tracking-[0.3em] uppercase text-bfb-blue mb-5"
-        >
-          Career Outcomes
-        </motion.span>
-        <motion.h2
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-5xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-8"
-        >
-          Our Placements
-        </motion.h2>
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0 }}
-          whileInView={{ opacity: 1, scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-          className="h-px w-12 bg-bfb-blue/30 mx-auto"
-        />
+      <div className="relative pt-page pb-section px-gutter text-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
+
+        <div className="relative z-10">
+          <motion.span
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue"
+          >
+            Career Outcomes
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-hero font-serif text-slate-900 dark:text-silver mt-4"
+          >
+            Our Placements
+          </motion.h2>
+        </div>
       </div>
 
-      <div className="pb-28 px-4 sm:px-6 lg:px-8">
+      <div className="pb-28 px-gutter">
         <div className="max-w-6xl mx-auto">
           {/* Controls */}
           <div className="flex flex-col items-center gap-8 mb-16">
@@ -185,7 +241,7 @@ export default function Placements() {
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {featuredLogos.map((logo, i) => (
-                    <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-40 flex items-center justify-center p-8">
+                    <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-40 flex items-center justify-center p-8">
                       <img src={`/companies/${encodeURIComponent(logo.filename)}`} alt={logo.name} className="w-full h-full object-contain" />
                     </div>
                   ))}
@@ -210,40 +266,17 @@ export default function Placements() {
                   {/* Full-Time Section */}
                   {fullTime.length > 0 && (
                     <div className="space-y-6">
-                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Full-Time</h4>
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70 dark:text-white">Full-Time</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {getUniquePlacements(fullTime).map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                            <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-32 flex items-center justify-center p-6">
                               <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left border-collapse min-w-[800px]">
-                            <thead>
-                              <tr className="border-b border-slate-200 dark:border-white/10">
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {fullTime.map((firm, i) => (
-                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                        <PlacementsTable rows={fullTime} />
                       )}
                     </div>
                   )}
@@ -251,40 +284,17 @@ export default function Placements() {
                   {/* Internships Section */}
                   {internships.length > 0 && (
                     <div className="space-y-6">
-                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70">Internships</h4>
+                      <h4 className="text-[10px] font-bold tracking-[0.2em] uppercase text-bfb-blue/70 dark:text-white">Internships</h4>
                       {viewMode === "grid" ? (
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                           {getUniquePlacements(internships).map((firm, i) => (
-                            <div key={i} className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm h-32 flex items-center justify-center p-6">
+                            <div key={i} className="bg-white border border-slate-200 dark:border-white/15 shadow-sm dark:shadow-lg dark:shadow-black/20 rounded-sm h-32 flex items-center justify-center p-6">
                               <img src={`/companies/${encodeURIComponent(firm.filename)}`} alt={firm.name} className="w-full h-full object-contain" />
                             </div>
                           ))}
                         </div>
                       ) : (
-                        <div className="overflow-x-auto">
-                          <table className="w-full text-left border-collapse min-w-[800px]">
-                            <thead>
-                              <tr className="border-b border-slate-200 dark:border-white/10">
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Member</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Company</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Industry</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Group</th>
-                                <th className="py-4 text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400">Location</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {internships.map((firm, i) => (
-                                <tr key={i} className="border-b border-slate-100 dark:border-white/5">
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver">{firm.member}</td>
-                                  <td className="py-4 text-sm text-slate-900 dark:text-silver font-bold">{firm.name}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.industry}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.group}</td>
-                                  <td className="py-4 text-sm text-slate-500">{firm.location}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
+                        <PlacementsTable rows={internships} />
                       )}
                     </div>
                   )}

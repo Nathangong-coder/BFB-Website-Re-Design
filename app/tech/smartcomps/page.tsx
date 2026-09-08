@@ -2,7 +2,53 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Info, AlertCircle, Play, Sparkles, ChevronDown, Check, X, Shield, FileText } from "lucide-react";
+import { Info, AlertCircle, Play, Sparkles, ChevronDown, Check, X, Shield, FileText, Loader2 } from "lucide-react";
+import { fadeInUp } from "@/lib/animations";
+
+// The full tool is implemented but hidden behind a "Coming Soon" placeholder
+// below while it's still being tuned. Swap the default export back to
+// SmartCompsTool to re-enable it.
+export default function SmartCompsPage() {
+  return (
+    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
+      <section className="relative flex-1 flex flex-col items-center justify-center pt-page pb-section px-gutter text-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-slate-50 dark:bg-midnight" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
+
+        <div className="relative z-10 max-w-xl mx-auto">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4"
+          >
+            <div className="p-3 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+              <Sparkles className="text-bfb-blue" size={28} />
+            </div>
+            <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue">
+              Proprietary Tech
+            </span>
+            <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
+              smartComps Valuator
+            </h1>
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed">
+              A hybrid quantitative valuation engine fusing standard financial multiples with high-dimensional qualitative NLP embeddings from company summaries.
+            </p>
+            <div className="flex items-center gap-3 text-slate-400 font-medium italic">
+              <div className="w-2 h-2 bg-slate-300 dark:bg-slate-700 rounded-full animate-pulse" />
+              Coming soon
+            </div>
+          </motion.div>
+        </div>
+      </section>
+    </div>
+  );
+}
 
 interface ConfigData {
   financial_features: string[];
@@ -24,7 +70,9 @@ interface PredictionResult {
   valuation_range: string;
 }
 
-export default function SmartCompsPage() {
+// Not currently rendered — kept here so the tool can be flipped back on
+// by exporting this instead of the placeholder above.
+export function SmartCompsTool() {
   const [config, setConfig] = useState<ConfigData | null>(null);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [target, setTarget] = useState<string>("enterprise_value");
@@ -45,6 +93,7 @@ export default function SmartCompsPage() {
   
   // Connection error
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [isConfigLoading, setIsConfigLoading] = useState<boolean>(true);
   
   // Modals state
   const [activeModal, setActiveModal] = useState<"about" | "terms" | "privacy" | null>(null);
@@ -70,6 +119,7 @@ export default function SmartCompsPage() {
   const loadConfig = async () => {
     try {
       setConnectionError(null);
+      setIsConfigLoading(true);
       const res = await fetch("/api/smartcomps/config");
       if (!res.ok) {
         throw new Error("Failed to fetch configuration");
@@ -94,6 +144,8 @@ export default function SmartCompsPage() {
     } catch (err) {
       console.error(err);
       setConnectionError("Could not connect to the smartComps valuation backend. Please check that the server is running.");
+    } finally {
+      setIsConfigLoading(false);
     }
   };
 
@@ -118,6 +170,7 @@ export default function SmartCompsPage() {
     }
 
     setIsTraining(true);
+    setIsConfigExpanded(false); // Collapse the form so the loading panel is front and center
     setTrainStatus("Initializing valuation engine and tuning model hyperparameters...");
     setPredictionResult(null);
     setPredictionError(null);
@@ -138,8 +191,7 @@ export default function SmartCompsPage() {
         setMetrics(result.metrics);
         setTrained(true);
         setTrainStatus("Valuation engine ready.");
-        setIsConfigExpanded(false); // Collapse configuration after training
-        
+
         // Initialize input state for selected features (excluding NLP business summary)
         const initialInputs: Record<string, string> = {};
         selectedFeatures.forEach(feat => {
@@ -152,7 +204,7 @@ export default function SmartCompsPage() {
         setTrainStatus(`Error: ${result.message || "Failed to train model."}`);
       }
     } catch (err) {
-      setTrainStatus("Failed to connect to the backend server.");
+      setTrainStatus("Error: Lost connection to the backend server while training. Training large feature sets can take several minutes — please try again.");
     } finally {
       setIsTraining(false);
     }
@@ -219,12 +271,21 @@ export default function SmartCompsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-midnight pt-32 pb-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        
+    <div className="relative min-h-screen bg-white dark:bg-midnight pt-page pb-section px-gutter overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+      </div>
+
+      <div className="relative z-10 max-w-4xl mx-auto">
+
         {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-silver mb-4 flex items-center justify-center gap-3">
+        <div className="flex flex-col items-center gap-4 mb-12 text-center">
+          <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue">
+            Proprietary Tech
+          </span>
+          <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center flex items-center justify-center gap-3">
             smartComps Valuator
             <button
               onClick={() => setActiveModal("about")}
@@ -234,11 +295,20 @@ export default function SmartCompsPage() {
               <Info size={24} />
             </button>
           </h1>
-          <div className="h-px w-16 bg-gradient-to-r from-transparent via-bfb-blue/40 to-transparent mx-auto mb-6" />
-          <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm max-w-xl mx-auto">
+          <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+          <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-xl mx-auto">
             A hybrid quantitative valuation engine fusing standard financial multiples with high-dimensional qualitative NLP embeddings from company summaries.
           </p>
         </div>
+
+        {/* Initial engine connection loading state */}
+        {isConfigLoading && !connectionError && (
+          <div className="mb-8 p-10 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-center">
+            <Loader2 size={28} className="mx-auto mb-4 text-bfb-blue animate-spin" />
+            <p className="text-sm font-semibold text-slate-700 dark:text-silver">Connecting to the valuation engine...</p>
+            <p className="text-xs text-slate-400 dark:text-silver/40 mt-1">This can take a moment on a cold start.</p>
+          </div>
+        )}
 
         {/* Backend offline error */}
         {connectionError && (
@@ -264,7 +334,8 @@ export default function SmartCompsPage() {
             <div className="bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm overflow-hidden">
               <button
                 onClick={() => setIsConfigExpanded(!isConfigExpanded)}
-                className="w-full px-6 py-4 flex items-center justify-between bg-slate-50 dark:bg-white/[0.02] border-b border-slate-100 dark:border-white/5 cursor-pointer"
+                disabled={isTraining}
+                className="w-full px-6 py-4 flex items-center justify-between bg-slate-50 dark:bg-white/[0.02] border-b border-slate-100 dark:border-white/5 cursor-pointer disabled:cursor-not-allowed"
               >
                 <div className="flex items-center gap-2.5">
                   <Sparkles size={16} className="text-bfb-blue" />
@@ -344,10 +415,14 @@ export default function SmartCompsPage() {
                               disabled={isTraining || selectedFeatures.length === 0}
                               className="w-full py-3.5 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20 text-sm flex items-center justify-center gap-2"
                             >
-                              <Play size={14} fill="currentColor" />
+                              {isTraining ? (
+                                <Loader2 size={14} className="animate-spin" />
+                              ) : (
+                                <Play size={14} fill="currentColor" />
+                              )}
                               {isTraining ? "Training Engine..." : "Initialize & Train Engine"}
                             </button>
-                            
+
                             {trainStatus && (
                               <p className={`mt-3 text-xs leading-relaxed ${
                                 trainStatus.startsWith("Error") 
@@ -369,6 +444,21 @@ export default function SmartCompsPage() {
               </AnimatePresence>
             </div>
 
+            {/* Training Loading State */}
+            {isTraining && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-12 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-center max-w-xl mx-auto"
+              >
+                <Loader2 size={32} className="mx-auto mb-4 text-bfb-blue animate-spin" />
+                <p className="text-sm font-semibold text-slate-700 dark:text-silver">Training the valuation engine...</p>
+                <p className="text-xs text-slate-400 dark:text-silver/40 mt-2 max-w-sm mx-auto leading-relaxed">
+                  Fitting the model and encoding business summaries can take a few minutes for larger feature sets. Please keep this tab open.
+                </p>
+              </motion.div>
+            )}
+
             {/* Model Performance Metrics Panel */}
             {metrics && (
               <motion.div
@@ -387,7 +477,7 @@ export default function SmartCompsPage() {
                     className="text-center cursor-help"
                     title="Median Absolute Percentage Error: Lower is better. Measures the average percentage difference between the model's estimate and the true value."
                   >
-                    <div className="text-2xl md:text-3xl font-serif text-slate-800 dark:text-silver">
+                    <div className="text-h2 font-serif text-slate-800 dark:text-silver">
                       {(metrics.mdape * 100).toFixed(1)}%
                     </div>
                     <div className="text-[10px] text-slate-400 dark:text-silver/40 font-bold uppercase mt-1">MDAPE</div>
@@ -397,7 +487,7 @@ export default function SmartCompsPage() {
                     className="text-center cursor-help"
                     title="Coefficient of Determination (R-squared): Higher is better (max 1.0). Indicates the proportion of valuation variance explained by the model features."
                   >
-                    <div className="text-2xl md:text-3xl font-serif text-slate-800 dark:text-silver">
+                    <div className="text-h2 font-serif text-slate-800 dark:text-silver">
                       {metrics.r2.toFixed(2)}
                     </div>
                     <div className="text-[10px] text-slate-400 dark:text-silver/40 font-bold uppercase mt-1">R² Score</div>
@@ -506,8 +596,9 @@ export default function SmartCompsPage() {
               {/* Prediction Result Display */}
               {isPredicting && (
                 <div className="p-12 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-center">
-                  <div className="inline-block animate-pulse w-8 h-8 rounded-full bg-bfb-blue/30 mb-3" />
-                  <p className="text-sm text-slate-500 dark:text-silver/60">Evaluating financials and encoding business description. Running predictions...</p>
+                  <Loader2 size={32} className="mx-auto mb-4 text-bfb-blue animate-spin" />
+                  <p className="text-sm font-semibold text-slate-700 dark:text-silver">Running the valuation models...</p>
+                  <p className="text-xs text-slate-400 dark:text-silver/40 mt-2">Evaluating financials and encoding the business description.</p>
                 </div>
               )}
 
@@ -527,7 +618,7 @@ export default function SmartCompsPage() {
                     Estimated {getDisplayLabel(target)}
                   </span>
                   
-                  <div className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-silver">
+                  <div className="text-hero font-serif font-bold text-slate-900 dark:text-silver">
                     {predictionResult.valuation}
                   </div>
 

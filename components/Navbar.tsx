@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, ChevronRight, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronRight, ChevronDown, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { staggerContainer, fadeInUp } from "@/lib/animations";
 import ThemeToggle from "./ThemeToggle";
@@ -19,7 +19,6 @@ const navItems: NavItem[] = [
   {
     name: "Team",
     children: [
-      { name: "Executive Board", href: "/executive-board" },
       { name: "Members", href: "/members" },
       { name: "Placements", href: "/placements" },
     ],
@@ -28,8 +27,8 @@ const navItems: NavItem[] = [
   {
     name: "Events",
     children: [
+      { name: "Recruitment", href: "/recruitment" },
       { name: "Calendar", href: "/events" },
-      { name: "Recruitment", href: "/join" },
     ],
   },
   {
@@ -38,20 +37,12 @@ const navItems: NavItem[] = [
       {
         name: "Tech",
         children: [
-          { name: "BAI", href: "/tech/bai" },
-          { name: "Quant Accelerator", href: "/tech/quant" },
+          { name: "BAI & Quant Accelerator", href: "/tech/bai" },
           { name: "smartComps", href: "/tech/smartcomps" },
         ],
       },
-      {
-        name: "Newsletters",
-        children: [
-          { name: "Hub", href: "/resources/newsletters" },
-          { name: "Archives", href: "/resources/newsletters-2" },
-        ],
-      },
-      { name: "Training", href: "/training" },
-      { name: "Contact", href: "/contact" },
+      { name: "Newsletters", href: "/resources/newsletters" },
+      { name: "Training", href: "/recruitment/training" },
     ],
   },
 ];
@@ -143,25 +134,23 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/92 dark:bg-midnight/90 backdrop-blur-md border-b border-slate-100 dark:border-white/8">
+    <nav className="fixed top-0 w-full z-50 bg-white dark:bg-midnight border-b border-slate-100 dark:border-slate-800">
       <div className="max-w-[1400px] mx-auto px-gutter">
-        <div className="flex justify-between h-nav items-center">
-          <Link href="/" className="flex items-center">
-            <>
-              <img
-                src="/bfb-transparent.png"
-                alt="BFB Logo"
-                className="h-logo w-auto object-contain dark:hidden"
-              />
-              <img
-                src="/dark-blue-BFB-logo.png"
-                alt="BFB Logo"
-                className="h-logo w-auto object-contain hidden dark:block"
-              />
-            </>
+        <div className="grid grid-cols-[1fr_auto_1fr] h-nav items-center">
+          <Link href="/" className="flex items-center justify-self-start">
+            <img
+              src="/bfb-transparent.png"
+              alt="BFB Logo"
+              className="h-logo w-auto object-contain dark:hidden"
+            />
+            <img
+              src="/bfb-transparent-white.png"
+              alt="BFB Logo"
+              className="h-logo w-auto object-contain hidden dark:block"
+            />
           </Link>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 justify-self-center">
             {navItems.map((item) =>
               item.children ? (
                 <div
@@ -170,7 +159,7 @@ export default function Navbar() {
                   onMouseEnter={() => handleMouseEnter(item.name)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  <button className="text-[15px] text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver transition-colors py-1">
+                  <button className="text-[15px] tracking-wide text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver transition-colors py-1">
                     {item.name}
                   </button>
                   <AnimatePresence>
@@ -183,7 +172,7 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   href={item.href || "#"}
-                  className={`text-[15px] transition-colors ${
+                  className={`text-[15px] tracking-wide transition-colors ${
                     pathname === item.href
                       ? "text-bfb-blue font-medium"
                       : "text-slate-600 dark:text-silver/60 hover:text-slate-900 dark:hover:text-silver"
@@ -195,13 +184,17 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-self-end">
             <ThemeToggle />
             <Link
               href="/contact"
-              className="hidden md:inline-flex items-center px-5 py-2.5 bg-bfb-blue text-white text-[15px] font-semibold rounded-sm hover:bg-bfb-blue/90 transition-colors"
+              className="group hidden md:inline-flex items-center gap-1.5 px-5 py-2 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 text-sm font-medium tracking-wide rounded-none hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors"
             >
               Contact Us
+              <ArrowUpRight
+                size={14}
+                className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+              />
             </Link>
             <button
               className="md:hidden p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center text-slate-600 dark:text-silver/70 hover:text-slate-900 dark:hover:text-silver transition-colors"
@@ -231,7 +224,7 @@ export default function Navbar() {
                 className="h-logo w-auto object-contain dark:hidden"
               />
               <img
-                src="/dark-blue-BFB-logo.png"
+                src="/bfb-transparent-white.png"
                 alt="BFB Logo"
                 className="h-logo w-auto object-contain hidden dark:block"
               />
@@ -326,11 +319,12 @@ export default function Navbar() {
             {/* Pinned primary CTA */}
             <div className="flex-shrink-0 px-gutter py-5 border-t border-slate-100 dark:border-white/8">
               <Link
-                href="/join"
+                href="/recruitment"
                 onClick={() => setMobileOpen(false)}
-                className="block w-full text-center bg-bfb-blue text-white py-4 rounded-sm text-base font-semibold hover:bg-bfb-blue/90 transition-colors"
+                className="flex items-center justify-center gap-1.5 w-full text-center border border-slate-300 dark:border-white/15 text-slate-700 dark:text-silver py-4 text-base font-semibold hover:border-slate-400 dark:hover:border-white/30 transition-colors"
               >
                 Join Us
+                <ArrowUpRight size={16} />
               </Link>
             </div>
           </motion.div>

@@ -1,154 +1,16 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTrainingStore } from "@/lib/store";
 import { FINANCE_MODULES } from "@/lib/questions";
-import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, CheckCircle, Timer } from "lucide-react";
+import { ChevronRight, RotateCcw, Award, Terminal, BookOpen, Timer, X } from "lucide-react";
 import Link from "next/link";
-import { sendQuizPerfectEmail } from "@/app/actions/quizPerfect";
+import { fadeInUp } from "@/lib/animations";
 
-// ─── Perfect Score Form ───────────────────────────────────────────────────────
+// ─── Training Quiz ────────────────────────────────────────────────────────────
 
-function PerfectScoreForm({ moduleName, onReset }: { moduleName: string; onReset: () => void }) {
-  const [pending, startTransition] = useTransition();
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    formData.set("module", moduleName);
-    startTransition(async () => {
-      const res = await sendQuizPerfectEmail(formData);
-      if (res.success) setSent(true);
-      else setError(res.error ?? "Something went wrong.");
-    });
-  }
-
-  if (sent) {
-    return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="max-w-xl w-full text-center mx-auto px-4"
-      >
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-50 dark:bg-green-900/20 mb-6">
-          <CheckCircle size={32} className="text-green-500" />
-        </div>
-        <h2 className="text-3xl font-serif text-slate-900 dark:text-silver mb-4">Records Updated</h2>
-        <p className="text-slate-500 dark:text-silver/60 mb-10 leading-relaxed">
-          Your information has been saved in our records. Congratulations again on your perfect score!
-        </p>
-        <button
-          onClick={onReset}
-          className="flex items-center gap-2 px-6 py-3 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all mx-auto"
-        >
-          <RotateCcw size={16} /> Take Another Module
-        </button>
-      </motion.div>
-    );
-  }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="max-w-xl w-full mx-auto px-4"
-    >
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-6">
-          <Award size={32} className="text-green-600 dark:text-green-400" />
-        </div>
-        <h2 className="text-3xl md:text-4xl font-serif text-slate-900 dark:text-silver mb-3">
-          Perfect Score!
-        </h2>
-        <p className="text-slate-500 dark:text-silver/60 text-sm leading-relaxed max-w-sm mx-auto">
-          You aced the <span className="font-semibold text-slate-700 dark:text-silver">{moduleName}</span> module.
-          Please share your info so we can save it in our records.
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
-            Full Name <span className="text-red-400">*</span>
-          </label>
-          <input
-            name="name"
-            type="text"
-            required
-            placeholder="Your full name"
-            className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
-            Email <span className="text-red-400">*</span>
-          </label>
-          <input
-            name="email"
-            type="email"
-            required
-            placeholder="you@ucla.edu"
-            className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
-          />
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
-              Year <span className="text-red-400">*</span>
-            </label>
-            <select
-              name="year"
-              required
-              className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue transition-colors text-sm"
-            >
-              <option value="">Select year</option>
-              <option>Freshman</option>
-              <option>Sophomore</option>
-              <option>Junior</option>
-              <option>Senior</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-silver/80 mb-1.5">
-              Major <span className="text-red-400">*</span>
-            </label>
-            <input
-              name="major"
-              type="text"
-              required
-              placeholder="e.g. Economics"
-              className="w-full px-4 py-3 bg-white dark:bg-glass border border-slate-200 dark:border-white/10 rounded-sm text-slate-900 dark:text-silver placeholder-slate-400 dark:placeholder-silver/30 focus:outline-none focus:border-bfb-blue transition-colors text-sm"
-            />
-          </div>
-        </div>
-
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-
-        <button
-          type="submit"
-          disabled={pending}
-          className="w-full py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20 disabled:opacity-50 disabled:cursor-not-allowed text-sm mt-2"
-        >
-          {pending ? "Sending..." : "Submit"}
-        </button>
-      </form>
-
-      <button
-        onClick={onReset}
-        className="mt-6 w-full text-center text-sm text-slate-400 dark:text-silver/40 hover:text-slate-600 dark:hover:text-silver/70 transition-colors"
-      >
-        Skip and go back home
-      </button>
-    </motion.div>
-  );
-}
-
-// ─── Main Page ────────────────────────────────────────────────────────────────
-
-export default function TrainingPage() {
+export default function TrainingQuiz() {
   const {
     currentModule,
     currentQuestionIndex,
@@ -172,6 +34,13 @@ export default function TrainingPage() {
     }
   }, [quizStatus, tickTimer]);
 
+  // Stop the quiz if the person navigates away or closes the page mid-attempt.
+  useEffect(() => {
+    return () => {
+      resetQuiz();
+    };
+  }, [resetQuiz]);
+
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -181,17 +50,35 @@ export default function TrainingPage() {
   // 1. Module selection
   if (quizStatus === "idle") {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-3 mb-8 text-bfb-blue dark:text-gold">
-            <Terminal size={24} />
-            <span className="text-xs font-bold tracking-widest uppercase">BFB Knowledge Assessment</span>
-          </div>
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
+          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
+          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
+        </div>
 
-          <h1 className="text-4xl md:text-6xl font-serif text-slate-900 dark:text-silver mb-6">Knowledge Assessment</h1>
-          <p className="text-slate-500 dark:text-silver/60 text-lg mb-12 max-w-2xl">
-            Select a module to test your technical proficiency.
-          </p>
+        <div className="relative z-10 max-w-5xl mx-auto pt-page pb-section px-gutter">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col items-center gap-4 text-center mb-16"
+          >
+            <span className="flex items-center gap-2 text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-bfb-blue/70">
+              <Terminal size={16} />
+              BFB Knowledge Assessment
+            </span>
+
+            <h2 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
+              Knowledge Assessment
+            </h2>
+
+            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
+
+            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed max-w-2xl mx-auto">
+              Select a module to test your technical proficiency.
+            </p>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {FINANCE_MODULES.map((module) => (
@@ -230,7 +117,7 @@ export default function TrainingPage() {
     const isAnswerCorrect = hasSubmitted && selectedAnswer === question.correctIndex;
 
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-page pb-section px-gutter">
         <div className="max-w-3xl mx-auto">
           <div className="flex justify-between items-center mb-12">
             <div className="flex items-center gap-3 text-bfb-blue dark:text-gold">
@@ -245,6 +132,13 @@ export default function TrainingPage() {
               <div className="text-slate-400 dark:text-silver/40 text-xs font-mono">
                 Question {currentQuestionIndex + 1} of {currentModule.questions.length}
               </div>
+              <button
+                onClick={resetQuiz}
+                aria-label="Exit quiz and return to module selection"
+                className="flex items-center gap-1.5 text-slate-400 dark:text-silver/40 hover:text-red-500 dark:hover:text-red-400 text-xs font-bold uppercase tracking-widest transition-colors"
+              >
+                <X size={14} /> Exit
+              </button>
             </div>
           </div>
 
@@ -265,7 +159,7 @@ export default function TrainingPage() {
               exit={{ opacity: 0, x: -20 }}
               className="space-y-8"
             >
-              <h2 className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-silver leading-snug">
+              <h2 className="text-h2 font-serif text-slate-900 dark:text-silver leading-snug">
                 {question.question}
               </h2>
 
@@ -345,20 +239,9 @@ export default function TrainingPage() {
   // 3. Completion
   if (quizStatus === "completed" && currentModule) {
     const isPerfect = score === currentModule.questions.length;
-
-    // Perfect score → show contact form
-    if (isPerfect) {
-      return (
-        <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-          <PerfectScoreForm moduleName={currentModule.title} onReset={resetQuiz} />
-        </div>
-      );
-    }
-
-    // Non-perfect completion
     const percentage = (score / currentModule.questions.length) * 100;
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-32 pb-20 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 dark:bg-midnight pt-page pb-section px-gutter flex items-center justify-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -383,7 +266,9 @@ export default function TrainingPage() {
             </p>
 
             <p className="text-slate-600 dark:text-silver/80 mb-12 leading-relaxed text-sm">
-              You need a perfect 10/10 to unlock the next step. Review the explanations and try again — you&apos;ve got this.
+              {isPerfect
+                ? "Perfect score! Great work on the " + currentModule.title + " module."
+                : "Review the explanations and try again — you’ve got this."}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

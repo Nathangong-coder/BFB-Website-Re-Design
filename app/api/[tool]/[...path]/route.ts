@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Training can take several minutes, so give this function room to wait on
+// the Python backend instead of Vercel cutting the connection early.
+export const maxDuration = 300;
+
 const BACKEND_URL = process.env.SMARTCOMPS_BACKEND_URL || "http://127.0.0.1:5001";
 
 async function proxyRequest(
@@ -42,10 +46,13 @@ async function proxyRequest(
     });
   } catch (error) {
     console.error("Proxy error:", error);
+    const isTimeout = error instanceof Error && /timeout|timed out|aborted/i.test(error.message);
     return NextResponse.json(
-      { 
-        status: "error", 
-        message: "Failed to connect to the valuation backend. Please ensure the Python server is running on port 5001." 
+      {
+        status: "error",
+        message: isTimeout
+          ? "The valuation backend took too long to respond. Training large feature sets can take several minutes — please try again, or try a smaller feature set."
+          : "Failed to connect to the valuation backend. Please ensure the Python server is running and reachable.",
       },
       { status: 502 }
     );
