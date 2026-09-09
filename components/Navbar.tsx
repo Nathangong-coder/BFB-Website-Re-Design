@@ -29,6 +29,10 @@ const navItems: NavItem[] = [
     children: [
       { name: "Recruitment", href: "/recruitment" },
       { name: "Calendar", href: "/events" },
+      {
+        name: "Competition",
+        children: [{ name: "Alpha Research", href: "/competition/alpha-research" }],
+      },
     ],
   },
   {
@@ -37,7 +41,8 @@ const navItems: NavItem[] = [
       {
         name: "Tech",
         children: [
-          { name: "BAI & Quant Accelerator", href: "/tech/bai" },
+          { name: "Bruin Algorithmic Insights (BAI)", href: "/tech/bai" },
+          { name: "Quant Accelerator", href: "/tech/quant" },
           { name: "smartComps", href: "/tech/smartcomps" },
         ],
       },
@@ -54,7 +59,7 @@ function DropdownMenu({ items }: { items: NavItem[] }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
       transition={{ duration: 0.15, ease: "easeOut" }}
-      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg shadow-slate-200/60 dark:shadow-none py-1 z-50"
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg shadow-slate-200/60 dark:shadow-none py-1 z-50"
     >
       {items.map((item) => (
         <div key={item.name} className="relative group">
@@ -65,7 +70,7 @@ function DropdownMenu({ items }: { items: NavItem[] }) {
                 <ChevronRight size={14} />
               </button>
               {/* Sub-dropdown - Only visible on hover of the parent group */}
-              <div className="absolute top-0 left-full pl-1 w-48 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0">
+              <div className="absolute top-0 left-full pl-1 w-64 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200 translate-x-2 group-hover:translate-x-0">
                 <div className="bg-white dark:bg-[#0D1323] border border-slate-100 dark:border-white/8 rounded-sm shadow-lg py-1">
                   {item.children.map((child) => (
                     <Link

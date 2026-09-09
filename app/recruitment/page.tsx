@@ -34,6 +34,53 @@ const timeline = [
   },
 ];
 
+const importantDates = [
+  {
+    date: "September 22",
+    title: "Applications Open",
+    desc: "Submit a resume and two short essay responses through our application form.",
+    optional: false,
+  },
+  {
+    date: "September 30",
+    time: "6:00–8:00 PM",
+    title: "UBS Fall Business Showcase",
+    desc: "An evening with UBS covering the firm, its businesses, and how to position yourself for recruiting.",
+    optional: true,
+  },
+  {
+    date: "October 2",
+    title: "Info Session",
+    desc: "Learn more about the club, our process, and what we look for — and meet current members.",
+    optional: true,
+  },
+  {
+    date: "October 2",
+    time: "11:59 PM",
+    title: "Applications Due",
+    desc: "Resume and essay responses must be submitted before the deadline.",
+    optional: false,
+  },
+  {
+    date: "October 5",
+    title: "Coffee Chats",
+    desc: "Selected candidates participate in a two hour behavioral interview.",
+    optional: false,
+  },
+  {
+    date: "Between rounds",
+    title: "Office Hours",
+    desc: "Reach out to current members for advice before the final round.",
+    optional: true,
+  },
+  {
+    date: "October 8–9",
+    title: "Final Round Interviews",
+    desc: "A final interview covering market knowledge, a case study, and financial technicals.",
+    optional: false,
+  },
+];
+
 export default function RecruitmentPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
@@ -113,6 +160,70 @@ export default function RecruitmentPage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Important Dates */}
+      <section className="py-section px-gutter">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <span className="text-eyebrow font-bold uppercase tracking-[0.3em] text-bfb-blue dark:text-accent">
+              Mark Your Calendar
+            </span>
+            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mt-4 mb-4">
+              Important Dates — Fall 2026
+            </h2>
+            <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl mx-auto">
+              Events marked <span className="font-semibold text-slate-600 dark:text-silver/80">Optional</span> are
+              open to attend but are not part of the evaluation.
+            </p>
+          </motion.div>
+
+          <ul className="divide-y divide-slate-100 dark:divide-white/5 border-y border-slate-100 dark:border-white/5">
+            {importantDates.map((item, i) => (
+              <motion.li
+                key={`${item.title}-${item.date}`}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                className="flex flex-col lap:flex-row lap:items-baseline gap-2 lap:gap-8 py-5"
+              >
+                <div className="lap:w-48 shrink-0">
+                  <p className="text-sm font-bold text-bfb-blue dark:text-accent tabular-nums">
+                    {item.date}
+                  </p>
+                  {item.time ? (
+                    <p className="text-xs text-slate-400 dark:text-silver/40 tabular-nums mt-0.5">
+                      {item.time}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-3 flex-wrap mb-1">
+                    <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver leading-tight">
+                      {item.title}
+                    </h3>
+                    {item.optional ? (
+                      <span className="shrink-0 px-2 py-0.5 rounded-full border border-slate-200 dark:border-white/10 text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400 dark:text-silver/40">
+                        Optional
+                      </span>
+                    ) : null}
+                  </div>
+                  <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.li>
+            ))}
+          </ul>
         </div>
       </section>
 

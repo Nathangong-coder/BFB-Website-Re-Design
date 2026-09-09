@@ -30,6 +30,8 @@ const placementsByYear: Record<number, { name: string; member: string; industry:
     { name: "Franklin Templeton", member: "Abhi Kumar", industry: "Finance", group: "Trading", filename: "franklin templeton.png", type: "internship", location: "Chicago, IL" },
     { name: "Altman Solon", member: "Viraj Nigam", industry: "Consulting", group: "Consulting", filename: "altman solon.jpg", type: "internship", location: "New York, NY" },
     { name: "Pulice Nervell", member: "Keilee Hane", industry: "Legal", group: "Legal Clerk", filename: "public nervell.png", type: "internship", location: "Honolulu, HI" },
+    { name: "HOPU Investments", member: "Andrew Guan", industry: "Finance", group: "Private Equity", filename: "hopu investments.jpg", type: "internship", location: "Hong Kong" },
+    { name: "Strategy&", member: "Richard Tucholski", industry: "Consulting", group: "Quant", filename: "strategyand.jpg", type: "internship", location: "Los Angeles, CA" },
   ],
   2025: [
     { name: "JP Morgan Chase", member: "Charlotte Humphreys", industry: "Finance", group: "Risk Management", filename: "jp morgan.jpg", type: "full-time", location: "Newark, Delaware" },
