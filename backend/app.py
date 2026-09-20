@@ -15,7 +15,19 @@ backend_dir = os.path.dirname(os.path.abspath(__file__))
 if backend_dir not in sys.path:
     sys.path.append(backend_dir)
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+from limiter import limiter
+
 app = Flask(__name__)
+
+# Trust X-Forwarded-For headers from reverse proxy (Cloud Run / Vercel)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
+# Limit maximum payload size to 10 MB to prevent memory exhaustion
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024
+
+# Initialize rate limiter
+limiter.init_app(app)
 
 # ==========================================
 # REGISTER BLUEPRINTS FOR MODULAR TOOLS

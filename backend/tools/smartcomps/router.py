@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 # Import local ML modules
 from .valuation import ValuationEngine
 from .embedder import FeatureProcessor
+from limiter import limiter
 
 smartcomps_bp = Blueprint('smartcomps', __name__)
 
@@ -34,6 +35,7 @@ def get_config():
     })
 
 @smartcomps_bp.route('/train', methods=['POST'])
+@limiter.limit("1 per 20 minutes")
 def train_model():
     """Initializes and trains the custom model based on user selection."""
     try:
