@@ -19,6 +19,7 @@ import {
   Trophy,
 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
+import CompetitionAuthPortal from "@/components/CompetitionAuthPortal";
 
 const glance = [
   { icon: Users, label: "Team Size", value: "Up to 3 students" },
@@ -223,6 +224,7 @@ function WorkflowStep({
 export default function AlphaResearchCompetitionPage() {
   const reduceMotion = useReducedMotion() ?? false;
   const [openStep, setOpenStep] = useState<string | null>(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
@@ -257,12 +259,12 @@ export default function AlphaResearchCompetitionPage() {
             </p>
 
             <div className="flex flex-col lap:flex-row items-center gap-4 mt-4">
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
+              <button
+                onClick={() => setIsAuthOpen(true)}
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
               >
-                Register Interest <ChevronRight size={18} aria-hidden="true" />
-              </Link>
+                Register Interest / Sign In <ChevronRight size={18} aria-hidden="true" />
+              </button>
               <a
                 href="#timeline"
                 className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 font-medium rounded-sm hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
@@ -608,12 +610,12 @@ export default function AlphaResearchCompetitionPage() {
             and onboarding details as they are published.
           </p>
 
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
+          <button
+            onClick={() => setIsAuthOpen(true)}
+            className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
           >
-            Register Interest <ChevronRight size={18} aria-hidden="true" />
-          </Link>
+            Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
+          </button>
 
           <p className="mt-10 text-xs text-slate-400 dark:text-silver/40 leading-relaxed">
             Rules, scoring weights, and risk limits on this page are proposed. BFB publishes the
@@ -621,6 +623,12 @@ export default function AlphaResearchCompetitionPage() {
           </p>
         </div>
       </section>
+
+      {/* Supabase Auth & Registration Modal Portal */}
+      <CompetitionAuthPortal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+      />
     </div>
   );
 }
