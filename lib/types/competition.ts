@@ -1,4 +1,15 @@
-export type ClassYear = "Freshman" | "Sophomore" | "Junior" | "Senior" | "Graduate";
+export type ClassYear =
+  | "2025"
+  | "2026"
+  | "2027"
+  | "2028"
+  | "2029"
+  | "Graduate / Other"
+  | "Freshman"
+  | "Sophomore"
+  | "Junior"
+  | "Senior"
+  | "Graduate";
 
 export interface CompetitionRegistration {
   id: string;

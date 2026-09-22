@@ -17,12 +17,24 @@ async function proxyRequest(
     // Dynamically forward to the corresponding Python blueprint prefix
     const targetUrl = `${BACKEND_URL}/api/${tool}/${pathString}`;
     
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("host", new URL(BACKEND_URL).host);
+    const headers: Record<string, string> = {
+      "Accept": "application/json",
+    };
+
+    const contentType = request.headers.get("content-type");
+    if (contentType) {
+      headers["content-type"] = contentType;
+    }
+
+    const auth = request.headers.get("authorization");
+    if (auth) {
+      headers["authorization"] = auth;
+    }
 
     const init: RequestInit = {
       method: request.method,
-      headers: requestHeaders,
+      headers: headers,
+      signal: AbortSignal.timeout(300000), // 5 minutes timeout for ML training & cold starts
     };
 
     if (request.method !== "GET" && request.method !== "HEAD") {

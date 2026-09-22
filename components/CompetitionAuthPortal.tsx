@@ -32,16 +32,31 @@ interface CompetitionAuthPortalProps {
 }
 
 const CLASS_YEARS: ClassYear[] = [
-  "Freshman",
-  "Sophomore",
-  "Junior",
-  "Senior",
-  "Graduate",
+  "2025",
+  "2026",
+  "2027",
+  "2028",
+  "2029",
+  "Graduate / Other",
 ];
 
 function getErrorMessage(err: any): string {
   if (!err) return "An error occurred. Please try again.";
   if (typeof err === "string") return err;
+
+  const rawMsg =
+    err.message ||
+    err.error_description ||
+    err.msg ||
+    (typeof err === "object" ? JSON.stringify(err) : "");
+
+  if (
+    err.code === "42P17" ||
+    (typeof rawMsg === "string" && rawMsg.includes("infinite recursion"))
+  ) {
+    return "Supabase RLS Infinite Recursion Error (42P17): An RLS policy on 'competition_registrations' in Supabase is querying itself. Please run the SQL script in 'supabase_setup.sql' in your Supabase SQL Editor to replace recursive policies with non-recursive ones.";
+  }
+
   if (err.message && typeof err.message === "string" && err.message.trim() !== "") {
     return err.message;
   }
@@ -79,12 +94,14 @@ export default function CompetitionAuthPortal({
   );
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
   const [existingTeams, setExistingTeams] = useState<string[]>([]);
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState<boolean>(false);
 
   // Form states - Auth
   const [fullName, setFullName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [classYear, setClassYear] = useState<ClassYear>("Junior");
+  const [classYear, setClassYear] = useState<ClassYear>("2027");
+  const [agreedToTerms, setAgreedToTerms] = useState<boolean>(true);
 
   // Form states - Team
   const [newTeamName, setNewTeamName] = useState<string>("");
@@ -164,6 +181,15 @@ export default function CompetitionAuthPortal({
         if (data.team_name) {
           fetchTeamMembers(data.team_name);
         }
+      } else if (sessionUser) {
+        const meta = sessionUser.user_metadata || {};
+        setUserProfile({
+          id: userId,
+          full_name: meta.full_name || fullName || "Participant",
+          email: sessionUser.email || email,
+          class_year: meta.class_year || classYear || "Junior",
+          team_name: null,
+        });
       }
     } catch (err) {
       console.error("Error loading profile:", err);
@@ -203,11 +229,24 @@ export default function CompetitionAuthPortal({
       return;
     }
 
+    if (!agreedToTerms) {
+      setErrorMsg(
+        "Please confirm ownership of your email address and agree to competition updates to register."
+      );
+      return;
+    }
+
+    const nameParts = fullName.trim().split(/\s+/);
+    if (nameParts.length !== 2 || !nameParts[0] || !nameParts[1]) {
+      setErrorMsg("Please enter only your First and Last name (e.g. John Doe).");
+      return;
+    }
+
     const cleanEmail = email.trim().toLowerCase();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(cleanEmail)) {
-      setErrorMsg("Please enter a valid email address (e.g. name@ucla.edu).");
+      setErrorMsg("Please enter a valid email address (e.g. name@example.com).");
       return;
     }
 
@@ -237,7 +276,7 @@ export default function CompetitionAuthPortal({
     setLoading(true);
 
     try {
-      // Sign up user via Supabase Auth
+      // 1. Sign up user via Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: cleanEmail,
         password,
@@ -280,22 +319,12 @@ export default function CompetitionAuthPortal({
         });
 
       if (dbError) {
-        if (dbError.code === "42P01" || dbError.message.includes("does not exist")) {
-          setErrorMsg(
-            "Account created, but the 'competition_registrations' database table is missing in Supabase. Please run the SQL script in your Supabase SQL Editor."
-          );
-        } else if (dbError.code === "42501" || dbError.message.includes("row-level security")) {
-          setErrorMsg(
-            "Account created! Note: Please update the RLS SQL policy in Supabase (run the provided SQL script to allow registration insert)."
-          );
-        } else {
-          console.warn("DB Insert Warning:", dbError.message);
-        }
+        console.warn("Profile DB Insert warning:", dbError.message);
       }
 
       if (!authData.session && authData.user) {
         setSuccessMsg(
-          `Account created! A confirmation link has been sent to ${cleanEmail}. Please check your inbox and click the link to sign in and complete team registration.`
+          `Account created! A confirmation link has been sent to ${cleanEmail}. Please check your inbox and click the link to confirm your registration.`
         );
       } else {
         setSessionUser(authData.user);
@@ -375,11 +404,13 @@ export default function CompetitionAuthPortal({
       const cleanTeamName = newTeamName.trim();
 
       // Check if team name already exists (case-insensitive)
-      const { data: existingTeam } = await supabase
+      const { data: existingTeam, error: checkError } = await supabase
         .from("competition_registrations")
         .select("team_name")
         .ilike("team_name", cleanTeamName)
         .limit(1);
+
+      if (checkError) throw checkError;
 
       if (existingTeam && existingTeam.length > 0) {
         throw new Error(
@@ -387,19 +418,26 @@ export default function CompetitionAuthPortal({
         );
       }
 
-      // Assign user to new team
+      // Assign user to new team (use upsert to support users whose initial DB insert failed due to previous RLS)
+      const meta = sessionUser.user_metadata || {};
       const { error: updateError } = await supabase
         .from("competition_registrations")
-        .update({
+        .upsert({
+          id: sessionUser.id,
+          full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+          email: sessionUser.email || email,
+          class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
           team_name: cleanTeamName,
           updated_at: new Date().toISOString(),
-        })
-        .eq("id", sessionUser.id);
+        });
 
       if (updateError) throw updateError;
 
-      const updatedProfile = {
-        ...userProfile!,
+      const updatedProfile: CompetitionRegistration = {
+        id: sessionUser.id,
+        full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+        email: sessionUser.email || email,
+        class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
         team_name: cleanTeamName,
       };
 
@@ -439,7 +477,9 @@ export default function CompetitionAuthPortal({
         .select("id, full_name")
         .ilike("team_name", cleanTeamName);
 
-      if (teamCheckError || !teamMembersData || teamMembersData.length === 0) {
+      if (teamCheckError) throw teamCheckError;
+
+      if (!teamMembersData || teamMembersData.length === 0) {
         throw new Error(
           `Team '${cleanTeamName}' was not found. Please check the spelling or create a new team.`
         );
@@ -451,14 +491,18 @@ export default function CompetitionAuthPortal({
         );
       }
 
-      // Add user to team
+      // Add user to team (use upsert to support users whose initial DB insert failed due to previous RLS)
+      const meta = sessionUser.user_metadata || {};
       const { error: updateError } = await supabase
         .from("competition_registrations")
-        .update({
+        .upsert({
+          id: sessionUser.id,
+          full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+          email: sessionUser.email || email,
+          class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
           team_name: cleanTeamName,
           updated_at: new Date().toISOString(),
-        })
-        .eq("id", sessionUser.id);
+        });
 
       if (updateError) throw updateError;
 
@@ -482,9 +526,9 @@ export default function CompetitionAuthPortal({
 
   // Leave Team
   async function handleLeaveTeam() {
-    if (!confirm("Are you sure you want to leave your team?")) return;
-
     setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
     try {
       await supabase
         .from("competition_registrations")
@@ -493,11 +537,12 @@ export default function CompetitionAuthPortal({
 
       setUserProfile((prev) => (prev ? { ...prev, team_name: null } : null));
       setTeamMembers([]);
-      setSuccessMsg("You have left the team.");
+      setSuccessMsg("You have left your team. Please create or join a new team below.");
     } catch (err: any) {
       setErrorMsg("Failed to leave team.");
     } finally {
       setLoading(false);
+      setShowLeaveConfirm(false);
     }
   }
 
@@ -528,6 +573,50 @@ export default function CompetitionAuthPortal({
           transition={{ duration: 0.2 }}
           className="relative w-full max-w-lg bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
         >
+          {/* Quick Team Change Confirmation Overlay Popup */}
+          <AnimatePresence>
+            {showLeaveConfirm && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.15 }}
+                className="absolute inset-0 z-30 bg-white/95 dark:bg-midnight/95 backdrop-blur-md p-6 flex flex-col items-center justify-center text-center space-y-4"
+              >
+                <div className="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center">
+                  <AlertCircle size={24} />
+                </div>
+                <div>
+                  <h4 className="text-base font-bold text-slate-900 dark:text-silver">
+                    Leave Team '{userProfile?.team_name}'?
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-silver/60 mt-1.5 max-w-xs leading-relaxed">
+                    Are you sure you want to leave your team? You will be unassigned and directed to create or join a new team.
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 w-full max-w-xs pt-2">
+                  <button
+                    onClick={() => setShowLeaveConfirm(false)}
+                    className="flex-1 py-2.5 px-4 bg-slate-100 dark:bg-white/5 hover:bg-slate-200 dark:hover:bg-white/10 text-slate-700 dark:text-silver text-xs font-semibold rounded-xl transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleLeaveTeam}
+                    disabled={loading}
+                    className="flex-1 py-2.5 px-4 bg-red-500 hover:bg-red-600 text-white text-xs font-semibold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-1.5"
+                  >
+                    {loading ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      "Yes, Leave Team"
+                    )}
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
             <div className="flex items-center gap-3">
@@ -630,7 +719,7 @@ export default function CompetitionAuthPortal({
 
                     <div className="flex justify-between items-center text-sm py-1 border-b border-slate-200/50 dark:border-white/5">
                       <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
-                        Class Year
+                        Graduation Year
                       </span>
                       <span className="font-medium text-slate-900 dark:text-silver">
                         {userProfile.class_year}
@@ -653,7 +742,7 @@ export default function CompetitionAuthPortal({
                           Team Roster ({teamMembers.length}/3 Members)
                         </span>
                         <button
-                          onClick={handleLeaveTeam}
+                          onClick={() => setShowLeaveConfirm(true)}
                           className="text-xs text-red-500 hover:underline"
                         >
                           Change Team
@@ -884,7 +973,7 @@ export default function CompetitionAuthPortal({
                           required
                           value={fullName}
                           onChange={(e) => setFullName(e.target.value)}
-                          placeholder="e.g. Alex Chen"
+                          placeholder="John Doe"
                           className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
                         />
                       </div>
@@ -904,7 +993,7 @@ export default function CompetitionAuthPortal({
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="student@ucla.edu"
+                          placeholder="name@example.com"
                           className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
                         />
                       </div>
@@ -933,7 +1022,7 @@ export default function CompetitionAuthPortal({
 
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                        Class Year
+                        Graduation Year
                       </label>
                       <div className="relative">
                         <GraduationCap
@@ -954,6 +1043,22 @@ export default function CompetitionAuthPortal({
                           ))}
                         </select>
                       </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 pt-1">
+                      <input
+                        type="checkbox"
+                        id="agreedToTerms"
+                        checked={agreedToTerms}
+                        onChange={(e) => setAgreedToTerms(e.target.checked)}
+                        className="mt-0.5 w-4 h-4 text-bfb-blue rounded border-slate-300 focus:ring-bfb-blue cursor-pointer"
+                      />
+                      <label
+                        htmlFor="agreedToTerms"
+                        className="text-[11px] text-slate-500 dark:text-silver/60 leading-tight cursor-pointer"
+                      >
+                        I confirm I own this email address and agree to receive official competition rules, announcements, and updates from Blockchain at UCLA.
+                      </label>
                     </div>
 
                     <button
@@ -986,7 +1091,7 @@ export default function CompetitionAuthPortal({
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          placeholder="student@ucla.edu"
+                          placeholder="name@example.com"
                           className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
                         />
                       </div>
