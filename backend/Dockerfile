@@ -34,7 +34,7 @@ RUN pip install --no-cache-dir poetry && \
     poetry install --no-interaction --no-ansi --no-root
 
 # Copy the source code into the container.
-COPY app.py ./
+COPY app.py limiter.py ./
 COPY tools/ ./tools/
 
 # Pre-download the sentence-transformers model at build time so cold starts
@@ -50,5 +50,5 @@ USER appuser
 # Expose the port that the application listens on.
 EXPOSE 5001
 
-# Run the application.
-CMD ["gunicorn", "app:app", "--bind=0.0.0.0:5001", "--workers=1", "--timeout=580"]
+# Run the application using shell form so $PORT env var (set by Cloud Run) is respected
+CMD exec gunicorn app:app --bind "0.0.0.0:${PORT:-5001}" --workers 1 --timeout 580
