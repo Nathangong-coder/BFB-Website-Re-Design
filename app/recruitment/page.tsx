@@ -16,16 +16,17 @@ const importantDates = [
     optional: false,
   },
   {
-    date: "September 30",
-    time: "6:00–8:00 PM",
+    date: "September 29",
+    time: "7:00–9:00 PM",
+    location: "La Kretz 110",
     title: "UBS Fall Business Showcase",
-    desc: "An evening with UBS covering the firm, its businesses, and how to position yourself for recruiting.",
+    desc: "An evening to get insight into all the finance clubs at UCLA.",
     optional: true,
   },
   {
     date: "October 2",
     title: "Info Session",
-    desc: "Learn more about the club, our process, and what we look for — and meet current members.",
+    desc: "Learn more about the club, our process, and what we look for.",
     optional: true,
   },
   {
@@ -199,6 +200,11 @@ export default function RecruitmentPage() {
                   {item.time ? (
                     <p className="text-xs text-slate-400 dark:text-silver/40 tabular-nums mt-0.5">
                       {item.time}
+                    </p>
+                  ) : null}
+                  {item.location ? (
+                    <p className="text-xs text-slate-400 dark:text-silver/40 mt-0.5">
+                      {item.location}
                     </p>
                   ) : null}
                 </div>
