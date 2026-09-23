@@ -56,7 +56,7 @@ export default function NewslettersArchive() {
             BFB Archives
           </h1>
           <p className="text-slate-500 dark:text-silver/60 text-lg font-light max-w-2xl mx-auto">
-            Access our full library of institutional research, annual reports, and strategic briefings.
+            Browse our reports, member presentations, and research from past years.
           </p>
         </div>
       </section>

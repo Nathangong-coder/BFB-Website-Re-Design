@@ -33,7 +33,7 @@ const generalMeetings: CalendarEvent[] = eachDayOfInterval({
 // Fall 2026 recruiting cycle — mirrors the dates on /recruitment.
 const recruitingEvents: CalendarEvent[] = [
   { date: new Date(2026, 8, 22), title: "Applications Open" },
-  { date: new Date(2026, 8, 30), title: "UBS Fall Business Showcase", time: "6:00–8:00 PM" },
+  { date: new Date(2026, 8, 29), title: "UBS Fall Business Showcase", time: "7:00–9:00 PM" },
   { date: new Date(2026, 9, 2), title: "Info Session" },
   { date: new Date(2026, 9, 2), title: "Applications Due", time: "11:59 PM" },
   { date: new Date(2026, 9, 5), title: "Coffee Chats" },

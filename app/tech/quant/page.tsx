@@ -115,7 +115,7 @@ export default function QuantPage() {
             variants={fadeInUp}
             className="text-slate-500 dark:text-silver/60 text-body-lg font-light leading-relaxed max-w-3xl mb-12"
           >
-            The Quant Accelerator is a 10-week, quarter-long introductory course designed as the foundational gateway for undergraduates looking to break into quantitative finance. Serving as the primary feeder system for BFB&apos;s senior Bayesian Analysis (BAI) program, the course provides an baseline in vector programming, structured software workflows, applied statistics, and market mechanics. Every topic is structured to be highly approachable and introductory, requiring no prior quantitative or programming experience.
+            A 10-week intro course for undergrads looking to break into quantitative finance. You&apos;ll learn the basics of coding, statistics, and how markets work — no prior experience needed. It&apos;s also the main path into BFB&apos;s Bruin Algorithmic Insights (BAI) program.
           </motion.p>
         </motion.div>
       </section>
