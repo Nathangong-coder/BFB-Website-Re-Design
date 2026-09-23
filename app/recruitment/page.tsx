@@ -3,36 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ChevronRight, GraduationCap } from "lucide-react";
+import { ChevronRight, ExternalLink, GraduationCap } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
-const timeline = [
-  {
-    step: "01",
-    title: "Info Session",
-    desc: "Students attend our info session to learn more about the club and network with current members.",
-  },
-  {
-    step: "02",
-    title: "Applications Open",
-    desc: "Our application process consists of a resume submission followed by two short essay questions.",
-  },
-  {
-    step: "03",
-    title: "Coffee Chats",
-    desc: "After the application closes, selected candidates participate in a two hour behavioral interview.",
-  },
-  {
-    step: "04",
-    title: "Office Hours",
-    desc: "Selected candidates can choose to reach out to current members for advice before the final round.",
-  },
-  {
-    step: "05",
-    title: "Final Round Interviews",
-    desc: "Selected candidates participate in a final interview covering market knowledge, a case study, and financial technicals.",
-  },
-];
+const APPLICATION_URL = "https://forms.gle/s6mummabJZkDNaSBA";
 
 const importantDates = [
   {
@@ -81,6 +55,34 @@ const importantDates = [
   },
 ];
 
+const timeline = [
+  {
+    step: "01",
+    title: "Info Session",
+    desc: "Students attend our info session to learn more about the club and network with current members.",
+  },
+  {
+    step: "02",
+    title: "Applications Open",
+    desc: "Our application process consists of a resume submission followed by two short essay questions.",
+  },
+  {
+    step: "03",
+    title: "Coffee Chats",
+    desc: "After the application closes, selected candidates participate in a two hour behavioral interview.",
+  },
+  {
+    step: "04",
+    title: "Office Hours",
+    desc: "Selected candidates can choose to reach out to current members for advice before the final round.",
+  },
+  {
+    step: "05",
+    title: "Final Round Interviews",
+    desc: "Selected candidates participate in a final interview covering market knowledge, a case study, and financial technicals.",
+  },
+];
+
 export default function RecruitmentPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
@@ -116,51 +118,46 @@ export default function RecruitmentPage() {
         </div>
       </section>
 
-      {/* Recruiting Timeline */}
-      <section className="py-section px-gutter border-t border-slate-100 dark:border-white/5 bg-slate-50/20 dark:bg-white/[0.01]">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-4">
-              Recruiting Timeline
-            </h2>
-            <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl mx-auto">
-              What to expect from info session through final round interviews.
+      {/* Live application notice — remove once applications close */}
+      <section className="px-gutter border-y border-bfb-blue/25 dark:border-bfb-blue/30 bg-bfb-blue/[0.04] dark:bg-bfb-blue/[0.08]">
+        <motion.div
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="max-w-5xl mx-auto py-10 lap:py-12 flex flex-col lap:flex-row lap:items-center gap-8 lap:gap-12 text-center lap:text-left"
+        >
+          <div className="flex-1 min-w-0">
+            <span className="inline-flex items-center gap-2.5 text-eyebrow font-bold uppercase tracking-[0.2em] text-bfb-blue dark:text-accent">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-bfb-blue dark:bg-accent opacity-75 animate-ping" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-bfb-blue dark:bg-accent" />
+              </span>
+              Now accepting applications
+            </span>
+
+            <p className="text-h3 font-serif text-slate-900 dark:text-silver mt-3 leading-snug">
+              Fall 2026 recruitment is open
             </p>
-          </motion.div>
 
-          <div className="relative overflow-x-auto pb-4">
-            <div className="flex items-stretch gap-8 lap:gap-6 px-2 lap:px-0 min-w-max lap:min-w-0 lap:grid lap:grid-cols-5 relative">
-              <div className="hidden lap:block absolute top-6 left-[10%] right-[10%] h-px bg-slate-200 dark:bg-slate-800 z-0" />
-
-              {timeline.map((item, i) => (
-                <div key={item.step} className="relative z-10 flex flex-col items-center gap-6 shrink-0 w-64 lap:w-auto">
-                  <div className="flex items-center justify-center shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-white dark:bg-midnight border-2 border-bfb-blue flex items-center justify-center shadow-sm">
-                      <span className="text-bfb-blue font-bold text-xs">{item.step}</span>
-                    </div>
-                  </div>
-
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: i * 0.1 }}
-                    className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm hover:border-bfb-blue/30 dark:hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 text-center h-full w-full"
-                  >
-                    <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
-                    <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
-                  </motion.div>
-                </div>
-              ))}
-            </div>
+            <p className="text-slate-500 dark:text-silver/60 text-body leading-relaxed mt-2">
+              A resume and two short essay questions — the only form you need to submit. Closes{" "}
+              <span className="font-semibold text-slate-700 dark:text-silver/80">
+                October 2 at 11:59 PM
+              </span>
+              .
+            </p>
           </div>
-        </div>
+
+          <a
+            href={APPLICATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 self-center inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-all duration-300 hover:-translate-y-1 shadow-lg shadow-bfb-blue/20"
+          >
+            Start Your Application <ExternalLink size={18} />
+          </a>
+        </motion.div>
       </section>
 
       {/* Important Dates */}
@@ -224,6 +221,70 @@ export default function RecruitmentPage() {
               </motion.li>
             ))}
           </ul>
+
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-10 text-center"
+          >
+            <a
+              href={APPLICATION_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-bold text-bfb-blue dark:text-accent hover:gap-3 transition-all duration-300"
+            >
+              Open the application form <ExternalLink size={15} />
+            </a>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Recruiting Timeline */}
+      <section className="py-section px-gutter border-t border-slate-100 dark:border-white/5 bg-slate-50/20 dark:bg-white/[0.01]">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mb-4">
+              Recruiting Timeline
+            </h2>
+            <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl mx-auto">
+              What to expect from info session through final round interviews.
+            </p>
+          </motion.div>
+
+          <div className="relative overflow-x-auto pb-4">
+            <div className="flex items-stretch gap-8 lap:gap-6 px-2 lap:px-0 min-w-max lap:min-w-0 lap:grid lap:grid-cols-5 relative">
+              <div className="hidden lap:block absolute top-6 left-[10%] right-[10%] h-px bg-slate-200 dark:bg-slate-800 z-0" />
+
+              {timeline.map((item, i) => (
+                <div key={item.step} className="relative z-10 flex flex-col items-center gap-6 shrink-0 w-64 lap:w-auto">
+                  <div className="flex items-center justify-center shrink-0">
+                    <div className="w-12 h-12 rounded-full bg-white dark:bg-midnight border-2 border-bfb-blue flex items-center justify-center shadow-sm">
+                      <span className="text-bfb-blue font-bold text-xs">{item.step}</span>
+                    </div>
+                  </div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: i * 0.1 }}
+                    className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm hover:border-bfb-blue/30 dark:hover:border-accent/30 hover:-translate-y-1 transition-all duration-300 text-center h-full w-full"
+                  >
+                    <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver mb-2 leading-tight">{item.title}</h3>
+                    <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm">{item.desc}</p>
+                  </motion.div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
