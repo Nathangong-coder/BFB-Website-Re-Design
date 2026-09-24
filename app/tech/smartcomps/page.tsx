@@ -5,51 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Info, AlertCircle, Play, Sparkles, ChevronDown, Check, X, Shield, FileText, Loader2 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
-// The full tool is implemented but hidden behind a "Coming Soon" placeholder
-// below while it's still being tuned. Swap the default export back to
-// SmartCompsTool to re-enable it.
-export default function SmartCompsPage() {
-  return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
-      <section className="relative flex-1 flex flex-col items-center justify-center pt-page pb-section px-gutter text-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-slate-50 dark:bg-midnight" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-bfb-blue/[0.05] via-transparent to-transparent" />
-          <div className="absolute -top-24 -right-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-50" />
-          <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-bfb-blue/10 rounded-full blur-3xl opacity-40" />
-        </div>
-
-        <div className="relative z-10 max-w-xl mx-auto">
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col items-center gap-4"
-          >
-            <div className="p-3 bg-white dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
-              <Sparkles className="text-bfb-blue" size={28} />
-            </div>
-            <span className="block w-full text-center text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue">
-              Proprietary Tech
-            </span>
-            <h1 className="text-hero font-serif text-slate-900 dark:text-silver leading-tight text-center">
-              smartComps Valuator
-            </h1>
-            <div className="w-24 h-px bg-gradient-to-r from-transparent via-bfb-blue to-transparent opacity-30" />
-            <p className="italic font-light text-slate-400 dark:text-silver/40 text-body-lg leading-relaxed">
-              A hybrid quantitative valuation engine fusing standard financial multiples with high-dimensional qualitative NLP embeddings from company summaries.
-            </p>
-            <div className="flex items-center gap-3 text-slate-400 font-medium italic">
-              <div className="w-2 h-2 bg-slate-300 dark:bg-slate-700 rounded-full animate-pulse" />
-              Coming soon
-            </div>
-          </motion.div>
-        </div>
-      </section>
-    </div>
-  );
-}
-
 interface ConfigData {
   financial_features: string[];
   categorical_features: string[];
@@ -70,9 +25,8 @@ interface PredictionResult {
   valuation_range: string;
 }
 
-// Not currently rendered — kept here so the tool can be flipped back on
-// by exporting this instead of the placeholder above.
-export function SmartCompsTool() {
+// SmartComps Valuator Interactive UI
+export default function SmartCompsPage() {
   const [config, setConfig] = useState<ConfigData | null>(null);
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [target, setTarget] = useState<string>("enterprise_value");
@@ -143,7 +97,40 @@ export function SmartCompsTool() {
       }
     } catch (err) {
       console.error(err);
-      setConnectionError("Could not connect to the smartComps valuation backend. Please check that the server is running.");
+      setConnectionError(
+        "The ML valuation engine backend is currently offline. You can explore the tool's interface, feature controls, and input forms below, but model training and live valuation reports are disabled until the server comes back online."
+      );
+
+      const fallbackConfig: ConfigData = {
+        financial_features: [
+          "estimated_revenue",
+          "ebitda",
+          "total_cash",
+          "total_debt",
+          "forwardPE",
+          "ev_to_ebitda",
+          "employee_count",
+        ],
+        categorical_features: ["sector"],
+        targets: ["enterprise_value"],
+        nlp_features: ["business_summary"],
+        sector_options: [
+          "Technology",
+          "Healthcare",
+          "Financial Services",
+          "Consumer Cyclical",
+          "Industrial",
+          "Energy",
+          "Real Estate",
+        ],
+      };
+      setConfig(fallbackConfig);
+      setSelectedFeatures([
+        ...fallbackConfig.financial_features,
+        ...fallbackConfig.categorical_features,
+        ...fallbackConfig.nlp_features,
+      ]);
+      setTarget("enterprise_value");
     } finally {
       setIsConfigLoading(false);
     }
@@ -412,7 +399,7 @@ export function SmartCompsTool() {
                           <div>
                             <button
                               onClick={handleTrain}
-                              disabled={isTraining || selectedFeatures.length === 0}
+                              disabled={isTraining || selectedFeatures.length === 0 || !!connectionError}
                               className="w-full py-3.5 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20 text-sm flex items-center justify-center gap-2"
                             >
                               {isTraining ? (
@@ -420,7 +407,7 @@ export function SmartCompsTool() {
                               ) : (
                                 <Play size={14} fill="currentColor" />
                               )}
-                              {isTraining ? "Training Engine..." : "Initialize & Train Engine"}
+                              {isTraining ? "Training Engine..." : connectionError ? "Backend Server Offline" : "Initialize & Train Engine"}
                             </button>
 
                             {trainStatus && (
@@ -505,14 +492,19 @@ export function SmartCompsTool() {
                   <span className="text-sm font-bold tracking-wider uppercase text-slate-800 dark:text-silver">
                     2. Valuation Inputs
                   </span>
-                  {!trained && (
+                  {!trained && !connectionError && (
                     <span className="text-[10px] px-2 py-0.5 bg-amber-500/10 text-amber-500 border border-amber-500/20 rounded-full font-bold ml-2">
                       Engine Uninitialized
                     </span>
                   )}
+                  {connectionError && (
+                    <span className="text-[10px] px-2 py-0.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full font-bold ml-2">
+                      Offline Mode (Preview Only)
+                    </span>
+                  )}
                 </div>
 
-                {trained ? (
+                {trained || connectionError ? (
                   <div className="space-y-6">
                     
                     {/* Inputs Generation */}
@@ -577,11 +569,11 @@ export function SmartCompsTool() {
                     {/* Generate Button */}
                     <button
                       onClick={handlePredict}
-                      disabled={isPredicting || !canPredict()}
+                      disabled={isPredicting || !canPredict() || !!connectionError}
                       className="w-full py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5 shadow-lg shadow-bfb-blue/20 text-sm flex items-center justify-center gap-2"
                     >
                       <Sparkles size={14} />
-                      {isPredicting ? "Running Valuation Models..." : "Generate Valuation Report"}
+                      {isPredicting ? "Running Valuation Models..." : connectionError ? "Backend Server Offline" : "Generate Valuation Report"}
                     </button>
                     
                   </div>
