@@ -43,16 +43,17 @@ const standards = [
       "Transaction costs and slippage matched to instrument liquidity and turnover; zero-cost results disclosed separately.",
       "Parameter sensitivity and adjacent specifications, so a narrow optimum is visible rather than hidden.",
       "Subperiod, regime, and instrument-level attribution — aggregate performance alone is not enough.",
+      "Comparison with a relevant benchmark and simple baselines, separating market beta from the claimed alpha.",
       "Return, volatility, drawdown, turnover, exposure, hit rate, and trade count — not Sharpe alone.",
     ],
   },
 ];
 
 const forwardWindow = [
-  "No single annualized ratio or roughly three-month return decides the winner.",
+  "For Best Rigor, no single ratio or 16-week return decides the result.",
   "Drawdown path, concentration, implementation errors, and unexplained deviations can outweigh a strong headline return.",
   "Trade count and independence are considered before any Sharpe, Calmar, or hit-rate figure is interpreted.",
-  "Low-frequency strategies stay eligible for research awards even when the forward sample is too small for a performance award.",
+  "Low-frequency strategies stay eligible for Best Rigor even when the forward sample is too small for Best Sharpe or Best Calmar.",
 ];
 
 const riskControls = [
@@ -74,12 +75,22 @@ const riskControls = [
   {
     control: "Forward drawdown",
     baseline: "Max 35%",
-    application: "A breach removes eligibility for overall and performance-based awards, subject to incident review",
+    application: "A breach removes eligibility for Best Sharpe and Best Calmar, subject to incident review",
   },
   {
-    control: "Risk-adjusted award sample",
+    control: "Best Sharpe & Best Calmar sample",
     baseline: "≥ 30 independent completed trades (≥ 10 in the forward window)",
-    application: "Applies to metric-based awards; trades split mechanically to inflate the count are consolidated",
+    application: "Applies to Best Sharpe and Best Calmar; trades split mechanically to inflate the count are consolidated, and repeated partial fills are not new trades",
+  },
+  {
+    control: "Capital at work",
+    baseline: "Average gross exposure ≥ 25% across the forward window",
+    application: "Required for Best Sharpe and Best Calmar",
+  },
+  {
+    control: "Calmar drawdown floor",
+    baseline: "Max drawdown floored at 2%",
+    application: "Stops a tiny drawdown from inflating the Calmar ratio",
   },
 ];
 
@@ -92,8 +103,8 @@ const executionModel = [
 
 const designation = [
   "Explain why the general concentration or trade-count rule would distort your research design, and propose an alternative risk limit.",
-  "Approved teams stay eligible for thesis, validation, and risk-management awards.",
-  "Metric-based awards may be unavailable when the sample is too small.",
+  "Approved teams stay eligible for Best Rigor.",
+  "Best Sharpe and Best Calmar may be unavailable when the sample is too small.",
   "Decisions are recorded before evaluation, so exceptions cannot be granted after performance is known.",
 ];
 
@@ -111,6 +122,7 @@ const verification = [
     icon: ShieldCheck,
     title: "Finalist Verification",
     points: [
+      "Finalists are the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams.",
       "BFB reproduces headline metrics from your archived package and the official logs.",
       "Finalists reconcile return, P&L, drawdown, exposure, and trade count to a common methodology.",
       "Judges may inspect a sample of signals and trades for timestamp integrity and rule compliance.",
@@ -121,8 +133,7 @@ const verification = [
     title: "Intellectual Property",
     points: [
       "You retain ownership of your original research and code, subject to competition rules and third-party data terms.",
-      "Source code, non-public research, resumes, and contact details are shared only with your consent.",
-      "Sponsors receive only what is described in the agreed partnership scope.",
+      "Source code and non-public research are shared only with your consent.",
     ],
   },
 ];
@@ -287,7 +298,7 @@ export default function AlphaResearchDetailsPage() {
           <SectionHeader
             eyebrow="Interpretation"
             title="How the Forward Window Is Read"
-            lead="A December-to-March window gives far more evidence than a five-week test, but it is still too short to make an annualized Sharpe or Calmar ratio statistically decisive — especially for low-turnover equity strategies. Forward performance complements the research record; it does not replace it."
+            lead="The Nov 30 – Mar 19 window (16 weeks) gives far more evidence than a five-week test, but it is still too short to make an annualized Sharpe or Calmar ratio statistically decisive, especially for low-turnover equity strategies. That is why Best Sharpe and Best Calmar have minimum-activity rules, and why forward performance is 20% of the Best Rigor rubric rather than the whole score."
           />
 
           <motion.div
@@ -314,7 +325,7 @@ export default function AlphaResearchDetailsPage() {
           <SectionHeader
             eyebrow="Guardrails"
             title="Portfolio & Risk Limits"
-            lead="These baselines make results comparable and stop a short sample from rewarding a single concentrated bet. They remain proposed until the final handbook is published before launch."
+            lead="These limits make results comparable and stop a short sample from rewarding a single concentrated bet."
           />
 
           <div className="overflow-x-auto">
@@ -425,9 +436,19 @@ export default function AlphaResearchDetailsPage() {
         </div>
       </section>
 
-      {/* Back link */}
+      {/* Back link & Contact */}
       <section className="py-section px-gutter border-t border-slate-100 dark:border-white/5">
         <div className="max-w-3xl mx-auto text-center">
+          <p className="mb-6 text-sm text-slate-500 dark:text-silver/60">
+            Questions? Email{" "}
+            <a
+              href="mailto:bfbatucla@gmail.com"
+              className="text-bfb-blue dark:text-accent font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue rounded-sm"
+            >
+              bfbatucla@gmail.com
+            </a>
+          </p>
+
           <Link
             href="/competition/alpha-research"
             className="group inline-flex items-center gap-2 text-body font-semibold text-bfb-blue dark:text-accent hover:opacity-85 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-4 rounded-sm"
@@ -441,8 +462,7 @@ export default function AlphaResearchDetailsPage() {
           </Link>
 
           <p className="mt-10 text-xs text-slate-400 dark:text-silver/40 leading-relaxed max-w-lg mx-auto">
-            Rules, scoring weights, and risk limits on this page are proposed. BFB publishes the
-            final rubric, data conventions, and tie-break procedure before the strategy freeze.
+            Full rules and data conventions are emailed to registered participants. BFB publishes the tie-break procedure before the strategy freeze.
           </p>
         </div>
       </section>
