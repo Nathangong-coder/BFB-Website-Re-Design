@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ChevronRight,
   ChevronDown,
@@ -22,10 +22,11 @@ import { fadeInUp } from "@/lib/animations";
 import CompetitionAuthPortal from "@/components/CompetitionAuthPortal";
 
 const glance = [
-  { icon: Users, label: "Team Size", value: "Up to 3 students" },
+  { icon: Users, label: "Team Size", value: "1–3 undergraduates, any school" },
   { icon: Wallet, label: "Starting Capital", value: "$100,000 simulated" },
   { icon: LineChart, label: "Markets", value: "S&P 500 + Binance spot" },
-  { icon: CalendarClock, label: "Forward Window", value: "Dec 2026 – Mar 2027" },
+  { icon: CalendarClock, label: "Forward Window", value: "Nov 30, 2026 – Mar 19, 2027" },
+  { icon: CalendarClock, label: "Register & submit by", value: "Nov 22, 2026 · 11:59 PM PT" },
 ];
 
 const workflow = [
@@ -52,45 +53,45 @@ const workflow = [
   {
     step: "05",
     title: "Submit & Freeze",
-    desc: "Deliver code, configuration, documentation, and declared dependencies before the deadline. After the freeze, nothing changes.",
+    desc: "Deliver code, configuration, documentation, and declared dependencies by Sun, Nov 22, 2026, 11:59 PM PT. After the freeze, nothing changes.",
   },
   {
     step: "06",
     title: "Complete the Forward Window",
-    desc: "Your unchanged strategy runs through the official evaluation environment and data feed.",
+    desc: "From Mon, Nov 30, 2026, 6:30 AM PT to Fri, Mar 19, 2027, 1:00 PM PT, your unchanged strategy runs through the official evaluation environment and data feed.",
   },
   {
     step: "07",
     title: "Present & Defend",
-    desc: "Explain the result, the attribution, the limitations, and the lessons to the judging panel.",
+    desc: "The Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams present in spring quarter: 3 minutes, plus 3 minutes of Q&A. Explain the result, the attribution, the limitations, and the lessons to the judging panel.",
   },
 ];
 
 const timeline = [
   {
-    phase: "Registration & Orientation",
-    timing: "September 2026",
-    output: "Team registration, rules briefing, and technical onboarding",
+    phase: "Registration",
+    timing: "September – Sun, Nov 22, 2026, 11:59 PM PT",
+    output: "Register to receive the detailed instructions by email",
   },
   {
     phase: "Research & Development",
-    timing: "September – November 2026",
+    timing: "September – Nov 22, 2026",
     output: "Thesis, data work, implementation, and historical testing",
   },
   {
     phase: "Submission & Freeze",
-    timing: "Late November 2026",
+    timing: "Sun, Nov 22, 2026, 11:59 PM PT",
     output: "Research memo, code package, results, and locked configuration",
   },
   {
     phase: "Unseen Forward Window",
-    timing: "December 2026 – early March 2027",
+    timing: "Mon, Nov 30, 2026, 6:30 AM PT – Fri, Mar 19, 2027, 1:00 PM PT",
     output: "Official simulated execution through the period before spring break",
   },
   {
     phase: "Verification & Finals",
-    timing: "March – early spring quarter 2027",
-    output: "Reproduction checks, then finalist presentations and awards",
+    timing: "Late March – early spring quarter 2027",
+    output: "Reproduction checks; the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams present; awards",
   },
 ];
 
@@ -146,84 +147,138 @@ const scoring = [
 ];
 
 const awards = [
-  { group: "Overall", items: ["First place", "Second place", "Third place"] },
   {
-    group: "Research Awards",
-    items: ["Best Research Thesis", "Best Backtest and Validation", "Best Risk Management"],
+    title: "Best Sharpe",
+    body: "Highest forward-window Sharpe ratio among eligible strategies.",
+    tag: "Cash prize",
   },
   {
-    group: "Performance Awards",
-    items: ["Best Forward-Window Performance", "Best Risk-Adjusted Strategy"],
+    title: "Best Calmar",
+    body: "Highest forward-window return per unit of max drawdown (drawdown floored at 2%) among eligible strategies.",
+    tag: "Cash prize",
+  },
+  {
+    title: "Best Rigor",
+    body: "Judged by the panel on the full rubric. The top 5 teams present, and the winner is decided after the presentations.",
+    tag: "Cash prize",
   },
 ];
 
-function WorkflowStep({
-  item,
-  isOpen,
-  onToggle,
-  reduceMotion,
-}: {
-  item: (typeof workflow)[number];
-  isOpen: boolean;
-  onToggle: () => void;
-  reduceMotion: boolean;
-}) {
-  const panelId = `workflow-panel-${item.step}`;
+const faq = [
+  {
+    id: "a-1",
+    q: "Who can enter?",
+    a: "Any undergraduate student from any school. You can enter solo or as a team of up to 3.",
+  },
+  {
+    id: "a-2",
+    q: "How do I register, and when does registration close?",
+    a: "Register on this page by Sun, Nov 22, 2026, 11:59 PM PT. Detailed instructions are emailed after you register, so registering early gives you more time to prepare.",
+  },
+  {
+    id: "a-3",
+    q: "When is the submission deadline?",
+    a: "Also Sun, Nov 22, 2026, 11:59 PM PT. Registration and submission close at the same time.",
+  },
+  {
+    id: "a-4",
+    q: "What do I submit?",
+    a: "One package with five parts: a research memo; runnable strategy code with a pinned environment, a configuration file, and a clear entry point; a backtest report; a data dictionary and provenance record; and reproduction instructions with a signed confirmation that nothing changes after the freeze.",
+  },
+  {
+    id: "a-5",
+    q: "Which markets can I trade?",
+    a: "A frozen S&P 500 constituent universe and up to 1,000 Binance spot instruments. Long and short positions are allowed within the risk limits.",
+  },
+  {
+    id: "a-6",
+    q: "Is real money involved?",
+    a: "No. Every team starts with $100,000 of simulated capital.",
+  },
+  {
+    id: "a-7",
+    q: "What are the risk limits?",
+    a: "At most 20% of the portfolio in any single position, at most 150% gross exposure, net exposure between −100% and +100%, and a maximum drawdown of 35% in the forward window.",
+  },
+  {
+    id: "a-8",
+    q: "Can I use my own data?",
+    a: "Yes, for research. Obtain it lawfully and disclose every source. The official evaluation uses BFB's market data and published conventions.",
+  },
+  {
+    id: "a-9",
+    q: "Can I change my strategy after the deadline?",
+    a: "No. Your package is timestamped and hashed at the deadline, and only the frozen package runs. Emergency fixes need organizer approval and are disclosed to everyone.",
+  },
+  {
+    id: "a-10",
+    q: "When does the forward window run, and do I need to do anything?",
+    a: "From Mon, Nov 30, 2026, 6:30 AM PT to Fri, Mar 19, 2027, 1:00 PM PT. BFB runs your frozen strategy, so you don't need to do anything during the window.",
+  },
+  {
+    id: "a-11",
+    q: "How are the awards decided?",
+    a: "Best Sharpe and Best Calmar go to the eligible strategies with the highest forward-window Sharpe and Calmar ratios. Best Rigor is judged on the rubric: thesis and implementation 30%, backtest rigor and robustness 35%, forward-window performance 20%, and risk controls and reproducibility 15%.",
+  },
+  {
+    id: "a-12",
+    q: "What makes a strategy eligible for Best Sharpe or Best Calmar?",
+    a: "At least 30 independent completed trades (at least 10 in the forward window), average gross exposure of at least 25% across the window, a forward drawdown within 35%, and no rule breach, prohibited data use, material post-freeze change, or failed reproduction. Calmar floors max drawdown at 2%.",
+  },
+  {
+    id: "a-13",
+    q: "My strategy trades rarely or uses a single asset. Can I still compete?",
+    a: "Yes. Best Rigor has no minimum trade count. Single-asset, infrequent-event, long-holding, or unique-data strategies can request a Specialized Research Designation before the freeze.",
+  },
+  {
+    id: "a-14",
+    q: "Can one team win more than one award?",
+    a: "Yes.",
+  },
+  {
+    id: "a-15",
+    q: "What happens at the finals?",
+    a: "In spring quarter, the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&A. The Best Rigor winner is decided after the presentations.",
+  },
+  {
+    id: "a-16",
+    q: "Do the presentations change Best Sharpe or Best Calmar?",
+    a: "No. Those two awards are decided by the forward-window metrics once BFB has verified the results. Only Best Rigor is decided after the presentations.",
+  },
+  {
+    id: "a-17",
+    q: "Who owns my strategy?",
+    a: "You keep ownership of your original research and code. Source code and non-public research are shared only with your consent.",
+  },
+  {
+    id: "a-18",
+    q: "Who do I contact with questions?",
+    a: "Email bfbatucla@gmail.com",
+  },
+];
 
+function WorkflowStep({ item }: { item: (typeof workflow)[number] }) {
   return (
-    <button
-      type="button"
-      onClick={onToggle}
-      aria-expanded={isOpen}
-      aria-controls={panelId}
-      style={{ touchAction: "manipulation" }}
-      className={`snap-start shrink-0 w-64 self-start text-left p-6 rounded-2xl border bg-white dark:bg-midnight/40 shadow-sm transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-midnight ${
-        isOpen
-          ? "border-bfb-blue/40 dark:border-accent/40"
-          : "border-slate-100 dark:border-white/5 hover:border-bfb-blue/30 dark:hover:border-accent/30"
-      }`}
-    >
-      <div className="flex items-center justify-between gap-3 mb-4">
+    <div className="snap-start shrink-0 w-72 self-stretch text-left p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm flex flex-col justify-start">
+      <div className="flex items-center gap-3 mb-4">
         <span className="w-9 h-9 rounded-full border-2 border-bfb-blue flex items-center justify-center text-bfb-blue font-bold text-[11px] tabular-nums">
           {item.step}
         </span>
-        <ChevronDown
-          size={16}
-          aria-hidden="true"
-          className={`text-slate-400 dark:text-silver/40 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
-          }`}
-        />
       </div>
 
-      {/* min-height reserves two lines so every collapsed card is the same height */}
-      <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver leading-tight text-pretty min-h-[2.5rem]">
+      <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver leading-tight text-pretty mb-3">
         {item.title}
       </h3>
 
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            id={panelId}
-            initial={reduceMotion ? undefined : { height: 0, opacity: 0 }}
-            animate={reduceMotion ? undefined : { height: "auto", opacity: 1 }}
-            exit={reduceMotion ? undefined : { height: 0, opacity: 0 }}
-            transition={{ duration: reduceMotion ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="overflow-hidden"
-          >
-            <p className="pt-3 text-slate-500 dark:text-silver/60 leading-relaxed text-sm">
-              {item.desc}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </button>
+      <p className="text-slate-500 dark:text-silver/60 leading-relaxed text-sm text-pretty">
+        {item.desc}
+      </p>
+    </div>
   );
 }
 
 export default function AlphaResearchCompetitionPage() {
   const reduceMotion = useReducedMotion() ?? false;
-  const [openStep, setOpenStep] = useState<string | null>(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
@@ -283,7 +338,7 @@ export default function AlphaResearchCompetitionPage() {
               <div className="flex-1 h-px bg-slate-100 dark:bg-white/10" />
             </div>
 
-            <div className="grid grid-cols-2 lap:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lap:grid-cols-3 desktop:grid-cols-5 gap-6">
               {glance.map((item, i) => (
                 <motion.div
                   key={item.label}
@@ -328,21 +383,14 @@ export default function AlphaResearchCompetitionPage() {
               The Participant Workflow
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              Seven stages, from an idea you can defend to a result you have to explain. Select a
-              step to read what it involves.
+              Seven stages, from an idea you can defend to a result you have to explain.
             </p>
           </motion.div>
 
           <div className="-mx-gutter px-gutter overflow-x-auto pb-4 snap-x snap-mandatory">
-            <div className="flex items-start gap-4 min-w-max">
+            <div className="flex items-stretch gap-4 min-w-max">
               {workflow.map((item) => (
-                <WorkflowStep
-                  key={item.step}
-                  item={item}
-                  isOpen={openStep === item.step}
-                  onToggle={() => setOpenStep(openStep === item.step ? null : item.step)}
-                  reduceMotion={reduceMotion}
-                />
+                <WorkflowStep key={item.step} item={item} />
               ))}
             </div>
           </div>
@@ -366,8 +414,7 @@ export default function AlphaResearchCompetitionPage() {
               Competition Timeline
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              Research through fall, freeze in late November, then an extended forward window that
-              ends before spring break.
+              Research through fall, register and submit by Sun, Nov 22, then a forward window from Nov 30 to Mar 19 that ends before spring break.
             </p>
           </motion.div>
 
@@ -428,8 +475,7 @@ export default function AlphaResearchCompetitionPage() {
               What You Submit
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              Five pieces, due at the late-November freeze. Every submission receives a timestamped
-              archive and a cryptographic hash.
+              Five pieces, due Sun, Nov 22, 2026, 11:59 PM PT. Every submission receives a timestamped archive and a cryptographic hash.
             </p>
           </motion.div>
 
@@ -478,11 +524,10 @@ export default function AlphaResearchCompetitionPage() {
               Evaluation
             </span>
             <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mt-4 mb-3 text-balance">
-              How You Are Scored
+              How Awards Are Decided
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              Judges score independently against a written rubric before panel discussion. 65% of the
-              weight sits on research and testing quality.
+              Best Sharpe and Best Calmar are computed from the forward window for eligible strategies. Best Rigor is judged against the written rubric below: judges score independently before panel discussion, and 65% of the weight sits on research and testing quality.
             </p>
           </motion.div>
 
@@ -565,35 +610,94 @@ export default function AlphaResearchCompetitionPage() {
               Awards
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              There is more than one way to win. Research awards are open to strategies whose forward
-              sample is too small for a performance award.
+              Three awards, each with a cash prize. One team can win more than one. Best Rigor has no minimum trade count, so low-frequency strategies stay eligible.
             </p>
           </motion.div>
 
           <div className="grid lap:grid-cols-3 gap-6">
-            {awards.map((group, i) => (
+            {awards.map((award, i) => (
               <motion.div
-                key={group.group}
+                key={award.title}
                 initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm"
+                className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm flex flex-col justify-between"
               >
-                <div className="inline-flex p-3 bg-bfb-blue/10 text-bfb-blue dark:text-accent rounded-full mb-4">
-                  <Trophy size={20} aria-hidden="true" />
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="inline-flex p-3 bg-bfb-blue/10 text-bfb-blue dark:text-accent rounded-full">
+                      <Trophy size={20} aria-hidden="true" />
+                    </div>
+                    <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-bfb-blue dark:text-accent bg-bfb-blue/10 dark:bg-accent/10 rounded-full">
+                      {award.tag}
+                    </span>
+                  </div>
+                  <h3 className="text-base font-semibold tracking-tight text-slate-900 dark:text-silver mb-2 leading-tight text-pretty">
+                    {award.title}
+                  </h3>
+                  <p className="text-sm text-slate-500 dark:text-silver/60 leading-relaxed text-pretty">
+                    {award.body}
+                  </p>
                 </div>
-                <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-slate-400 mb-4">
-                  {group.group}
-                </p>
-                <ul className="space-y-2">
-                  {group.items.map((item) => (
-                    <li key={item} className="text-sm text-slate-700 dark:text-silver/80 leading-relaxed">
-                      {item}
-                    </li>
-                  ))}
-                </ul>
               </motion.div>
+            ))}
+          </div>
+
+          <p className="mt-8 text-sm text-slate-500 dark:text-silver/60 leading-relaxed text-pretty">
+            Finals (spring quarter): the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&amp;A. The Best Rigor winner is decided after the presentations.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-section px-gutter border-t border-slate-100 dark:border-white/5 bg-slate-50/20 dark:bg-white/[0.01] scroll-mt-nav">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mb-10"
+          >
+            <span className="text-eyebrow font-bold uppercase tracking-[0.3em] text-bfb-blue dark:text-accent">
+              FAQ
+            </span>
+            <h2 className="text-h2 font-serif text-slate-900 dark:text-silver mt-4 mb-3 text-balance">
+              Common Questions
+            </h2>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faq.map((item) => (
+              <details
+                key={item.id}
+                className="group rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 p-6 [&_summary::-webkit-details-marker]:hidden"
+              >
+                <summary className="flex cursor-pointer items-center justify-between gap-4 font-semibold text-slate-900 dark:text-silver text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 rounded-sm">
+                  <span>{item.q}</span>
+                  <ChevronDown
+                    size={18}
+                    className="shrink-0 text-slate-400 dark:text-silver/40 transition-transform duration-200 group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-white/5 text-sm text-slate-500 dark:text-silver/60 leading-relaxed text-pretty">
+                  {item.id === "a-18" ? (
+                    <p>
+                      Email{" "}
+                      <a
+                        href="mailto:bfbatucla@gmail.com"
+                        className="text-bfb-blue dark:text-accent font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue rounded-sm"
+                      >
+                        bfbatucla@gmail.com
+                      </a>
+                    </p>
+                  ) : (
+                    <p>{item.a}</p>
+                  )}
+                </div>
+              </details>
             ))}
           </div>
         </div>
@@ -606,8 +710,7 @@ export default function AlphaResearchCompetitionPage() {
             Register Your Interest
           </h2>
           <p className="text-slate-500 dark:text-silver/60 text-body-lg mb-10 text-pretty">
-            Teams of up to three UCLA students. We&apos;ll send the rules briefing, data conventions,
-            and onboarding details as they are published.
+            Open to undergraduates from any school, solo or in teams of up to 3. Register by Sun, Nov 22, 2026, 11:59 PM PT. Detailed instructions are emailed after you register.
           </p>
 
           <button
@@ -617,9 +720,18 @@ export default function AlphaResearchCompetitionPage() {
             Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
           </button>
 
+          <p className="mt-4 text-sm text-slate-500 dark:text-silver/60">
+            Questions? Email{" "}
+            <a
+              href="mailto:bfbatucla@gmail.com"
+              className="text-bfb-blue dark:text-accent font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue rounded-sm"
+            >
+              bfbatucla@gmail.com
+            </a>
+          </p>
+
           <p className="mt-10 text-xs text-slate-400 dark:text-silver/40 leading-relaxed">
-            Rules, scoring weights, and risk limits on this page are proposed. BFB publishes the
-            final rubric, data conventions, and tie-break procedure before the strategy freeze.
+            Full rules and data conventions are emailed to registered participants. BFB publishes the tie-break procedure before the strategy freeze.
           </p>
         </div>
       </section>
