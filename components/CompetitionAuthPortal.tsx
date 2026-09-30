@@ -1376,7 +1376,7 @@ export default function CompetitionAuthPortal({
                         htmlFor="agreedToTerms"
                         className="text-[11px] text-slate-500 dark:text-silver/60 leading-tight cursor-pointer"
                       >
-                        I confirm I own this email address and agree to receive official competition rules, announcements, and updates from Blockchain at UCLA.
+                        I confirm I own this email address and agree to receive official competition rules, announcements, and updates from BFB at UCLA.
                       </label>
                     </div>
 
