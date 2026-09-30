@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import {
@@ -280,6 +280,17 @@ function WorkflowStep({ item }: { item: (typeof workflow)[number] }) {
 export default function AlphaResearchCompetitionPage() {
   const reduceMotion = useReducedMotion() ?? false;
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hasAuthParams =
+        window.location.hash.includes("access_token") ||
+        window.location.search.includes("code=");
+      if (hasAuthParams) {
+        setIsAuthOpen(true);
+      }
+    }
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
