@@ -20,6 +20,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import {
   ClassYear,
   CompetitionRegistration,
@@ -40,36 +41,79 @@ const CLASS_YEARS: ClassYear[] = [
   "Graduate / Other",
 ];
 
-function getErrorMessage(err: any): string {
+function getGoogleName(user: SupabaseUser | null): { firstName: string; lastName: string } {
+  if (!user) return { firstName: "", lastName: "" };
+  const meta = user.user_metadata || {};
+  const identityMeta = user.identities?.[0]?.identity_data || {};
+
+  const givenName =
+    meta.given_name ||
+    meta.first_name ||
+    identityMeta.given_name ||
+    identityMeta.first_name ||
+    "";
+  const familyName =
+    meta.family_name ||
+    meta.last_name ||
+    identityMeta.family_name ||
+    identityMeta.last_name ||
+    "";
+
+  if (givenName || familyName) {
+    return {
+      firstName: String(givenName).trim(),
+      lastName: String(familyName).trim(),
+    };
+  }
+
+  const fullName =
+    meta.full_name ||
+    meta.name ||
+    identityMeta.full_name ||
+    identityMeta.name ||
+    "";
+  if (fullName) {
+    const parts = String(fullName).trim().split(/\s+/);
+    if (parts.length === 1) {
+      return { firstName: parts[0], lastName: "" };
+    }
+    return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
+  }
+
+  return { firstName: "", lastName: "" };
+}
+
+function getErrorMessage(err: unknown): string {
   if (!err) return "An error occurred. Please try again.";
   if (typeof err === "string") return err;
 
+  const errObj = err as Record<string, unknown>;
   const rawMsg =
-    err.message ||
-    err.error_description ||
-    err.msg ||
+    (errObj.message as string) ||
+    (errObj.error_description as string) ||
+    (errObj.msg as string) ||
     (typeof err === "object" ? JSON.stringify(err) : "");
 
   if (
-    err.code === "42P17" ||
+    errObj.code === "42P17" ||
     (typeof rawMsg === "string" && rawMsg.includes("infinite recursion"))
   ) {
     return "Supabase RLS Infinite Recursion Error (42P17): An RLS policy on 'competition_registrations' in Supabase is querying itself. Please run the SQL script in 'supabase_setup.sql' in your Supabase SQL Editor to replace recursive policies with non-recursive ones.";
   }
 
-  if (err.message && typeof err.message === "string" && err.message.trim() !== "") {
-    return err.message;
+  if (errObj.message && typeof errObj.message === "string" && errObj.message.trim() !== "") {
+    return errObj.message;
   }
-  if (err.error_description && typeof err.error_description === "string") {
-    return err.error_description;
+  if (errObj.error_description && typeof errObj.error_description === "string") {
+    return errObj.error_description;
   }
-  if (err.msg && typeof err.msg === "string") {
-    return err.msg;
+  if (errObj.msg && typeof errObj.msg === "string") {
+    return errObj.msg;
   }
   try {
     const str = JSON.stringify(err);
     if (str !== "{}" && str !== "[]" && str !== '""') return str;
-  } catch (e) {
+  } catch {
     // ignore
   }
   return "An unexpected error occurred. Please check your network or try again.";
@@ -88,7 +132,7 @@ export default function CompetitionAuthPortal({
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
   // User state
-  const [sessionUser, setSessionUser] = useState<any>(null);
+  const [sessionUser, setSessionUser] = useState<SupabaseUser | null>(null);
   const [userProfile, setUserProfile] = useState<CompetitionRegistration | null>(
     null
   );
@@ -102,6 +146,12 @@ export default function CompetitionAuthPortal({
   const [password, setPassword] = useState<string>("");
   const [classYear, setClassYear] = useState<ClassYear>("2027");
   const [agreedToTerms, setAgreedToTerms] = useState<boolean>(true);
+
+  // Form states - Google Profile Setup
+  const [googleFirstName, setGoogleFirstName] = useState<string>("");
+  const [googleLastName, setGoogleLastName] = useState<string>("");
+  const [googleClassYear, setGoogleClassYear] = useState<ClassYear>("2027");
+  const [isSettingUpProfile, setIsSettingUpProfile] = useState<boolean>(false);
 
   // Form states - Team
   const [newTeamName, setNewTeamName] = useState<string>("");
@@ -125,18 +175,20 @@ export default function CompetitionAuthPortal({
         const {
           data: { session },
         } = await supabase.auth.getSession();
+
         if (session?.user) {
           setSessionUser(session.user);
-          await fetchProfile(session.user.id);
+          await fetchProfile(session.user.id, session.user);
         } else {
           setSessionUser(null);
           setUserProfile(null);
           setTeamMembers([]);
+          setIsSettingUpProfile(false);
         }
 
         // Fetch list of existing unique team names for the Join dropdown/autocomplete
         fetchExistingTeams();
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Session check error:", err);
       } finally {
         setFetchingSession(false);
@@ -144,6 +196,25 @@ export default function CompetitionAuthPortal({
     }
 
     loadSession();
+
+    // Listen to Supabase Auth state changes (handles post-Google OAuth redirect)
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setSessionUser(session.user);
+        fetchProfile(session.user.id, session.user);
+      } else {
+        setSessionUser(null);
+        setUserProfile(null);
+        setTeamMembers([]);
+        setIsSettingUpProfile(false);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [isOpen]);
 
   async function fetchExistingTeams() {
@@ -157,42 +228,105 @@ export default function CompetitionAuthPortal({
         const unique = Array.from(
           new Set(
             data
-              .map((d: any) => d.team_name)
-              .filter((name: string) => name && name.trim() !== "")
+              .map((d: { team_name: string | null }) => d.team_name)
+              .filter((name: string | null): name is string => Boolean(name && name.trim() !== ""))
           )
         );
         setExistingTeams(unique);
       }
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("Error fetching existing teams:", err);
     }
   }
 
-  async function fetchProfile(userId: string) {
+  async function fetchProfile(userId: string, currentUserObj?: SupabaseUser) {
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("competition_registrations")
         .select("*")
         .eq("id", userId)
         .maybeSingle();
 
-      if (data) {
+      if (data && data.class_year) {
         setUserProfile(data as CompetitionRegistration);
+        setIsSettingUpProfile(false);
         if (data.team_name) {
           fetchTeamMembers(data.team_name);
         }
-      } else if (sessionUser) {
-        const meta = sessionUser.user_metadata || {};
-        setUserProfile({
-          id: userId,
-          full_name: meta.full_name || fullName || "Participant",
-          email: sessionUser.email || email,
-          class_year: meta.class_year || classYear || "Junior",
-          team_name: null,
-        });
+      } else {
+        // User logged in via Google (or row missing class_year) -> prompt for Google profile setup
+        setUserProfile(null);
+        setIsSettingUpProfile(true);
+
+        const targetUser = currentUserObj || sessionUser;
+        if (targetUser) {
+          const { firstName, lastName } = getGoogleName(targetUser);
+          setGoogleFirstName(firstName);
+          setGoogleLastName(lastName);
+        }
       }
     } catch (err) {
       console.error("Error loading profile:", err);
+    }
+  }
+
+  async function handleSaveGoogleProfile(e: React.FormEvent) {
+    e.preventDefault();
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    if (!sessionUser) {
+      setErrorMsg("No active user session found. Please sign in again.");
+      return;
+    }
+
+    const cleanFirst = googleFirstName.trim();
+    const cleanLast = googleLastName.trim();
+
+    if (!cleanFirst || !cleanLast) {
+      setErrorMsg("Please enter both your First Name and Last Name.");
+      return;
+    }
+
+    if (!googleClassYear) {
+      setErrorMsg("Please select your graduation year.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const combinedFullName = `${cleanFirst} ${cleanLast}`;
+      const userEmail = sessionUser.email || email;
+
+      const { error: dbError } = await supabase
+        .from("competition_registrations")
+        .upsert({
+          id: sessionUser.id,
+          full_name: combinedFullName,
+          email: userEmail,
+          class_year: googleClassYear,
+          team_name: null,
+          updated_at: new Date().toISOString(),
+        });
+
+      if (dbError) throw dbError;
+
+      const newProfile: CompetitionRegistration = {
+        id: sessionUser.id,
+        full_name: combinedFullName,
+        email: userEmail,
+        class_year: googleClassYear,
+        team_name: null,
+      };
+
+      setUserProfile(newProfile);
+      setIsSettingUpProfile(false);
+      setSuccessMsg("Profile saved successfully! Now create or join a team below.");
+    } catch (err: unknown) {
+      setErrorMsg(getErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -208,6 +342,35 @@ export default function CompetitionAuthPortal({
       }
     } catch (err) {
       console.error("Error loading team members:", err);
+    }
+  }
+
+  // Handle Google OAuth Sign In
+  async function handleGoogleSignIn() {
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    if (!isSupabaseConfigured()) {
+      setErrorMsg(
+        "Supabase credentials are not configured yet. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local"
+      );
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/competition/alpha-research`,
+        },
+      });
+
+      if (error) throw error;
+    } catch (err: unknown) {
+      setErrorMsg(getErrorMessage(err));
+      setLoading(false);
     }
   }
 
@@ -340,7 +503,7 @@ export default function CompetitionAuthPortal({
           "Account created successfully! Now please create or join a team below to complete your competition registration."
         );
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
     } finally {
       setLoading(false);
@@ -380,7 +543,7 @@ export default function CompetitionAuthPortal({
         await fetchProfile(data.user.id);
         setSuccessMsg("Successfully signed in!");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
     } finally {
       setLoading(false);
@@ -392,6 +555,11 @@ export default function CompetitionAuthPortal({
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
+
+    if (!sessionUser) {
+      setErrorMsg("You must be logged in to create a team.");
+      return;
+    }
 
     if (!newTeamName || newTeamName.trim() === "") {
       setErrorMsg("Please enter a valid team name.");
@@ -424,9 +592,9 @@ export default function CompetitionAuthPortal({
         .from("competition_registrations")
         .upsert({
           id: sessionUser.id,
-          full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+          full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
           email: sessionUser.email || email,
-          class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
+          class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
           team_name: cleanTeamName,
           updated_at: new Date().toISOString(),
         });
@@ -435,9 +603,9 @@ export default function CompetitionAuthPortal({
 
       const updatedProfile: CompetitionRegistration = {
         id: sessionUser.id,
-        full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+        full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
         email: sessionUser.email || email,
-        class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
+        class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
         team_name: cleanTeamName,
       };
 
@@ -448,7 +616,7 @@ export default function CompetitionAuthPortal({
       setSuccessMsg(
         `Team '${cleanTeamName}' created successfully! You are registered for the competition. More details will be sent to your email soon.`
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
     } finally {
       setLoading(false);
@@ -460,6 +628,11 @@ export default function CompetitionAuthPortal({
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
+
+    if (!sessionUser) {
+      setErrorMsg("You must be logged in to join a team.");
+      return;
+    }
 
     if (!joinTeamName || joinTeamName.trim() === "") {
       setErrorMsg("Please select or enter an existing team name.");
@@ -497,9 +670,9 @@ export default function CompetitionAuthPortal({
         .from("competition_registrations")
         .upsert({
           id: sessionUser.id,
-          full_name: userProfile?.full_name || meta.full_name || fullName || "Participant",
+          full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
           email: sessionUser.email || email,
-          class_year: userProfile?.class_year || meta.class_year || classYear || "Junior",
+          class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
           team_name: cleanTeamName,
           updated_at: new Date().toISOString(),
         });
@@ -517,7 +690,7 @@ export default function CompetitionAuthPortal({
       setSuccessMsg(
         `Successfully joined Team '${cleanTeamName}'! More competition details will be sent to your email soon.`
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
     } finally {
       setLoading(false);
@@ -526,6 +699,7 @@ export default function CompetitionAuthPortal({
 
   // Leave Team
   async function handleLeaveTeam() {
+    if (!sessionUser) return;
     setLoading(true);
     setErrorMsg(null);
     setSuccessMsg(null);
@@ -538,7 +712,7 @@ export default function CompetitionAuthPortal({
       setUserProfile((prev) => (prev ? { ...prev, team_name: null } : null));
       setTeamMembers([]);
       setSuccessMsg("You have left your team. Please create or join a new team below.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setErrorMsg("Failed to leave team.");
     } finally {
       setLoading(false);
@@ -554,7 +728,7 @@ export default function CompetitionAuthPortal({
       setUserProfile(null);
       setTeamMembers([]);
       setSuccessMsg("Signed out successfully.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Sign out error:", err);
     } finally {
       setLoading(false);
@@ -588,7 +762,7 @@ export default function CompetitionAuthPortal({
                 </div>
                 <div>
                   <h4 className="text-base font-bold text-slate-900 dark:text-silver">
-                    Leave Team '{userProfile?.team_name}'?
+                    Leave Team &apos;{userProfile?.team_name}&apos;?
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-silver/60 mt-1.5 max-w-xs leading-relaxed">
                     Are you sure you want to leave your team? You will be unassigned and directed to create or join a new team.
@@ -629,7 +803,9 @@ export default function CompetitionAuthPortal({
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-silver/60">
                   {sessionUser
-                    ? userProfile?.team_name
+                    ? isSettingUpProfile || !userProfile
+                      ? "Step 1.5: Profile & Graduation Year"
+                      : userProfile?.team_name
                       ? "Registration Dashboard"
                       : "Step 2: Team Setup"
                     : "Student Sign-up & Login Portal"}
@@ -681,7 +857,115 @@ export default function CompetitionAuthPortal({
                 <span className="text-sm font-medium">Checking session...</span>
               </div>
             ) : sessionUser ? (
-              userProfile?.team_name ? (
+              isSettingUpProfile || !userProfile ? (
+                /* STEP 1.5: GOOGLE USER PROFILE & GRADUATION YEAR INPUT */
+                <div className="space-y-5">
+                  <div className="p-4 bg-bfb-blue/10 border border-bfb-blue/20 rounded-xl flex items-start gap-3">
+                    <User className="text-bfb-blue dark:text-accent mt-0.5 shrink-0" size={20} />
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-900 dark:text-silver">
+                        Complete Your Profile
+                      </h4>
+                      <p className="text-xs text-slate-500 dark:text-silver/60 mt-0.5 leading-relaxed">
+                        Signed in as <span className="font-semibold text-slate-700 dark:text-silver">{sessionUser.email}</span>. Please confirm your first and last name and select your graduation year.
+                      </p>
+                    </div>
+                  </div>
+
+                  <form onSubmit={handleSaveGoogleProfile} className="space-y-4">
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                          First Name
+                        </label>
+                        <div className="relative">
+                          <User
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                            size={16}
+                          />
+                          <input
+                            type="text"
+                            required
+                            value={googleFirstName}
+                            onChange={(e) => setGoogleFirstName(e.target.value)}
+                            placeholder="First Name"
+                            className="w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                          Last Name
+                        </label>
+                        <div className="relative">
+                          <User
+                            className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                            size={16}
+                          />
+                          <input
+                            type="text"
+                            required
+                            value={googleLastName}
+                            onChange={(e) => setGoogleLastName(e.target.value)}
+                            placeholder="Last Name"
+                            className="w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                        Graduation Year
+                      </label>
+                      <div className="relative">
+                        <GraduationCap
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                          size={16}
+                        />
+                        <select
+                          value={googleClassYear}
+                          onChange={(e) =>
+                            setGoogleClassYear(e.target.value as ClassYear)
+                          }
+                          className="w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue appearance-none"
+                        >
+                          {CLASS_YEARS.map((yr) => (
+                            <option key={yr} value={yr}>
+                              {yr}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-bfb-blue text-white font-bold text-sm rounded-xl hover:bg-bfb-blue/90 transition-colors shadow-lg shadow-bfb-blue/20"
+                    >
+                      {loading ? (
+                        <Loader2 size={18} className="animate-spin" />
+                      ) : (
+                        <>
+                          Save Profile & Continue <ArrowRight size={16} />
+                        </>
+                      )}
+                    </button>
+                  </form>
+
+                  <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex justify-between items-center text-xs text-slate-400">
+                    <span>Logged in as {sessionUser.email}</span>
+                    <button
+                      onClick={handleSignOut}
+                      className="text-red-500 hover:underline"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              ) : userProfile?.team_name ? (
                 /* STATE 3: LOGGED IN & TEAM ASSIGNED (CONFIRMED DASHBOARD) */
                 <div className="space-y-6">
                   <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-start gap-3">
@@ -925,6 +1209,41 @@ export default function CompetitionAuthPortal({
             ) : (
               /* STATE 1: UNAUTHENTICATED SIGN UP / SIGN IN FORMS */
               <div>
+                {/* Google OAuth Button */}
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-slate-700 dark:text-silver font-semibold text-sm rounded-xl transition-all shadow-sm cursor-pointer mb-5 focus:outline-none focus:ring-2 focus:ring-bfb-blue"
+                >
+                  <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+                    <path
+                      fill="#4285F4"
+                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    />
+                    <path
+                      fill="#34A853"
+                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    />
+                    <path
+                      fill="#FBBC05"
+                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                    />
+                    <path
+                      fill="#EA4335"
+                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                    />
+                  </svg>
+                  <span>Continue with Google</span>
+                </button>
+
+                <div className="relative flex items-center justify-center mb-6">
+                  <div className="border-t border-slate-200 dark:border-slate-800 w-full" />
+                  <span className="bg-white dark:bg-midnight px-3 text-[11px] uppercase tracking-wider text-slate-400 font-semibold absolute">
+                    Or with email
+                  </span>
+                </div>
+
                 {/* Tabs */}
                 <div className="flex p-1 bg-slate-100 dark:bg-slate-900/60 rounded-xl mb-6">
                   <button
