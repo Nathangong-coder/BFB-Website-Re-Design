@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS public.competition_submissions (
     research_memo_file_data TEXT,
 
     -- Deliverable 2: Strategy Code
+    language TEXT NOT NULL DEFAULT 'python',
     strategy_code_filename TEXT,
     strategy_code_content TEXT,
     entry_point TEXT,

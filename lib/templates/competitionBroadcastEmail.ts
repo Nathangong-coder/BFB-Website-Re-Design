@@ -29,7 +29,7 @@ export function generateBroadcastEmailHtml({
     <!-- Header -->
     <tr>
       <td style="padding: 24px; background-color: #0f172a; border-bottom: 1px solid #1e293b; text-align: center;">
-        <h2 style="margin: 0; color: #3b82f6; font-size: 20px; font-weight: 700;">Blockchain at UCLA</h2>
+        <h2 style="margin: 0; color: #3b82f6; font-size: 20px; font-weight: 700;">BFB at UCLA</h2>
         <p style="margin: 4px 0 0 0; color: #94a3b8; font-size: 12px; text-transform: uppercase; tracking-wider: 1px;">Alpha Research Competition</p>
       </td>
     </tr>
@@ -52,7 +52,7 @@ export function generateBroadcastEmailHtml({
           You are receiving this official announcement because your email address was registered for the BFB Alpha Research Competition.
         </p>
         <p style="margin: 0 0 8px 0;">
-          <strong>Blockchain at UCLA</strong> | Associated Students UCLA | 308 Westwood Plaza, Los Angeles, CA 90024
+          <strong>BFB at UCLA</strong> | Associated Students UCLA | 308 Westwood Plaza, Los Angeles, CA 90024
         </p>
         <p style="margin: 0;">
           If you received this message by mistake or wish to stop receiving competition updates, <a href="${unsubscribeUrl}" style="color: #3b82f6; text-decoration: underline;">click here to unsubscribe</a>.

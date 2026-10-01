@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope } from "lucide-react";
+import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope, Download, Code2 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
 const markets = [
@@ -366,7 +366,7 @@ export default function AlphaResearchDetailsPage() {
             </table>
           </div>
 
-          <div className="grid lap:grid-cols-2 gap-6 mt-12">
+          <div className="grid lap:grid-cols-3 gap-6 mt-12">
             <motion.div
               initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
               whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -401,6 +401,74 @@ export default function AlphaResearchDetailsPage() {
                 strategy? Request the designation before the freeze.
               </p>
               <Bullets items={designation} />
+            </motion.div>
+
+            <motion.div
+              initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="p-card rounded-3xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <Code2 className="text-bfb-blue dark:text-accent" size={20} aria-hidden="true" />
+                  <h3 className="text-h3 font-serif text-slate-900 dark:text-silver text-pretty">
+                    Download Starter Code Templates
+                  </h3>
+                </div>
+                <p className="text-sm text-slate-500 dark:text-silver/60 leading-relaxed mb-5">
+                  We accept strategy code submissions exclusively in <strong className="text-slate-900 dark:text-silver">Python (.py)</strong> and <strong className="text-slate-900 dark:text-silver">C++ (.cpp)</strong>. Download our standardized starter packages containing sample signal generators, CLI entry points, and build manifests:
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-2">
+                <a
+                  href="/templates/bfb_alpha_template.py"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    Python Starter Template (.py)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/requirements.txt"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Python dependencies (requirements.txt)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/bfb_alpha_template.cpp"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-400" />
+                    C++ Starter Template (.cpp)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/Makefile"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    C++ Build Manifest (Makefile)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+              </div>
             </motion.div>
           </div>
         </div>

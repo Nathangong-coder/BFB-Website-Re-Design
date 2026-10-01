@@ -51,12 +51,15 @@ export interface BacktestMetrics {
   benchmark_name?: string;
 }
 
+export type LanguageType = "python" | "cpp";
+
 export interface SubmissionDeliverables {
   research_memo_title: string;
   research_memo_content: string;
   research_memo_file_name?: string;
   research_memo_file_data?: string;
 
+  language: LanguageType;
   strategy_code_filename: string;
   strategy_code_content: string;
   entry_point: string;

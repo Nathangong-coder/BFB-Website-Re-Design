@@ -28,6 +28,7 @@ export function buildCanonicalSubmissionPayload(params: {
       file_name: params.deliverables.research_memo_file_name || "",
     },
     code: {
+      language: params.deliverables.language || "python",
       filename: params.deliverables.strategy_code_filename.trim(),
       content: params.deliverables.strategy_code_content.trim(),
       entry_point: params.deliverables.entry_point.trim(),
@@ -87,6 +88,7 @@ export async function verifySubmissionHash(
   submission: CompetitionSubmission
 ): Promise<HashVerificationResult> {
   const deliverables: SubmissionDeliverables = {
+    language: submission.language || "python",
     research_memo_title: submission.research_memo_title,
     research_memo_content: submission.research_memo_content,
     research_memo_file_name: submission.research_memo_file_name,

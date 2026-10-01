@@ -90,16 +90,17 @@ export default function SubmissionHashInspector({
 
   return (
     <AnimatePresence>
-      <div
-        key="inspector-modal-backdrop"
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-      >
+      <div key="inspector-modal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Static Isolated Backdrop Layer */}
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md pointer-events-none" />
+
         <motion.div
           initial={{ opacity: 0, scale: 0.96, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.96, y: 10 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-2xl bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
+          style={{ transform: "translateZ(0)", contain: "layout style" }}
+          className="relative z-10 w-full max-w-2xl bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col will-change-transform"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
@@ -206,19 +207,20 @@ export default function SubmissionHashInspector({
 
               <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-white/5">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
-                  <BarChart3 size={12} /> Sharpe Ratio
+                  <Code2 size={12} /> Language
                 </span>
-                <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 truncate">
-                  {bm.expected_sharpe !== undefined ? bm.expected_sharpe : "N/A"}
+                <p className="text-xs font-semibold text-bfb-blue dark:text-accent mt-1 truncate uppercase flex items-center gap-1.5">
+                  <span className={`w-2 h-2 rounded-full ${submission.language === "cpp" ? "bg-blue-400" : "bg-emerald-400"}`} />
+                  {submission.language === "cpp" ? "C++ (.cpp)" : "Python (.py)"}
                 </p>
               </div>
 
               <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-white/5">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
-                  <Code2 size={12} /> Entry Point
+                  <BarChart3 size={12} /> Sharpe Ratio
                 </span>
-                <p className="text-xs font-semibold text-bfb-blue dark:text-accent mt-1 truncate">
-                  {submission.entry_point || "main.py"}
+                <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 truncate">
+                  {bm.expected_sharpe !== undefined ? bm.expected_sharpe : "N/A"}
                 </p>
               </div>
             </div>
@@ -235,7 +237,11 @@ export default function SubmissionHashInspector({
                   {submission.research_memo_title}
                 </div>
                 <div>
-                  <span className="font-semibold text-slate-900 dark:text-silver">Strategy File:</span>{" "}
+                  <span className="font-semibold text-slate-900 dark:text-silver">Entry Point &amp; Strategy File:</span>{" "}
+                  <code className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono">
+                    {submission.entry_point || "main.py"}
+                  </code>{" "}
+                  →{" "}
                   <code className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono">
                     {submission.strategy_code_filename}
                   </code>
