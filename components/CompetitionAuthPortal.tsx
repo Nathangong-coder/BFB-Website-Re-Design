@@ -25,7 +25,10 @@ import {
   ClassYear,
   CompetitionRegistration,
   TeamMember,
+  CompetitionSubmission,
 } from "@/lib/types/competition";
+import CompetitionSubmissionPortal from "./CompetitionSubmissionPortal";
+import SubmissionHashInspector from "./SubmissionHashInspector";
 
 interface CompetitionAuthPortalProps {
   isOpen: boolean;
@@ -157,6 +160,11 @@ export default function CompetitionAuthPortal({
   const [newTeamName, setNewTeamName] = useState<string>("");
   const [joinTeamName, setJoinTeamName] = useState<string>("");
 
+  // Submission portal states
+  const [latestSubmission, setLatestSubmission] = useState<CompetitionSubmission | null>(null);
+  const [isSubmissionPortalOpen, setIsSubmissionPortalOpen] = useState<boolean>(false);
+  const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
+
   // Check active session and fetch profile
   useEffect(() => {
     if (!isOpen) return;
@@ -183,6 +191,7 @@ export default function CompetitionAuthPortal({
           setSessionUser(null);
           setUserProfile(null);
           setTeamMembers([]);
+          setLatestSubmission(null);
           setIsSettingUpProfile(false);
         }
 
@@ -208,6 +217,7 @@ export default function CompetitionAuthPortal({
         setSessionUser(null);
         setUserProfile(null);
         setTeamMembers([]);
+        setLatestSubmission(null);
         setIsSettingUpProfile(false);
       }
     });
@@ -239,6 +249,25 @@ export default function CompetitionAuthPortal({
     }
   }
 
+  async function fetchTeamSubmission(teamName: string) {
+    try {
+      const { data, error } = await supabase
+        .from("competition_submissions")
+        .select("*")
+        .ilike("team_name", teamName.trim())
+        .eq("is_latest", true)
+        .maybeSingle();
+
+      if (!error && data) {
+        setLatestSubmission(data as CompetitionSubmission);
+      } else {
+        setLatestSubmission(null);
+      }
+    } catch (err) {
+      console.error("Error loading team submission:", err);
+    }
+  }
+
   async function fetchProfile(userId: string, currentUserObj?: SupabaseUser) {
     try {
       const { data } = await supabase
@@ -252,6 +281,7 @@ export default function CompetitionAuthPortal({
         setIsSettingUpProfile(false);
         if (data.team_name) {
           fetchTeamMembers(data.team_name);
+          fetchTeamSubmission(data.team_name);
         }
       } else {
         // User logged in via Google (or row missing class_year) -> prompt for Google profile setup
@@ -738,8 +768,12 @@ export default function CompetitionAuthPortal({
   if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+    <>
+      <AnimatePresence>
+        <div
+          key="auth-portal-backdrop"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
+        >
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -931,8 +965,8 @@ export default function CompetitionAuthPortal({
                           }
                           className="w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue appearance-none"
                         >
-                          {CLASS_YEARS.map((yr) => (
-                            <option key={yr} value={yr}>
+                          {CLASS_YEARS.map((yr, idx) => (
+                            <option key={`google-yr-${yr}-${idx}`} value={yr}>
                               {yr}
                             </option>
                           ))}
@@ -1049,6 +1083,71 @@ export default function CompetitionAuthPortal({
                         ))}
                       </div>
                     </div>
+                  </div>
+
+                  {/* Strategy Deliverables & Submission Portal Card */}
+                  <div className="p-4 bg-slate-900 text-slate-100 rounded-xl space-y-3 border border-slate-800">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="text-bfb-blue dark:text-accent" size={18} />
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200">
+                          Strategy Deliverables & Submission
+                        </h4>
+                      </div>
+                      {latestSubmission ? (
+                        <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 rounded-full flex items-center gap-1 border border-emerald-500/30">
+                          <CheckCircle2 size={12} /> Version {latestSubmission.version} Submitted
+                        </span>
+                      ) : (
+                        <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-400 rounded-full flex items-center gap-1 border border-amber-500/30">
+                          <AlertCircle size={12} /> Pending Submission
+                        </span>
+                      )}
+                    </div>
+
+                    {latestSubmission ? (
+                      <div className="space-y-2.5 pt-1">
+                        <div className="p-2.5 bg-slate-950/80 rounded-lg border border-slate-800 text-xs space-y-1.5 font-mono">
+                          <div className="flex justify-between items-center">
+                            <span className="text-slate-400">Timestamp:</span>
+                            <span className="text-slate-200">{new Date(latestSubmission.submitted_at).toLocaleString()}</span>
+                          </div>
+                          <div className="flex justify-between items-center truncate">
+                            <span className="text-slate-400">SHA-256 Hash:</span>
+                            <span className="text-accent truncate pl-2 font-semibold">
+                              {latestSubmission.crypto_hash.substring(0, 16)}...
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-1">
+                          <button
+                            onClick={() => setIsSubmissionPortalOpen(true)}
+                            className="flex-1 py-2 px-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                          >
+                            Resubmit Strategy (v{latestSubmission.version + 1}) <ArrowRight size={14} />
+                          </button>
+                          <button
+                            onClick={() => setIsInspectorOpen(true)}
+                            className="py-2 px-3 bg-white/10 hover:bg-white/20 text-silver font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                          >
+                            <ShieldCheck size={14} className="text-emerald-400" /> Verify Hash
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-3 pt-1">
+                        <p className="text-xs text-slate-300 leading-relaxed">
+                          Upload your team&apos;s Research Memo, Strategy Code, Backtest Report, Data Provenance, and Reproduction Instructions. Teams can resubmit as many times as needed before the deadline.
+                        </p>
+                        <button
+                          onClick={() => setIsSubmissionPortalOpen(true)}
+                          className="w-full py-2.5 px-4 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-bfb-blue/20"
+                        >
+                          Submit Strategy Deliverables <ArrowRight size={14} />
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <button
@@ -1169,8 +1268,8 @@ export default function CompetitionAuthPortal({
                             className="w-full pl-10 pr-4 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
                           />
                           <datalist id="existing-teams-list">
-                            {existingTeams.map((name) => (
-                              <option key={name} value={name} />
+                            {existingTeams.map((name, idx) => (
+                              <option key={`team-opt-${name || idx}-${idx}`} value={name} />
                             ))}
                           </datalist>
                         </div>
@@ -1355,8 +1454,8 @@ export default function CompetitionAuthPortal({
                           }
                           className="w-full pl-10 pr-3 py-2.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue appearance-none"
                         >
-                          {CLASS_YEARS.map((yr) => (
-                            <option key={yr} value={yr}>
+                          {CLASS_YEARS.map((yr, idx) => (
+                            <option key={`reg-yr-${yr}-${idx}`} value={yr}>
                               {yr}
                             </option>
                           ))}
@@ -1455,5 +1554,28 @@ export default function CompetitionAuthPortal({
         </motion.div>
       </div>
     </AnimatePresence>
+
+    {/* Submission Portal Modal */}
+    <CompetitionSubmissionPortal
+      isOpen={isSubmissionPortalOpen}
+      onClose={() => setIsSubmissionPortalOpen(false)}
+      teamName={userProfile?.team_name || ""}
+      userEmail={sessionUser?.email || ""}
+      userId={sessionUser?.id || ""}
+      currentSubmission={latestSubmission}
+      onSubmissionSuccess={() => {
+        if (userProfile?.team_name) {
+          fetchTeamSubmission(userProfile.team_name);
+        }
+      }}
+    />
+
+    {/* Hash Verification Inspector Modal */}
+    <SubmissionHashInspector
+      isOpen={isInspectorOpen}
+      onClose={() => setIsInspectorOpen(false)}
+      submission={latestSubmission}
+    />
+  </>
   );
 }

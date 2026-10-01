@@ -141,8 +141,8 @@ const verification = [
 function Bullets({ items }: { items: string[] }) {
   return (
     <ul className="space-y-3">
-      {items.map((point) => (
-        <li key={point} className="flex items-start gap-3">
+      {items.map((point, index) => (
+        <li key={`bullet-${index}-${point.slice(0, 20)}`} className="flex items-start gap-3">
           <span
             className="mt-2 w-1.5 h-1.5 rounded-full bg-bfb-blue/60 dark:bg-accent/60 shrink-0"
             aria-hidden="true"
