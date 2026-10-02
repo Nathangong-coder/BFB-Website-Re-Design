@@ -318,7 +318,7 @@ export default function AlphaResearchCompetitionPage() {
                 href="/competition/alpha-research/register"
                 className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
               >
-                Register Team <UserPlus size={18} aria-hidden="true" />
+                Register <UserPlus size={18} aria-hidden="true" />
               </Link>
               <Link
                 href="/competition/alpha-research/submit"
@@ -724,7 +724,7 @@ export default function AlphaResearchCompetitionPage() {
               href="/competition/alpha-research/register"
               className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
             >
-              Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
+              Register <ChevronRight size={18} aria-hidden="true" />
             </Link>
             <Link
               href="/competition/alpha-research/submit"
