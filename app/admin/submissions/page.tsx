@@ -10,7 +10,6 @@ import {
   Download,
   FileText,
   Code2,
-  BarChart3,
   Database,
   Lock,
   CheckCircle2,
@@ -105,17 +104,6 @@ if __name__ == "__main__":
     main()`,
     entry_point: "strategy.py",
     dependencies: "numpy>=1.24.0\npandas>=2.0.0\nscipy>=1.10.0",
-    backtest_metrics: {
-      expected_sharpe: 2.14,
-      expected_calmar: 2.85,
-      max_drawdown_pct: 7.2,
-      gross_exposure_pct: 100.0,
-      net_exposure_pct: 0.5,
-      annual_turnover_pct: 420.0,
-      trade_count: 1240,
-      win_rate_pct: 56.4,
-      benchmark_name: "S&P 500 ETF (SPY)",
-    },
     data_provenance: "Tested on 5-minute bar equities data from Polygon.io and Alpha Vantage covering 2021-2025. No forward bias; clean train/test split.",
     reproduction_instructions: "# Reproduction Instructions\n1. Ensure Python 3.10+ is installed.\n2. Install requirements: `pip install -r requirements.txt`.\n3. Execute strategy: `python3 strategy.py market_data.json output_signals.json`.",
     signed_confirmation: true,
@@ -178,24 +166,13 @@ int main(int argc, char* argv[]) {
 }`,
     entry_point: "strategy.cpp",
     dependencies: "g++ -O3 -std=c++20 strategy.cpp -o strategy_runner",
-    backtest_metrics: {
-      expected_sharpe: 2.89,
-      expected_calmar: 3.42,
-      max_drawdown_pct: 4.8,
-      gross_exposure_pct: 100.0,
-      net_exposure_pct: 0.0,
-      annual_turnover_pct: 1250.0,
-      trade_count: 8900,
-      win_rate_pct: 59.8,
-      benchmark_name: "S&P 500 ETF (SPY)",
-    },
     data_provenance: "High-frequency tick data backtested using custom C++ market simulator with 50-microsecond synthetic queue latency.",
     reproduction_instructions: "# Reproduction Instructions\n1. Compile with Makefile: `make` or `g++ -O3 -std=c++20 strategy.cpp -o strategy_runner`.\n2. Execute strategy: `./strategy_runner market_data.json output_signals.json`.",
     signed_confirmation: true,
   },
 ];
 
-type ModalTab = "memo" | "code" | "metrics" | "provenance" | "reproduction";
+type ModalTab = "memo" | "code" | "provenance" | "reproduction";
 
 function AdminSubmissionsDashboardContent() {
   const { logout } = useAdminAuth();
@@ -655,11 +632,10 @@ function AdminSubmissionsDashboardContent() {
             <table className="w-full text-left text-xs text-slate-300">
               <thead className="bg-slate-950 text-slate-400 font-semibold uppercase tracking-wider border-b border-white/10">
                 <tr>
-                  <th className="py-3.5 px-4">Team & Version</th>
+                  <th className="py-3.5 px-4">Team &amp; Version</th>
                   <th className="py-3.5 px-4">Submitter Email</th>
                   <th className="py-3.5 px-4">Language / Entry</th>
                   <th className="py-3.5 px-4">Submitted At</th>
-                  <th className="py-3.5 px-4">Sharpe / MaxDD</th>
                   <th className="py-3.5 px-4">SHA-256 Hash Digest</th>
                   <th className="py-3.5 px-4 text-right">Actions</th>
                 </tr>
@@ -667,7 +643,7 @@ function AdminSubmissionsDashboardContent() {
               <tbody className="divide-y divide-white/5">
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-400">
+                    <td colSpan={6} className="py-12 text-center text-slate-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <RefreshCw size={24} className="animate-spin text-bfb-blue" />
                         <span>Loading team submissions from database...</span>
@@ -676,7 +652,7 @@ function AdminSubmissionsDashboardContent() {
                   </tr>
                 ) : filteredSubmissions.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="py-12 text-center text-slate-400">
+                    <td colSpan={6} className="py-12 text-center text-slate-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <AlertCircle size={24} className="text-amber-400" />
                         <span>No strategy submissions found matching your filters.</span>
@@ -731,21 +707,6 @@ function AdminSubmissionsDashboardContent() {
                           hour: "2-digit",
                           minute: "2-digit",
                         })}
-                      </td>
-
-                      <td className="py-3.5 px-4 font-mono">
-                        {sub.backtest_metrics?.expected_sharpe != null ? (
-                          <div className="flex flex-col">
-                            <span className="text-emerald-400 font-bold">
-                              {sub.backtest_metrics.expected_sharpe.toFixed(2)} Sharpe
-                            </span>
-                            <span className="text-slate-400 text-[10px]">
-                              -{sub.backtest_metrics.max_drawdown_pct ?? 0}% MaxDD
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-slate-500 font-sans">Unspecified</span>
-                        )}
                       </td>
 
                       <td className="py-3.5 px-4 font-mono text-[11px]">
@@ -908,17 +869,6 @@ function AdminSubmissionsDashboardContent() {
               </button>
 
               <button
-                onClick={() => setActiveModalTab("metrics")}
-                className={`py-2 px-3 text-xs font-semibold rounded-t-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                  activeModalTab === "metrics"
-                    ? "bg-slate-900 border-t-2 border-bfb-blue text-accent shadow-sm"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <BarChart3 size={14} /> 3. Backtest Metrics
-              </button>
-
-              <button
                 onClick={() => setActiveModalTab("provenance")}
                 className={`py-2 px-3 text-xs font-semibold rounded-t-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                   activeModalTab === "provenance"
@@ -926,7 +876,7 @@ function AdminSubmissionsDashboardContent() {
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                <Database size={14} /> 4. Data Provenance
+                <Database size={14} /> 3. Data Provenance
               </button>
 
               <button
@@ -937,7 +887,7 @@ function AdminSubmissionsDashboardContent() {
                     : "text-slate-400 hover:text-white"
                 }`}
               >
-                <Terminal size={14} /> 5. Reproduction Instructions
+                <Terminal size={14} /> 4. Reproduction Instructions
               </button>
             </div>
 
@@ -1031,62 +981,6 @@ function AdminSubmissionsDashboardContent() {
                       </pre>
                     </div>
                   )}
-                </div>
-              )}
-
-              {/* Tab 3: Backtest Metrics */}
-              {activeModalTab === "metrics" && (
-                <div className="space-y-4">
-                  <h4 className="text-base font-bold font-serif text-white">Self-Reported Backtest Metrics</h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    <div className="p-3 bg-slate-950 border border-white/10 rounded-xl">
-                      <span className="text-[11px] text-slate-400 uppercase font-semibold">Expected Sharpe</span>
-                      <p className="text-xl font-bold font-serif text-emerald-400 mt-1">
-                        {selectedSubmission.backtest_metrics?.expected_sharpe?.toFixed(2) ?? "N/A"}
-                      </p>
-                    </div>
-                    <div className="p-3 bg-slate-950 border border-white/10 rounded-xl">
-                      <span className="text-[11px] text-slate-400 uppercase font-semibold">Calmar Ratio</span>
-                      <p className="text-xl font-bold font-serif text-sky-400 mt-1">
-                        {selectedSubmission.backtest_metrics?.expected_calmar?.toFixed(2) ?? "N/A"}
-                      </p>
-                    </div>
-                    <div className="p-3 bg-slate-950 border border-white/10 rounded-xl">
-                      <span className="text-[11px] text-slate-400 uppercase font-semibold">Max Drawdown</span>
-                      <p className="text-xl font-bold font-serif text-red-400 mt-1">
-                        {selectedSubmission.backtest_metrics?.max_drawdown_pct != null
-                          ? `-${selectedSubmission.backtest_metrics.max_drawdown_pct}%`
-                          : "N/A"}
-                      </p>
-                    </div>
-                    <div className="p-3 bg-slate-950 border border-white/10 rounded-xl">
-                      <span className="text-[11px] text-slate-400 uppercase font-semibold">Win Rate</span>
-                      <p className="text-xl font-bold font-serif text-purple-400 mt-1">
-                        {selectedSubmission.backtest_metrics?.win_rate_pct != null
-                          ? `${selectedSubmission.backtest_metrics.win_rate_pct}%`
-                          : "N/A"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="p-4 bg-slate-950 border border-white/10 rounded-xl space-y-2 text-xs font-mono">
-                    <div className="flex justify-between py-1 border-b border-white/5">
-                      <span className="text-slate-400">Gross Exposure:</span>
-                      <span className="text-white font-bold">{selectedSubmission.backtest_metrics?.gross_exposure_pct ?? 100}%</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-white/5">
-                      <span className="text-slate-400">Net Exposure:</span>
-                      <span className="text-white font-bold">{selectedSubmission.backtest_metrics?.net_exposure_pct ?? 0}%</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-white/5">
-                      <span className="text-slate-400">Annual Turnover:</span>
-                      <span className="text-white font-bold">{selectedSubmission.backtest_metrics?.annual_turnover_pct ?? "N/A"}%</span>
-                    </div>
-                    <div className="flex justify-between py-1">
-                      <span className="text-slate-400">Benchmark Asset:</span>
-                      <span className="text-accent font-bold">{selectedSubmission.backtest_metrics?.benchmark_name || "S&P 500 ETF (SPY)"}</span>
-                    </div>
-                  </div>
                 </div>
               )}
 

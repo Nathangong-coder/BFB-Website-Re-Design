@@ -148,7 +148,7 @@ export async function verifySubmissionHash(
     strategy_code_content: submission.strategy_code_content || "",
     entry_point: submission.entry_point || (submission.language === "cpp" ? "strategy.cpp" : "strategy.py"),
     dependencies: submission.dependencies || "",
-    backtest_metrics: submission.backtest_metrics || {},
+    backtest_metrics: submission.backtest_metrics,
     data_provenance: submission.data_provenance || "",
     reproduction_instructions: submission.reproduction_instructions || "",
     signed_confirmation: submission.signed_confirmation ?? true,

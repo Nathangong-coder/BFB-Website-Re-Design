@@ -6,7 +6,6 @@ import {
   X,
   FileText,
   Code2,
-  BarChart3,
   Database,
   Lock,
   CheckCircle2,
@@ -28,7 +27,6 @@ import { Download } from "lucide-react";
 import type {
   CompetitionSubmission,
   SubmissionDeliverables,
-  BacktestMetrics,
   LanguageType,
 } from "@/lib/types/competition";
 import { computeSubmissionHash } from "@/lib/crypto";
@@ -44,7 +42,7 @@ interface CompetitionSubmissionPortalProps {
   onSubmissionSuccess: () => void;
 }
 
-type TabType = "memo" | "code" | "metrics" | "provenance" | "reproduction";
+type TabType = "memo" | "code" | "provenance" | "reproduction";
 
 const PYTHON_BOILERPLATE = `"""
 BFB at UCLA - Alpha Research Competition
@@ -158,17 +156,6 @@ export default function CompetitionSubmissionPortal({
     "pandas>=2.0.0\nnumpy>=1.24.0\nscikit-learn>=1.2.0\n"
   );
 
-  // Backtest Metrics State
-  const [sharpe, setSharpe] = useState<string>("1.85");
-  const [calmar, setCalmar] = useState<string>("2.10");
-  const [maxDrawdown, setMaxDrawdown] = useState<string>("12.5");
-  const [grossExposure, setGrossExposure] = useState<string>("110");
-  const [netExposure, setNetExposure] = useState<string>("15");
-  const [annualTurnover, setAnnualTurnover] = useState<string>("240");
-  const [tradeCount, setTradeCount] = useState<string>("64");
-  const [winRate, setWinRate] = useState<string>("58.5");
-  const [benchmarkName, setBenchmarkName] = useState<string>("S&P 500 Total Return");
-
   // Data Provenance State
   const [dataProvenance, setDataProvenance] = useState<string>(
     "1. S&P 500 Constituent Data: Adjusted daily close prices from official universe.\n2. Binance Spot OHLCV Data: 1-hour candles for top 100 instruments."
@@ -217,35 +204,12 @@ export default function CompetitionSubmissionPortal({
     setCodeContent(currentSubmission.strategy_code_content || "");
     setDependencies(currentSubmission.dependencies || "");
 
-    const bm = currentSubmission.backtest_metrics || {};
-    setSharpe(bm.expected_sharpe !== undefined ? String(bm.expected_sharpe) : "");
-    setCalmar(bm.expected_calmar !== undefined ? String(bm.expected_calmar) : "");
-    setMaxDrawdown(bm.max_drawdown_pct !== undefined ? String(bm.max_drawdown_pct) : "");
-    setGrossExposure(bm.gross_exposure_pct !== undefined ? String(bm.gross_exposure_pct) : "");
-    setNetExposure(bm.net_exposure_pct !== undefined ? String(bm.net_exposure_pct) : "");
-    setAnnualTurnover(bm.annual_turnover_pct !== undefined ? String(bm.annual_turnover_pct) : "");
-    setTradeCount(bm.trade_count !== undefined ? String(bm.trade_count) : "");
-    setWinRate(bm.win_rate_pct !== undefined ? String(bm.win_rate_pct) : "");
-    setBenchmarkName(bm.benchmark_name || "S&P 500 Total Return");
-
     setDataProvenance(currentSubmission.data_provenance || "");
     setReproductionInstructions(currentSubmission.reproduction_instructions || "");
     setSignedConfirmation(currentSubmission.signed_confirmation ?? true);
   }, [currentSubmission]);
 
   const buildDeliverablesPayload = useCallback((): SubmissionDeliverables => {
-    const backtest_metrics: BacktestMetrics = {
-      expected_sharpe: parseFloat(sharpe) || undefined,
-      expected_calmar: parseFloat(calmar) || undefined,
-      max_drawdown_pct: parseFloat(maxDrawdown) || undefined,
-      gross_exposure_pct: parseFloat(grossExposure) || undefined,
-      net_exposure_pct: parseFloat(netExposure) || undefined,
-      annual_turnover_pct: parseFloat(annualTurnover) || undefined,
-      trade_count: parseInt(tradeCount, 10) || undefined,
-      win_rate_pct: parseFloat(winRate) || undefined,
-      benchmark_name: benchmarkName.trim() || undefined,
-    };
-
     const targetFileName = language === "cpp" ? "strategy.cpp" : "strategy.py";
 
     return {
@@ -259,8 +223,6 @@ export default function CompetitionSubmissionPortal({
       entry_point: targetFileName,
       dependencies: dependencies.trim(),
 
-      backtest_metrics,
-
       data_provenance: dataProvenance.trim(),
 
       reproduction_instructions: reproductionInstructions.trim(),
@@ -268,22 +230,11 @@ export default function CompetitionSubmissionPortal({
     };
   }, [
     language,
-    codeFileName,
-    entryPoint,
     memoTitle,
     memoContent,
     memoFileName,
     codeContent,
     dependencies,
-    sharpe,
-    calmar,
-    maxDrawdown,
-    grossExposure,
-    netExposure,
-    annualTurnover,
-    tradeCount,
-    winRate,
-    benchmarkName,
     dataProvenance,
     reproductionInstructions,
     signedConfirmation,
@@ -598,17 +549,6 @@ export default function CompetitionSubmissionPortal({
             </button>
             <button
               type="button"
-              onClick={() => setActiveTab("metrics")}
-              className={`py-2 px-3 text-xs font-semibold rounded-t-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
-                activeTab === "metrics"
-                  ? "bg-white dark:bg-midnight border-t-2 border-bfb-blue text-bfb-blue dark:text-accent shadow-sm"
-                  : "text-slate-500 hover:text-slate-900 dark:hover:text-silver"
-              }`}
-            >
-              <BarChart3 size={14} /> 3. Backtest Metrics
-            </button>
-            <button
-              type="button"
               onClick={() => setActiveTab("provenance")}
               className={`py-2 px-3 text-xs font-semibold rounded-t-lg transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                 activeTab === "provenance"
@@ -616,7 +556,7 @@ export default function CompetitionSubmissionPortal({
                   : "text-slate-500 hover:text-slate-900 dark:hover:text-silver"
               }`}
             >
-              <Database size={14} /> 4. Data Provenance
+              <Database size={14} /> 3. Data Provenance
             </button>
             <button
               type="button"
@@ -627,7 +567,7 @@ export default function CompetitionSubmissionPortal({
                   : "text-slate-500 hover:text-slate-900 dark:hover:text-silver"
               }`}
             >
-              <Lock size={14} /> 5. Reproduction & Freeze
+              <Lock size={14} /> 4. Reproduction &amp; Freeze
             </button>
           </div>
 
@@ -752,12 +692,12 @@ export default function CompetitionSubmissionPortal({
 
                     <div className="flex flex-wrap items-center gap-2">
                       <a
-                        href={language === "cpp" ? "/templates/bfb_alpha_template.cpp" : "/templates/bfb_alpha_template.py"}
+                        href={language === "cpp" ? "/templates/strategy.cpp" : "/templates/strategy.py"}
                         download
                         className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-silver border border-slate-200 dark:border-slate-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors"
                       >
                         <Download size={13} className="text-bfb-blue dark:text-accent" />
-                        {language === "cpp" ? "bfb_alpha_template.cpp" : "bfb_alpha_template.py"}
+                        {language === "cpp" ? "strategy.cpp" : "strategy.py"}
                       </a>
                       <a
                         href={language === "cpp" ? "/templates/Makefile" : "/templates/requirements.txt"}
@@ -875,142 +815,7 @@ export default function CompetitionSubmissionPortal({
               </div>
             )}
 
-            {activeTab === "metrics" && (
-              <div className="space-y-4">
-                <p className="text-xs text-slate-500 dark:text-silver/60">
-                  Enter your strategy&apos;s out-of-sample backtest results. These metrics feed into the competition evaluation rubric.
-                </p>
 
-                <div className="grid grid-cols-2 lap:grid-cols-4 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Sharpe Ratio
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={sharpe}
-                      onChange={(e) => setSharpe(e.target.value)}
-                      placeholder="1.85"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Calmar Ratio
-                    </label>
-                    <input
-                      type="number"
-                      step="0.01"
-                      value={calmar}
-                      onChange={(e) => setCalmar(e.target.value)}
-                      placeholder="2.10"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Max Drawdown (%)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={maxDrawdown}
-                      onChange={(e) => setMaxDrawdown(e.target.value)}
-                      placeholder="12.5"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Win Rate (%)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      value={winRate}
-                      onChange={(e) => setWinRate(e.target.value)}
-                      placeholder="58.5"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 lap:grid-cols-4 gap-3">
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Gross Exposure (%)
-                    </label>
-                    <input
-                      type="number"
-                      step="1"
-                      value={grossExposure}
-                      onChange={(e) => setGrossExposure(e.target.value)}
-                      placeholder="110"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Net Exposure (%)
-                    </label>
-                    <input
-                      type="number"
-                      step="1"
-                      value={netExposure}
-                      onChange={(e) => setNetExposure(e.target.value)}
-                      placeholder="15"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Annual Turnover (%)
-                    </label>
-                    <input
-                      type="number"
-                      step="1"
-                      value={annualTurnover}
-                      onChange={(e) => setAnnualTurnover(e.target.value)}
-                      placeholder="240"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                      Trade Count
-                    </label>
-                    <input
-                      type="number"
-                      step="1"
-                      value={tradeCount}
-                      onChange={(e) => setTradeCount(e.target.value)}
-                      placeholder="64"
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-semibold text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                    Primary Benchmark Name
-                  </label>
-                  <input
-                    type="text"
-                    value={benchmarkName}
-                    onChange={(e) => setBenchmarkName(e.target.value)}
-                    placeholder="e.g. S&P 500 Total Return"
-                    className="w-full px-3.5 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-slate-900 dark:text-silver focus:outline-none focus:border-bfb-blue"
-                  />
-                </div>
-              </div>
-            )}
 
             {activeTab === "provenance" && (
               <div className="space-y-4">

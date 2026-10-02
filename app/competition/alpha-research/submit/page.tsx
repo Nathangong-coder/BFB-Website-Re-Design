@@ -174,7 +174,7 @@ export default function AlphaResearchSubmitPage() {
               Submit Alpha Strategy Deliverables
             </h1>
             <p className="text-slate-500 dark:text-silver/60 text-body leading-relaxed max-w-2xl">
-              Submit your Research Memo, Python/C++ runnable strategy code, backtest metrics, data provenance, and signed strategy freeze confirmation.
+              Submit your Research Memo, Python/C++ runnable strategy code, data provenance, and signed strategy freeze confirmation.
               Resubmit as many times as needed before <strong className="text-slate-900 dark:text-silver">Sun, Nov 22, 2026 at 11:59 PM PT</strong>.
             </p>
           </div>

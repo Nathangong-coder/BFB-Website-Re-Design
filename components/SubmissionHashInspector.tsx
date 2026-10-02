@@ -15,7 +15,6 @@ import {
   ShieldCheck,
   Code2,
   FileText,
-  BarChart3,
   Loader2,
 } from "lucide-react";
 import type { CompetitionSubmission } from "@/lib/types/competition";
@@ -85,8 +84,6 @@ export default function SubmissionHashInspector({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
-
-  const bm = submission.backtest_metrics || {};
 
   return (
     <AnimatePresence>
@@ -188,7 +185,7 @@ export default function SubmissionHashInspector({
             </div>
 
             {/* Metadata Grid */}
-            <div className="grid grid-cols-2 lap:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-white/5">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
                   <Calendar size={12} /> Submitted At
@@ -214,15 +211,6 @@ export default function SubmissionHashInspector({
                 <p className="text-xs font-semibold text-bfb-blue dark:text-accent mt-1 truncate uppercase flex items-center gap-1.5">
                   <span className={`w-2 h-2 rounded-full ${submission.language === "cpp" ? "bg-blue-400" : "bg-emerald-400"}`} />
                   {submission.language === "cpp" ? "C++ (.cpp)" : "Python (.py)"}
-                </p>
-              </div>
-
-              <div className="p-3 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-slate-100 dark:border-white/5">
-                <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 flex items-center gap-1">
-                  <BarChart3 size={12} /> Sharpe Ratio
-                </span>
-                <p className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 mt-1 truncate">
-                  {bm.expected_sharpe !== undefined ? bm.expected_sharpe : "N/A"}
                 </p>
               </div>
             </div>

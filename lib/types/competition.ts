@@ -65,7 +65,7 @@ export interface SubmissionDeliverables {
   entry_point: string;
   dependencies: string;
 
-  backtest_metrics: BacktestMetrics;
+  backtest_metrics?: BacktestMetrics;
 
   data_provenance: string;
 

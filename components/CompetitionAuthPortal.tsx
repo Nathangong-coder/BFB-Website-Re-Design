@@ -1129,7 +1129,7 @@ export default function CompetitionAuthPortal({
                     ) : (
                       <div className="space-y-3 pt-1">
                         <p className="text-xs text-slate-300 leading-relaxed">
-                          Upload your team&apos;s Research Memo, Strategy Code, Backtest Report, Data Provenance, and Reproduction Instructions. Teams can resubmit as many times as needed before the deadline.
+                          Upload your team&apos;s Research Memo, Strategy Code, Data Provenance, and Reproduction Instructions. Teams can resubmit as many times as needed before the deadline.
                         </p>
                         <Link
                           href="/competition/alpha-research/submit"

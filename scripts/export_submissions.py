@@ -118,10 +118,11 @@ def export_submissions(submissions: List[Dict[str, Any]], out_dir: str):
         with open(os.path.join(target_path, "research_memo.md"), "w", encoding="utf-8") as f:
             f.write(memo_content)
 
-        # 4. Write Backtest Metrics
-        metrics = sub.get("backtest_metrics", {})
-        with open(os.path.join(target_path, "backtest_metrics.json"), "w", encoding="utf-8") as f:
-            json.dump(metrics, f, indent=2)
+        # 4. Write Backtest Metrics (Optional / Legacy)
+        metrics = sub.get("backtest_metrics")
+        if metrics:
+            with open(os.path.join(target_path, "backtest_metrics.json"), "w", encoding="utf-8") as f:
+                json.dump(metrics, f, indent=2)
 
         # 5. Write Data Provenance
         prov_content = sub.get("data_provenance", "")
