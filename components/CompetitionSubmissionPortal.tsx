@@ -64,7 +64,7 @@ def generate_signals(market_data: Dict[str, Any]) -> Dict[str, float]:
     if not prices:
         return target_weights
 
-    # BFB at UCLA Quantitative Strategy Logic
+    # YOUR STRATEGY LOGIC HERE
     num_assets = len(prices)
     weight_per_asset = 0.50 / max(num_assets, 1)
 
@@ -98,7 +98,7 @@ const CPP_BOILERPLATE = `/**
 
 std::unordered_map<std::string, double> generate_signals(const std::string& market_data_json) {
     std::unordered_map<std::string, double> target_weights;
-    // BFB at UCLA Quantitative Strategy Logic
+    // YOUR STRATEGY LOGIC HERE
     target_weights["AAPL"] = 0.05;
     target_weights["MSFT"] = -0.03;
     target_weights["BTCUSDT"] = 0.02;
@@ -153,7 +153,7 @@ export default function CompetitionSubmissionPortal({
   const [language, setLanguage] = useState<LanguageType>("python");
   const [codeFileName, setCodeFileName] = useState<string>("strategy.py");
   const [codeContent, setCodeContent] = useState<string>(PYTHON_BOILERPLATE);
-  const [entryPoint, setEntryPoint] = useState<string>("main.py");
+  const [entryPoint, setEntryPoint] = useState<string>("strategy.py");
   const [dependencies, setDependencies] = useState<string>(
     "pandas>=2.0.0\nnumpy>=1.24.0\nscikit-learn>=1.2.0\n"
   );
@@ -176,7 +176,7 @@ export default function CompetitionSubmissionPortal({
 
   // Reproduction & Risk State
   const [reproductionInstructions, setReproductionInstructions] = useState<string>(
-    "1. Install dependencies via pip install -r requirements.txt\n2. Run python main.py --config config.json\n3. Output results will be saved to backtest_results.csv"
+    "1. Install dependencies via pip install -r requirements.txt\n2. Run python strategy.py market_data.json signals.json\n3. Output signals are verified automatically by BFB Evaluation Harness"
   );
   const [signedConfirmation, setSignedConfirmation] = useState<boolean>(true);
 
@@ -187,13 +187,13 @@ export default function CompetitionSubmissionPortal({
   function handleLanguageChange(newLang: LanguageType) {
     setLanguage(newLang);
     if (newLang === "python") {
-      setCodeFileName("bfb_alpha_template.py");
-      setEntryPoint("bfb_alpha_template.py");
+      setCodeFileName("strategy.py");
+      setEntryPoint("strategy.py");
       if (codeContent === CPP_BOILERPLATE) setCodeContent(PYTHON_BOILERPLATE);
       setDependencies("pandas>=2.0.0\nnumpy>=1.24.0\nscikit-learn>=1.2.0\n");
     } else {
-      setCodeFileName("bfb_alpha_template.cpp");
-      setEntryPoint("bfb_alpha_template.cpp");
+      setCodeFileName("strategy.cpp");
+      setEntryPoint("strategy.cpp");
       if (codeContent === PYTHON_BOILERPLATE) setCodeContent(CPP_BOILERPLATE);
       setDependencies("Makefile\ng++ >= 11 (C++17)\n");
     }
@@ -210,7 +210,7 @@ export default function CompetitionSubmissionPortal({
     setMemoContent(currentSubmission.research_memo_content || "");
     setMemoFileName(currentSubmission.research_memo_file_name || "");
 
-    const fn = currentSubmission.strategy_code_filename || currentSubmission.entry_point || (currentSubmission.language === "cpp" ? "bfb_alpha_template.cpp" : "bfb_alpha_template.py");
+    const fn = currentSubmission.language === "cpp" ? "strategy.cpp" : "strategy.py";
     setCodeFileName(fn);
     setEntryPoint(fn);
     setCodeContent(currentSubmission.strategy_code_content || "");
@@ -245,10 +245,7 @@ export default function CompetitionSubmissionPortal({
       benchmark_name: benchmarkName.trim() || undefined,
     };
 
-    const targetFileName =
-      codeFileName.trim() ||
-      entryPoint.trim() ||
-      (language === "cpp" ? "bfb_alpha_template.cpp" : "bfb_alpha_template.py");
+    const targetFileName = language === "cpp" ? "strategy.cpp" : "strategy.py";
 
     return {
       research_memo_title: memoTitle.trim() || "Alpha Research Thesis & Strategy Specification",
@@ -301,7 +298,7 @@ export default function CompetitionSubmissionPortal({
         const deliverables = buildDeliverablesPayload();
         const hash = await computeSubmissionHash({
           team_name: teamName,
-          submitted_at: new Date().toISOString().substring(0, 16),
+          submitted_at: new Date().toISOString().substring(0, 10) + "T00:00:00Z",
           submitted_by_email: userEmail,
           version: nextVersion,
           deliverables,
@@ -452,8 +449,7 @@ export default function CompetitionSubmissionPortal({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    setCodeFileName(file.name);
-
+    let targetLang: LanguageType = language;
     if (
       file.name.endsWith(".cpp") ||
       file.name.endsWith(".cc") ||
@@ -461,12 +457,17 @@ export default function CompetitionSubmissionPortal({
       file.name.endsWith(".h") ||
       file.name.endsWith(".hpp")
     ) {
+      targetLang = "cpp";
       setLanguage("cpp");
-      setEntryPoint(file.name);
     } else if (file.name.endsWith(".py")) {
+      targetLang = "python";
       setLanguage("python");
-      setEntryPoint(file.name);
     }
+
+    const standardizedName = targetLang === "cpp" ? "strategy.cpp" : "strategy.py";
+    setCodeFileName(standardizedName);
+    setEntryPoint(standardizedName);
+    setSuccessMsg(`Uploaded ${file.name} — auto-standardized entry point to ${standardizedName} for 1-click evaluation.`);
 
     const reader = new FileReader();
     reader.onload = (evt) => {
@@ -736,7 +737,7 @@ export default function CompetitionSubmissionPortal({
                         className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-silver border border-slate-200 dark:border-slate-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors"
                       >
                         <Download size={13} className="text-bfb-blue dark:text-accent" />
-                        Download {language === "cpp" ? "bfb_alpha_template.cpp" : "bfb_alpha_template.py"}
+                        {language === "cpp" ? "bfb_alpha_template.cpp" : "bfb_alpha_template.py"}
                       </a>
                       <a
                         href={language === "cpp" ? "/templates/Makefile" : "/templates/requirements.txt"}
@@ -744,7 +745,23 @@ export default function CompetitionSubmissionPortal({
                         className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-silver border border-slate-200 dark:border-slate-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors"
                       >
                         <Download size={13} className="text-bfb-blue dark:text-accent" />
-                        Download {language === "cpp" ? "Makefile" : "requirements.txt"}
+                        {language === "cpp" ? "Makefile" : "requirements.txt"}
+                      </a>
+                      <a
+                        href="/templates/market_data.json"
+                        download
+                        className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-silver border border-slate-200 dark:border-slate-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                      >
+                        <Download size={13} className="text-bfb-blue dark:text-accent" />
+                        market_data.json
+                      </a>
+                      <a
+                        href="/templates/signals.json"
+                        download
+                        className="px-2.5 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-silver border border-slate-200 dark:border-slate-700 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                      >
+                        <Download size={13} className="text-bfb-blue dark:text-accent" />
+                        signals.json
                       </a>
                     </div>
                   </div>
@@ -995,12 +1012,27 @@ export default function CompetitionSubmissionPortal({
 
             {activeTab === "reproduction" && (
               <div className="space-y-4">
+                <div className="p-3.5 bg-slate-900 border border-slate-800 rounded-xl space-y-2 text-xs font-mono">
+                  <div className="flex items-center justify-between text-slate-400 font-bold uppercase tracking-wider">
+                    <span>Enforced 1-Click Evaluation Command</span>
+                    <span className="text-emerald-400">Standardized</span>
+                  </div>
+                  <div className="p-2.5 bg-slate-950 rounded-lg text-slate-200 text-xs overflow-x-auto border border-white/5">
+                    {language === "cpp"
+                      ? "make && ./strategy_runner market_data.json signals.json"
+                      : "python strategy.py market_data.json signals.json"}
+                  </div>
+                  <p className="text-[11px] text-slate-400 font-sans">
+                    All strategy submissions are automatically tested by the BFB Evaluation Harness using entry point <strong className="text-slate-200">{language === "cpp" ? "strategy.cpp" : "strategy.py"}</strong>.
+                  </p>
+                </div>
+
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
                     Reproduction & Execution Instructions
                   </label>
                   <textarea
-                    rows={6}
+                    rows={5}
                     required
                     value={reproductionInstructions}
                     onChange={(e) => setReproductionInstructions(e.target.value)}

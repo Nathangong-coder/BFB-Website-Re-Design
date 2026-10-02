@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-11-30T14:30:00Z",
+  "universe": ["AAPL", "MSFT", "NVDA", "BTCUSDT", "ETHUSDT"],
+  "prices": {
+    "AAPL": 180.50,
+    "MSFT": 410.20,
+    "NVDA": 125.80,
+    "BTCUSDT": 64000.00,
+    "ETHUSDT": 3450.00
+  },
+  "ohlcv": {
+    "AAPL": { "open": 179.80, "high": 181.20, "low": 179.50, "close": 180.50, "volume": 45200000 },
+    "MSFT": { "open": 408.90, "high": 411.50, "low": 408.10, "close": 410.20, "volume": 21300000 },
+    "NVDA": { "open": 124.50, "high": 126.40, "low": 124.10, "close": 125.80, "volume": 68100000 },
+    "BTCUSDT": { "open": 63200.0, "high": 64500.0, "low": 63000.0, "close": 64000.0, "volume": 14200.5 },
+    "ETHUSDT": { "open": 3400.0, "high": 3480.0, "low": 3390.0, "close": 3450.0, "volume": 89000.2 }
+  }
+}

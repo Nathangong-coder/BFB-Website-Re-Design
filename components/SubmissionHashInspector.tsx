@@ -150,12 +150,14 @@ export default function SubmissionHashInspector({
                       ? "Re-computing SHA-256 Digest..."
                       : verificationResult?.isValid
                       ? "SHA-256 Hash Integrity Verified"
-                      : "Hash Mismatch / Integrity Warning"}
+                      : "Hash Verification Warning"}
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-silver/60 mt-0.5 leading-relaxed">
-                    {verificationResult?.isValid
+                    {verifying
+                      ? "Running canonical payload normalization and Web Crypto SHA-256 digest..."
+                      : verificationResult?.isValid
                       ? "The computed cryptographic digest matches the stored submission hash with 100% integrity. The submission payload is authentic and un-tampered."
-                      : "The payload hash does not match the stored digest."}
+                      : `The computed hash (${verificationResult?.computedHash.substring(0, 12)}...) differs from the stored hash (${verificationResult?.storedHash.substring(0, 12)}...).`}
                   </p>
                 </div>
               </div>
@@ -239,7 +241,7 @@ export default function SubmissionHashInspector({
                 <div>
                   <span className="font-semibold text-slate-900 dark:text-silver">Entry Point &amp; Strategy File:</span>{" "}
                   <code className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono">
-                    {submission.entry_point || "main.py"}
+                    {submission.entry_point || (submission.language === "cpp" ? "strategy.cpp" : "strategy.py")}
                   </code>{" "}
                   →{" "}
                   <code className="px-1.5 py-0.5 bg-slate-200 dark:bg-slate-800 rounded font-mono">

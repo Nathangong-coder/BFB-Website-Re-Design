@@ -1,14 +1,30 @@
 """
 ==============================================================================
 BFB at UCLA - Alpha Research Competition
-Python Strategy Starter Template (bfb_alpha_template.py)
+Python Strategy Implementation (strategy.py)
 ==============================================================================
 
-Execution Instructions:
-1. Ensure dependencies in requirements.txt are installed:
-   pip install -r requirements.txt
-2. Test your strategy locally or via evaluation harness:
-   python bfb_alpha_template.py market_data.json signals.json
+CLI Execution Contract:
+  python strategy.py market_data.json signals.json
+
+Input File Format (market_data.json):
+  JSON object containing market timestamps, prices, and OHLCV bars:
+  {
+    "timestamp": "2026-11-30T14:30:00Z",
+    "universe": ["AAPL", "MSFT", "NVDA", "BTCUSDT", "ETHUSDT"],
+    "prices": { "AAPL": 180.50, "MSFT": 410.20, "BTCUSDT": 64000.00 },
+    "ohlcv": {
+      "AAPL": { "open": 179.80, "high": 181.20, "low": 179.50, "close": 180.50, "volume": 45200000 }
+    }
+  }
+
+Output File Format (signals.json):
+  JSON object mapping ticker symbols to portfolio target allocation weights [-1.0, +1.0]:
+  {
+    "AAPL": 0.10,    # +10% Long Allocation
+    "MSFT": -0.05,   # -5% Short Allocation
+    "BTCUSDT": 0.05  # +5% Long Allocation
+  }
 """
 
 import sys
@@ -39,7 +55,7 @@ def generate_signals(market_data: Dict[str, Any]) -> Dict[str, float]:
         return target_weights
 
     # --------------------------------------------------------------------------
-    # YOUR BFB AT UCLA QUANTITATIVE STRATEGY LOGIC HERE
+    # YOUR STRATEGY LOGIC HERE
     # --------------------------------------------------------------------------
     num_assets = len(prices)
     weight_per_asset = 0.50 / max(num_assets, 1)  # Max 50% gross allocation

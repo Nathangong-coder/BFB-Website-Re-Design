@@ -1,14 +1,20 @@
 /**
  * ==============================================================================
  * BFB at UCLA - Alpha Research Competition
- * C++ Strategy Starter Template (bfb_alpha_template.cpp)
+ * C++ Strategy Implementation (strategy.cpp)
  * ==============================================================================
  * 
  * Compilation Instructions:
- * g++ -O3 -std=c++20 bfb_alpha_template.cpp -o strategy_runner
+ *   g++ -O3 -std=c++20 strategy.cpp -o strategy_runner
  * 
- * Execution Instructions:
- * ./strategy_runner market_data.json signals.json
+ * Execution Contract:
+ *   ./strategy_runner market_data.json signals.json
+ * 
+ * Input Schema (market_data.json):
+ *   {"timestamp": "...", "prices": {"AAPL": 180.50, ...}, "ohlcv": {...}}
+ * 
+ * Output Schema (signals.json):
+ *   {"AAPL": 0.10, "MSFT": -0.05, "BTCUSDT": 0.05}
  */
 
 #include <iostream>
@@ -22,7 +28,7 @@ std::unordered_map<std::string, double> generate_signals(const std::string& mark
     std::unordered_map<std::string, double> target_weights;
 
     // --------------------------------------------------------------------------
-    // YOUR BFB AT UCLA QUANTITATIVE C++ STRATEGY LOGIC HERE
+    // YOUR STRATEGY LOGIC HERE
     // --------------------------------------------------------------------------
     target_weights["AAPL"] = 0.05;
     target_weights["MSFT"] = -0.03;

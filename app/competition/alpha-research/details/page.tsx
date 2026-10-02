@@ -424,13 +424,13 @@ export default function AlphaResearchDetailsPage() {
 
               <div className="space-y-2.5 pt-2">
                 <a
-                  href="/templates/bfb_alpha_template.py"
+                  href="/templates/strategy.py"
                   download
                   className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
                 >
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    Python Starter Template (.py)
+                    Python Strategy File (strategy.py)
                   </span>
                   <Download size={14} className="text-bfb-blue dark:text-accent" />
                 </a>
@@ -447,13 +447,13 @@ export default function AlphaResearchDetailsPage() {
                 </a>
 
                 <a
-                  href="/templates/bfb_alpha_template.cpp"
+                  href="/templates/strategy.cpp"
                   download
                   className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
                 >
                   <span className="flex items-center gap-2">
                     <span className="w-2 h-2 rounded-full bg-blue-400" />
-                    C++ Starter Template (.cpp)
+                    C++ Strategy File (strategy.cpp)
                   </span>
                   <Download size={14} className="text-bfb-blue dark:text-accent" />
                 </a>
@@ -465,6 +465,28 @@ export default function AlphaResearchDetailsPage() {
                 >
                   <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
                     C++ Build Manifest (Makefile)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/market_data.json"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Sample Market Feed (market_data.json)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/signals.json"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Sample Output Signals (signals.json)
                   </span>
                   <Download size={14} className="text-bfb-blue dark:text-accent" />
                 </a>

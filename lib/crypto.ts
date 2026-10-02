@@ -1,10 +1,50 @@
-import type { SubmissionDeliverables, CompetitionSubmission } from "./types/competition";
+import type { SubmissionDeliverables, CompetitionSubmission, BacktestMetrics } from "./types/competition";
 
 export interface HashVerificationResult {
   isValid: boolean;
   computedHash: string;
   storedHash: string;
   canonicalPayload: string;
+}
+
+/**
+ * Normalizes any timestamp string (JS ISO, PostgreSQL TIMESTAMPTZ, Unix epoch)
+ * into a standard ISO-8601 string for deterministic cryptographic SHA-256 hashing.
+ */
+export function normalizeTimestamp(ts: string): string {
+  if (!ts) return "";
+  try {
+    const d = new Date(ts);
+    if (!isNaN(d.getTime())) {
+      return d.toISOString();
+    }
+  } catch {
+    // Fallback if parsing fails
+  }
+  return ts.trim();
+}
+
+/**
+ * Normalizes backtest metrics object with deterministic key sorting and null/undefined stripping.
+ */
+export function normalizeBacktestMetrics(metrics?: BacktestMetrics | null): Record<string, unknown> {
+  if (!metrics || typeof metrics !== "object") return {};
+
+  const clean: Record<string, unknown> = {};
+  const sortedKeys = Object.keys(metrics).sort();
+
+  for (const key of sortedKeys) {
+    const val = (metrics as Record<string, unknown>)[key];
+    if (val !== undefined && val !== null && val !== "") {
+      if (typeof val === "number") {
+        // Normalize numbers to 4 decimal precision to prevent float representation divergence
+        clean[key] = Math.round(val * 10000) / 10000;
+      } else {
+        clean[key] = val;
+      }
+    }
+  }
+  return clean;
 }
 
 /**
@@ -17,27 +57,29 @@ export function buildCanonicalSubmissionPayload(params: {
   version: number;
   deliverables: SubmissionDeliverables;
 }): string {
+  const deliverables = params.deliverables || {};
+
   const normalized = {
-    team_name: params.team_name.trim().toLowerCase(),
-    submitted_at: params.submitted_at,
-    submitted_by_email: params.submitted_by_email.trim().toLowerCase(),
-    version: params.version,
+    team_name: (params.team_name || "").trim().toLowerCase(),
+    submitted_at: normalizeTimestamp(params.submitted_at),
+    submitted_by_email: (params.submitted_by_email || "").trim().toLowerCase(),
+    version: Number(params.version) || 1,
     memo: {
-      title: params.deliverables.research_memo_title.trim(),
-      content: params.deliverables.research_memo_content.trim(),
-      file_name: params.deliverables.research_memo_file_name || "",
+      title: (deliverables.research_memo_title || "").trim(),
+      content: (deliverables.research_memo_content || "").trim(),
+      file_name: deliverables.research_memo_file_name || "",
     },
     code: {
-      language: params.deliverables.language || "python",
-      filename: params.deliverables.strategy_code_filename.trim(),
-      content: params.deliverables.strategy_code_content.trim(),
-      entry_point: params.deliverables.entry_point.trim(),
-      dependencies: params.deliverables.dependencies.trim(),
+      language: deliverables.language || "python",
+      filename: (deliverables.strategy_code_filename || "").trim(),
+      content: (deliverables.strategy_code_content || "").trim(),
+      entry_point: (deliverables.entry_point || "").trim(),
+      dependencies: (deliverables.dependencies || "").trim(),
     },
-    backtest: params.deliverables.backtest_metrics || {},
-    provenance: params.deliverables.data_provenance.trim(),
-    reproduction: params.deliverables.reproduction_instructions.trim(),
-    signed: params.deliverables.signed_confirmation,
+    backtest: normalizeBacktestMetrics(deliverables.backtest_metrics),
+    provenance: (deliverables.data_provenance || "").trim(),
+    reproduction: (deliverables.reproduction_instructions || "").trim(),
+    signed: Boolean(deliverables.signed_confirmation),
   };
 
   return JSON.stringify(normalized);
@@ -87,20 +129,29 @@ export async function computeSubmissionHash(params: {
 export async function verifySubmissionHash(
   submission: CompetitionSubmission
 ): Promise<HashVerificationResult> {
+  if (!submission) {
+    return {
+      isValid: false,
+      computedHash: "",
+      storedHash: "",
+      canonicalPayload: "",
+    };
+  }
+
   const deliverables: SubmissionDeliverables = {
     language: submission.language || "python",
-    research_memo_title: submission.research_memo_title,
-    research_memo_content: submission.research_memo_content,
+    research_memo_title: submission.research_memo_title || "",
+    research_memo_content: submission.research_memo_content || "",
     research_memo_file_name: submission.research_memo_file_name,
     research_memo_file_data: submission.research_memo_file_data,
-    strategy_code_filename: submission.strategy_code_filename,
-    strategy_code_content: submission.strategy_code_content,
-    entry_point: submission.entry_point,
-    dependencies: submission.dependencies,
-    backtest_metrics: submission.backtest_metrics,
-    data_provenance: submission.data_provenance,
-    reproduction_instructions: submission.reproduction_instructions,
-    signed_confirmation: submission.signed_confirmation,
+    strategy_code_filename: submission.strategy_code_filename || (submission.language === "cpp" ? "strategy.cpp" : "strategy.py"),
+    strategy_code_content: submission.strategy_code_content || "",
+    entry_point: submission.entry_point || (submission.language === "cpp" ? "strategy.cpp" : "strategy.py"),
+    dependencies: submission.dependencies || "",
+    backtest_metrics: submission.backtest_metrics || {},
+    data_provenance: submission.data_provenance || "",
+    reproduction_instructions: submission.reproduction_instructions || "",
+    signed_confirmation: submission.signed_confirmation ?? true,
   };
 
   const canonicalPayload = buildCanonicalSubmissionPayload({
@@ -119,12 +170,13 @@ export async function verifySubmissionHash(
     deliverables,
   });
 
-  const isValid = computedHash.toLowerCase() === submission.crypto_hash.toLowerCase();
+  const storedHash = (submission.crypto_hash || "").trim();
+  const isValid = computedHash.toLowerCase() === storedHash.toLowerCase();
 
   return {
     isValid,
     computedHash,
-    storedHash: submission.crypto_hash,
+    storedHash,
     canonicalPayload,
   };
 }
