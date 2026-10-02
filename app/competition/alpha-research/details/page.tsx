@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope, Download, Code2 } from "lucide-react";
+import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope, Download, Code2, AlertCircle } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
 const markets = [
@@ -522,6 +522,65 @@ export default function AlphaResearchDetailsPage() {
                 <Bullets items={card.points} />
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Legal Disclaimers & Code Execution Criteria */}
+      <section className="py-section px-gutter border-t border-slate-100 dark:border-white/5 bg-slate-900 text-slate-100">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <span className="text-eyebrow font-bold tracking-[0.25em] uppercase text-accent">
+              Official Legal Notices &amp; Execution Rules
+            </span>
+            <h2 className="text-h2 font-serif text-white">
+              Code Execution Criteria &amp; IP Privacy Release
+            </h2>
+          </div>
+
+          <div className="grid lap:grid-cols-2 gap-6 pt-4">
+            {/* 1-Click Code Disqualification Rule */}
+            <div className="p-6 rounded-2xl bg-red-500/10 border border-red-500/20 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-red-500/20 text-red-400 rounded-xl">
+                  <AlertCircle size={22} />
+                </div>
+                <h3 className="text-base font-bold text-white font-serif">
+                  1-Click Execution &amp; Automatic Disqualification Rule
+                </h3>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                All strategy submissions are evaluated strictly via automated execution using standardized entry points:
+              </p>
+              <div className="p-3 bg-slate-950 rounded-xl border border-white/10 font-mono text-xs text-emerald-400 space-y-1">
+                <div>Python: <code>python3 strategy.py market_data.json output_signals.json</code></div>
+                <div>C++: <code>make &amp;&amp; ./strategy_runner market_data.json output_signals.json</code></div>
+              </div>
+              <p className="text-xs text-red-300 font-semibold leading-relaxed">
+                ⚠️ If your submitted code fails to compile, throws uncaught runtime exceptions, or fails to produce target weight signals under this exact command, the strategy will be automatically disqualified.
+              </p>
+            </div>
+
+            {/* IP Privacy & Cybersecurity Disclaimer */}
+            <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl">
+                  <Lock size={22} />
+                </div>
+                <h3 className="text-base font-bold text-white font-serif">
+                  Strategy Privacy &amp; IP Security Liability Disclaimer
+                </h3>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                BFB at UCLA maintains standard access controls for competition judging, but all strategy submissions are uploaded at the participant&apos;s own risk.
+              </p>
+              <p className="text-xs text-amber-300 font-semibold leading-relaxed">
+                🔒 BFB at UCLA does NOT guarantee enterprise-grade confidentiality or cybersecurity protection for proprietary models, and disclaims all liability for accidental disclosure or unauthorized IP access.
+              </p>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Participants requiring strict IP secrecy are advised to submit public baseline models, synthetic features, or obfuscated logic.
+              </p>
+            </div>
           </div>
         </div>
       </section>

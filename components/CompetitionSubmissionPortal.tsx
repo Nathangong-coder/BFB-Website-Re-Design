@@ -179,6 +179,7 @@ export default function CompetitionSubmissionPortal({
     "1. Install dependencies via pip install -r requirements.txt\n2. Run python strategy.py market_data.json signals.json\n3. Output signals are verified automatically by BFB Evaluation Harness"
   );
   const [signedConfirmation, setSignedConfirmation] = useState<boolean>(true);
+  const [signedSecurityDisclaimer, setSignedSecurityDisclaimer] = useState<boolean>(true);
 
   const isResubmission = Boolean(currentSubmission);
   const nextVersion = (currentSubmission?.version || 0) + 1;
@@ -330,9 +331,9 @@ export default function CompetitionSubmissionPortal({
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    if (!signedConfirmation) {
+    if (!signedConfirmation || !signedSecurityDisclaimer) {
       setErrorMsg(
-        "Please check the signed confirmation box agreeing to strategy freeze rules."
+        "Please check both required confirmation boxes: Strategy Freeze Agreement and the IP Privacy & 1-Click Disqualification Release."
       );
       return;
     }
@@ -695,6 +696,25 @@ export default function CompetitionSubmissionPortal({
 
             {activeTab === "code" && (
               <div className="space-y-4">
+                {/* Disqualification Warning Banner */}
+                <div className="p-3.5 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 text-xs text-red-700 dark:text-red-400">
+                  <AlertCircle size={18} className="shrink-0 mt-0.5 text-red-500" />
+                  <div className="space-y-1">
+                    <p className="font-bold text-red-600 dark:text-red-400 uppercase tracking-wider text-[11px]">
+                      ⚠️ Disqualification Warning (1-Click Execution Requirement)
+                    </p>
+                    <p className="leading-relaxed text-[11px]">
+                      All strategy code is evaluated strictly via the automated 1-click command:{" "}
+                      <code className="px-1.5 py-0.5 bg-slate-950 text-emerald-400 font-mono rounded border border-white/10 font-bold">
+                        {language === "cpp"
+                          ? "make && ./strategy_runner market_data.json output_signals.json"
+                          : "python3 strategy.py market_data.json output_signals.json"}
+                      </code>
+                      . If your submission fails to compile, throws uncaught errors, or fails to output target signals under this command, <strong>the strategy will be automatically disqualified</strong>.
+                    </p>
+                  </div>
+                </div>
+
                 {/* Language Selection & Download Templates Header */}
                 <div className="p-4 bg-slate-50 dark:bg-slate-900/60 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -1041,20 +1061,38 @@ export default function CompetitionSubmissionPortal({
                   />
                 </div>
 
-                <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-start gap-3">
-                  <input
-                    type="checkbox"
-                    id="signedConfirmation"
-                    checked={signedConfirmation}
-                    onChange={(e) => setSignedConfirmation(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-bfb-blue rounded border-slate-300 focus:ring-bfb-blue cursor-pointer"
-                  />
-                  <label
-                    htmlFor="signedConfirmation"
-                    className="text-xs text-slate-700 dark:text-silver leading-relaxed cursor-pointer"
-                  >
-                    <span className="font-bold">Strategy Freeze Confirmation:</span> I confirm that our team&apos;s code and configuration will be locked at the submission deadline (Nov 22, 11:59 PM PT). No modifications will be made to the strategy logic during the forward window (Nov 30, 2026 – Mar 19, 2027).
-                  </label>
+                <div className="space-y-3 pt-2">
+                  <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="signedConfirmation"
+                      checked={signedConfirmation}
+                      onChange={(e) => setSignedConfirmation(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-bfb-blue rounded border-slate-300 focus:ring-bfb-blue cursor-pointer"
+                    />
+                    <label
+                      htmlFor="signedConfirmation"
+                      className="text-xs text-slate-700 dark:text-silver leading-relaxed cursor-pointer"
+                    >
+                      <span className="font-bold">1. Strategy Freeze Confirmation:</span> I confirm that our team&apos;s code and configuration will be locked at the submission deadline (Nov 22, 11:59 PM PT). No modifications will be made to the strategy logic during the forward window (Nov 30, 2026 – Mar 19, 2027).
+                    </label>
+                  </div>
+
+                  <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      id="signedSecurityDisclaimer"
+                      checked={signedSecurityDisclaimer}
+                      onChange={(e) => setSignedSecurityDisclaimer(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-bfb-blue rounded border-slate-300 focus:ring-bfb-blue cursor-pointer"
+                    />
+                    <label
+                      htmlFor="signedSecurityDisclaimer"
+                      className="text-xs text-slate-700 dark:text-silver leading-relaxed cursor-pointer"
+                    >
+                      <span className="font-bold text-amber-600 dark:text-amber-400">2. IP Privacy &amp; 1-Click Disqualification Release:</span> I understand that our code must execute cleanly via the 1-click evaluation command or face automatic disqualification. I acknowledge that BFB at UCLA does not guarantee enterprise-grade confidentiality or cybersecurity protection for proprietary trading models, and disclaims all liability for strategy privacy or IP disclosure.
+                    </label>
+                  </div>
                 </div>
               </div>
             )}
