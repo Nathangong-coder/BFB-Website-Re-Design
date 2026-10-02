@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
+import JSZip from "jszip";
 import {
   Shield,
   Search,
@@ -24,11 +25,15 @@ import {
   Cpu,
   Layers,
   Terminal,
-  ExternalLink,
+  FolderDown,
+  Archive,
+  Loader2,
+  LogOut,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 import type { CompetitionSubmission, LanguageType } from "@/lib/types/competition";
 import { computeSubmissionHash } from "@/lib/crypto";
+import AdminAuthGuard, { useAdminAuth } from "@/components/AdminAuthGuard";
 
 const SAMPLE_ADMIN_SUBMISSIONS: CompetitionSubmission[] = [
   {
@@ -190,15 +195,19 @@ int main(int argc, char* argv[]) {
   },
 ];
 
-type ModalTab = "memo" | "code" | "metrics" | "provenance" | "reproduction" | "hash";
+type ModalTab = "memo" | "code" | "metrics" | "provenance" | "reproduction";
 
-export default function AdminSubmissionsPage() {
+function AdminSubmissionsDashboardContent() {
+  const { logout } = useAdminAuth();
   const [submissions, setSubmissions] = useState<CompetitionSubmission[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState<"all" | "python" | "cpp">("all");
   const [latestOnly, setLatestOnly] = useState(true);
+
+  // Download ZIP loading states
+  const [downloadingZipId, setDownloadingZipId] = useState<string | null>(null);
+  const [downloadingAllZip, setDownloadingAllZip] = useState<boolean>(false);
 
   // Inspector Modal state
   const [selectedSubmission, setSelectedSubmission] = useState<CompetitionSubmission | null>(null);
@@ -215,7 +224,6 @@ export default function AdminSubmissionsPage() {
 
   const fetchSubmissions = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
       if (isSupabaseConfigured()) {
         const { data, error: sbError } = await supabase
@@ -316,7 +324,7 @@ export default function AdminSubmissionsPage() {
         },
       });
 
-      const matches = computed === sub.crypto_hash;
+      const matches = computed.toLowerCase() === (sub.crypto_hash || "").toLowerCase();
       setHashVerificationResult({ computedHash: computed, matches });
     } catch (e) {
       console.error("Hash verification error", e);
@@ -344,35 +352,133 @@ export default function AdminSubmissionsPage() {
     URL.revokeObjectURL(url);
   }
 
-  function downloadFullPackageJSON(sub: CompetitionSubmission) {
-    const manifest = {
-      team_name: sub.team_name,
-      version: sub.version,
-      submitted_at: sub.submitted_at,
-      submitted_by_email: sub.submitted_by_email,
-      crypto_hash: sub.crypto_hash,
-      entry_point: sub.entry_point,
-      language: sub.language,
-      deliverables: {
-        research_memo_title: sub.research_memo_title,
-        research_memo_content: sub.research_memo_content,
-        strategy_code_filename: sub.strategy_code_filename,
-        strategy_code_content: sub.strategy_code_content,
-        entry_point: sub.entry_point,
-        dependencies: sub.dependencies,
-        backtest_metrics: sub.backtest_metrics,
-        data_provenance: sub.data_provenance,
-        reproduction_instructions: sub.reproduction_instructions,
-      },
-    };
+  /**
+   * Generates and downloads a real .ZIP archive containing all individual deliverable files:
+   * - research_memo.md
+   * - strategy.py / strategy.cpp
+   * - requirements.txt / Makefile
+   * - backtest_metrics.json
+   * - data_provenance.md
+   * - reproduction_instructions.md
+   * - submission_manifest.json
+   */
+  async function downloadSubmissionZIP(sub: CompetitionSubmission) {
+    setDownloadingZipId(sub.id);
+    try {
+      const zip = new JSZip();
+      const safeTeamName = (sub.team_name || "Team").replace(/\s+/g, "_");
+      const folderName = `${safeTeamName}_v${sub.version}`;
+      const folder = zip.folder(folderName) || zip;
 
-    const filename = `${sub.team_name.replace(/\s+/g, "_")}_v${sub.version}_submission_package.json`;
-    downloadSubmissionFile(filename, JSON.stringify(manifest, null, 2), "application/json");
+      // 1. Research Memo (.md)
+      folder.file(
+        "research_memo.md",
+        sub.research_memo_content || "# Research Memo\n\nNo memo text provided."
+      );
+
+      // 2. Strategy Code (.py / .cpp)
+      const codeFileName =
+        sub.strategy_code_filename || (sub.language === "cpp" ? "strategy.cpp" : "strategy.py");
+      folder.file(codeFileName, sub.strategy_code_content || "");
+
+      // 3. Dependencies / Makefile
+      const depsFileName = sub.language === "cpp" ? "Makefile" : "requirements.txt";
+      folder.file(depsFileName, sub.dependencies || "");
+
+      // 4. Backtest Metrics (.json)
+      folder.file("backtest_metrics.json", JSON.stringify(sub.backtest_metrics || {}, null, 2));
+
+      // 5. Data Provenance (.md)
+      folder.file("data_provenance.md", sub.data_provenance || "");
+
+      // 6. Reproduction Instructions (.md)
+      folder.file("reproduction_instructions.md", sub.reproduction_instructions || "");
+
+      // 7. Submission Manifest (.json)
+      const manifest = {
+        team_name: sub.team_name,
+        version: sub.version,
+        submitted_at: sub.submitted_at,
+        submitted_by_email: sub.submitted_by_email,
+        crypto_hash: sub.crypto_hash,
+        language: sub.language,
+        entry_point: sub.entry_point || codeFileName,
+      };
+      folder.file("submission_manifest.json", JSON.stringify(manifest, null, 2));
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${folderName}_package.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("ZIP download error:", err);
+    } finally {
+      setDownloadingZipId(null);
+    }
   }
 
-  function exportAllManifests() {
-    const filename = `BFB_Alpha_Research_All_Submissions_${new Date().toISOString().substring(0, 10)}.json`;
-    downloadSubmissionFile(filename, JSON.stringify(submissions, null, 2), "application/json");
+  /**
+   * Bundles all team submissions into a master ZIP archive containing structured sub-folders.
+   */
+  async function exportAllSubmissionsZIP() {
+    if (submissions.length === 0) return;
+    setDownloadingAllZip(true);
+    try {
+      const zip = new JSZip();
+      const rootFolder = zip.folder("submissions_archive") || zip;
+
+      for (const sub of submissions) {
+        const safeTeamName = (sub.team_name || "Team").replace(/\s+/g, "_");
+        const folderName = `${safeTeamName}_v${sub.version}`;
+        const subFolder = rootFolder.folder(folderName);
+        if (!subFolder) continue;
+
+        subFolder.file("research_memo.md", sub.research_memo_content || "");
+        const codeFileName =
+          sub.strategy_code_filename || (sub.language === "cpp" ? "strategy.cpp" : "strategy.py");
+        subFolder.file(codeFileName, sub.strategy_code_content || "");
+        const depsFileName = sub.language === "cpp" ? "Makefile" : "requirements.txt";
+        subFolder.file(depsFileName, sub.dependencies || "");
+        subFolder.file("backtest_metrics.json", JSON.stringify(sub.backtest_metrics || {}, null, 2));
+        subFolder.file("data_provenance.md", sub.data_provenance || "");
+        subFolder.file("reproduction_instructions.md", sub.reproduction_instructions || "");
+        subFolder.file(
+          "submission_manifest.json",
+          JSON.stringify(
+            {
+              team_name: sub.team_name,
+              version: sub.version,
+              submitted_at: sub.submitted_at,
+              submitted_by_email: sub.submitted_by_email,
+              crypto_hash: sub.crypto_hash,
+              language: sub.language,
+              entry_point: sub.entry_point || codeFileName,
+            },
+            null,
+            2
+          )
+        );
+      }
+
+      const blob = await zip.generateAsync({ type: "blob" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `BFB_Alpha_Research_All_Submissions_${new Date().toISOString().substring(0, 10)}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Bulk ZIP export error:", err);
+    } finally {
+      setDownloadingAllZip(false);
+    }
   }
 
   function copyTextToClipboard(text: string, setCopied: React.Dispatch<React.SetStateAction<boolean>>) {
@@ -412,11 +518,31 @@ export default function AdminSubmissionsPage() {
           >
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
           </button>
+
           <button
-            onClick={exportAllManifests}
-            className="px-3 py-1.5 bg-bfb-blue hover:bg-bfb-blue/90 text-white rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-all shadow-md shadow-bfb-blue/20"
+            onClick={exportAllSubmissionsZIP}
+            disabled={downloadingAllZip || submissions.length === 0}
+            className="px-3.5 py-2 bg-accent/20 hover:bg-accent/30 text-accent border border-accent/40 rounded-lg flex items-center gap-1.5 text-xs font-bold transition-all shadow-md hover:scale-[1.02] active:scale-95 disabled:opacity-50"
           >
-            <Download size={14} /> Export All JSON ({submissions.length})
+            {downloadingAllZip ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <Archive size={14} />
+            )}
+            <span>
+              {downloadingAllZip
+                ? "Packaging All ZIPs..."
+                : `Export All ZIPs Archive (${submissions.length})`}
+            </span>
+          </button>
+
+          {/* 1-Click Lock Portal Button */}
+          <button
+            onClick={logout}
+            className="p-2 text-red-400 hover:text-red-300 transition-colors rounded-lg bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 flex items-center gap-1.5 text-xs font-semibold"
+            title="Lock Admin Portal & Logout"
+          >
+            <LogOut size={14} /> Lock Portal
           </button>
         </div>
       </header>
@@ -632,19 +758,28 @@ export default function AdminSubmissionsPage() {
                       </td>
 
                       <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Prominent High-Visibility View Button */}
                           <button
                             onClick={() => handleOpenModal(sub)}
-                            className="px-2.5 py-1 bg-bfb-blue/20 hover:bg-bfb-blue/30 text-bfb-blue dark:text-accent border border-bfb-blue/30 rounded flex items-center gap-1 text-xs font-semibold transition-colors"
+                            className="px-3.5 py-1.5 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-bold text-xs rounded-lg transition-all shadow-md shadow-bfb-blue/25 flex items-center gap-1.5 hover:scale-[1.02] active:scale-95"
                           >
-                            <Eye size={13} /> View
+                            <Eye size={14} className="text-white" /> Inspect Deliverables
                           </button>
+
+                          {/* True .ZIP Archive Downloader */}
                           <button
-                            onClick={() => downloadFullPackageJSON(sub)}
-                            className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-slate-200 rounded flex items-center gap-1 text-xs font-medium transition-colors"
-                            title="Download Submission Package JSON"
+                            onClick={() => downloadSubmissionZIP(sub)}
+                            disabled={downloadingZipId === sub.id}
+                            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-white/10 rounded-lg flex items-center gap-1.5 text-xs font-semibold transition-colors disabled:opacity-50"
+                            title="Download ZIP Archive Package containing all deliverables"
                           >
-                            <Download size={13} /> JSON
+                            {downloadingZipId === sub.id ? (
+                              <Loader2 size={13} className="animate-spin text-accent" />
+                            ) : (
+                              <FolderDown size={13} className="text-accent" />
+                            )}
+                            <span>{downloadingZipId === sub.id ? "Zipping..." : "Download ZIP"}</span>
                           </button>
                         </div>
                       </td>
@@ -693,10 +828,16 @@ export default function AdminSubmissionsPage() {
 
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => downloadFullPackageJSON(selectedSubmission)}
-                  className="px-3 py-1.5 bg-accent/20 hover:bg-accent/30 text-accent border border-accent/30 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
+                  onClick={() => downloadSubmissionZIP(selectedSubmission)}
+                  disabled={downloadingZipId === selectedSubmission.id}
+                  className="px-3 py-1.5 bg-bfb-blue hover:bg-bfb-blue/90 text-white border border-bfb-blue/30 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors shadow-md shadow-bfb-blue/20"
                 >
-                  <Download size={14} /> Export Package
+                  {downloadingZipId === selectedSubmission.id ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <FolderDown size={14} />
+                  )}
+                  <span>{downloadingZipId === selectedSubmission.id ? "Zipping..." : "Download ZIP Package"}</span>
                 </button>
                 <button
                   onClick={() => setSelectedSubmission(null)}
@@ -973,5 +1114,13 @@ export default function AdminSubmissionsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminSubmissionsPage() {
+  return (
+    <AdminAuthGuard>
+      <AdminSubmissionsDashboardContent />
+    </AdminAuthGuard>
   );
 }
