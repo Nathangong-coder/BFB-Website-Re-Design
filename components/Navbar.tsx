@@ -31,7 +31,12 @@ const navItems: NavItem[] = [
       { name: "Calendar", href: "/events" },
       {
         name: "Competition",
-        children: [{ name: "Alpha Research", href: "/competition/alpha-research" }],
+        children: [
+          { name: "Alpha Research Overview", href: "/competition/alpha-research" },
+          { name: "Register", href: "/competition/alpha-research/register" },
+          { name: "Submit Strategy", href: "/competition/alpha-research/submit" },
+          { name: "Rulebook & Specs", href: "/competition/alpha-research/details" },
+        ],
       },
     ],
   },

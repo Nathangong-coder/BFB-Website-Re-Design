@@ -13,13 +13,13 @@ import {
   CalendarClock,
   FileText,
   Code2,
-  BarChart3,
   Database,
   Lock,
   Trophy,
+  UserPlus,
+  UploadCloud,
 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
-import CompetitionAuthPortal from "@/components/CompetitionAuthPortal";
 
 const glance = [
   { icon: Users, label: "Team Size", value: "1–3 undergraduates, any school" },
@@ -81,7 +81,7 @@ const timeline = [
   {
     phase: "Submission & Freeze",
     timing: "Sun, Nov 22, 2026, 11:59 PM PT",
-    output: "Research memo, code package, results, and locked configuration",
+    output: "Research memo (including backtest findings), code package, data provenance, and locked configuration",
   },
   {
     phase: "Unseen Forward Window",
@@ -99,17 +99,12 @@ const deliverables = [
   {
     icon: FileText,
     title: "Research Memo",
-    desc: "Your thesis, evidence, assumptions, portfolio construction, and limitations — stated plainly enough that a judge can attack them.",
+    desc: "Your thesis, backtest results & empirical evidence, economic rationale, portfolio construction, and limitations — stated plainly enough that a judge can attack them.",
   },
   {
     icon: Code2,
     title: "Runnable Strategy Code",
-    desc: "A pinned environment, a configuration file, and a clear entry point. It has to run from documented inputs, with no manual adjustments.",
-  },
-  {
-    icon: BarChart3,
-    title: "Backtest Report",
-    desc: "Returns, drawdowns, turnover, exposure, trade statistics, benchmarks, and sensitivity checks.",
+    desc: "A pinned environment, dependencies manifest (requirements.txt/Makefile), and standard 1-click execution entry point (strategy.py or strategy.cpp).",
   },
   {
     icon: Database,
@@ -119,7 +114,7 @@ const deliverables = [
   {
     icon: Lock,
     title: "Reproduction Instructions",
-    desc: "Plus a signed confirmation that the post-freeze strategy will not be changed.",
+    desc: "Step-by-step execution instructions plus signed strategy freeze and 1-click execution releases.",
   },
 ];
 
@@ -183,7 +178,7 @@ const faq = [
   {
     id: "a-4",
     q: "What do I submit?",
-    a: "One package with five parts: a research memo; runnable strategy code with a pinned environment, a configuration file, and a clear entry point; a backtest report; a data dictionary and provenance record; and reproduction instructions with a signed confirmation that nothing changes after the freeze.",
+    a: "One package with four core deliverables: a research memo (including your thesis, backtest results, and empirical evidence); runnable strategy code with standard 1-click entry point (strategy.py or strategy.cpp); a data dictionary and provenance record; and reproduction instructions with signed strategy freeze & disqualification releases.",
   },
   {
     id: "a-5",
@@ -279,18 +274,6 @@ function WorkflowStep({ item }: { item: (typeof workflow)[number] }) {
 
 export default function AlphaResearchCompetitionPage() {
   const reduceMotion = useReducedMotion() ?? false;
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hasAuthParams =
-        window.location.hash.includes("access_token") ||
-        window.location.search.includes("code=");
-      if (hasAuthParams) {
-        setIsAuthOpen(true);
-      }
-    }
-  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
@@ -325,17 +308,23 @@ export default function AlphaResearchCompetitionPage() {
             </p>
 
             <div className="flex flex-col lap:flex-row items-center gap-4 mt-4">
-              <button
-                onClick={() => setIsAuthOpen(true)}
-                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+              <Link
+                href="/competition/alpha-research/register"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
               >
-                Register Interest / Sign In <ChevronRight size={18} aria-hidden="true" />
-              </button>
+                Register <UserPlus size={18} aria-hidden="true" />
+              </Link>
+              <Link
+                href="/competition/alpha-research/submit"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-bfb-blue text-bfb-blue dark:text-accent font-bold rounded-sm hover:bg-bfb-blue/10 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+              >
+                Submit Strategy <UploadCloud size={18} aria-hidden="true" />
+              </Link>
               <a
                 href="#timeline"
-                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 font-medium rounded-sm hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-6 py-4 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 font-medium rounded-sm hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
               >
-                See the Timeline
+                See Timeline
               </a>
             </div>
           </motion.div>
@@ -486,7 +475,7 @@ export default function AlphaResearchCompetitionPage() {
               What You Submit
             </h2>
             <p className="text-slate-500 dark:text-silver/60 text-body max-w-xl text-pretty">
-              Five pieces, due Sun, Nov 22, 2026, 11:59 PM PT. Every submission receives a timestamped archive and a cryptographic hash.
+              Four core pieces, due Sun, Nov 22, 2026, 11:59 PM PT. Every submission receives a timestamped archive and a cryptographic hash.
             </p>
           </motion.div>
 
@@ -498,9 +487,7 @@ export default function AlphaResearchCompetitionPage() {
                 whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.06 }}
-                className={`p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm ${
-                  i === deliverables.length - 1 ? "lap:col-span-2" : ""
-                }`}
+                className="p-6 rounded-2xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm"
               >
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 p-2.5 rounded-xl bg-bfb-blue/10 text-bfb-blue dark:text-accent">
@@ -724,12 +711,20 @@ export default function AlphaResearchCompetitionPage() {
             Open to undergraduates from any school, solo or in teams of up to 3. Register by Sun, Nov 22, 2026, 11:59 PM PT. Detailed instructions are emailed after you register.
           </p>
 
-          <button
-            onClick={() => setIsAuthOpen(true)}
-            className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
-          >
-            Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/competition/alpha-research/register"
+              className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
+            >
+              Register <ChevronRight size={18} aria-hidden="true" />
+            </Link>
+            <Link
+              href="/competition/alpha-research/submit"
+              className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-slate-300 dark:border-white/15 text-slate-700 dark:text-silver font-semibold rounded-sm hover:border-slate-400 dark:hover:border-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+            >
+              Submit Deliverables <UploadCloud size={18} aria-hidden="true" />
+            </Link>
+          </div>
 
           <p className="mt-4 text-sm text-slate-500 dark:text-silver/60">
             Questions? Email{" "}
@@ -746,12 +741,6 @@ export default function AlphaResearchCompetitionPage() {
           </p>
         </div>
       </section>
-
-      {/* Supabase Auth & Registration Modal Portal */}
-      <CompetitionAuthPortal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-      />
     </div>
   );
 }

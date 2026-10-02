@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope } from "lucide-react";
+import { ArrowLeft, Gauge, ShieldCheck, Lock, FileText, Info, Globe, Microscope, Download, Code2, AlertCircle } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
 
 const markets = [
@@ -141,8 +141,8 @@ const verification = [
 function Bullets({ items }: { items: string[] }) {
   return (
     <ul className="space-y-3">
-      {items.map((point) => (
-        <li key={point} className="flex items-start gap-3">
+      {items.map((point, index) => (
+        <li key={`bullet-${index}-${point.slice(0, 20)}`} className="flex items-start gap-3">
           <span
             className="mt-2 w-1.5 h-1.5 rounded-full bg-bfb-blue/60 dark:bg-accent/60 shrink-0"
             aria-hidden="true"
@@ -366,7 +366,7 @@ export default function AlphaResearchDetailsPage() {
             </table>
           </div>
 
-          <div className="grid lap:grid-cols-2 gap-6 mt-12">
+          <div className="grid lap:grid-cols-3 gap-6 mt-12">
             <motion.div
               initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
               whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -402,6 +402,96 @@ export default function AlphaResearchDetailsPage() {
               </p>
               <Bullets items={designation} />
             </motion.div>
+
+            <motion.div
+              initial={reduceMotion ? undefined : { opacity: 0, y: 10 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="p-card rounded-3xl border border-slate-100 dark:border-white/5 bg-white dark:bg-midnight/40 shadow-sm flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-5">
+                  <Code2 className="text-bfb-blue dark:text-accent" size={20} aria-hidden="true" />
+                  <h3 className="text-h3 font-serif text-slate-900 dark:text-silver text-pretty">
+                    Download Starter Code Templates
+                  </h3>
+                </div>
+                <p className="text-sm text-slate-500 dark:text-silver/60 leading-relaxed mb-5">
+                  We accept strategy code submissions exclusively in <strong className="text-slate-900 dark:text-silver">Python (.py)</strong> and <strong className="text-slate-900 dark:text-silver">C++ (.cpp)</strong>. Download our standardized starter packages containing sample signal generators, CLI entry points, and build manifests:
+                </p>
+              </div>
+
+              <div className="space-y-2.5 pt-2">
+                <a
+                  href="/templates/strategy.py"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    Python Strategy File (strategy.py)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/requirements.txt"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Python dependencies (requirements.txt)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/strategy.cpp"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-blue-400" />
+                    C++ Strategy File (strategy.cpp)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/Makefile"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    C++ Build Manifest (Makefile)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/market_data.json"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Sample Market Feed (market_data.json)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+
+                <a
+                  href="/templates/signals.json"
+                  download
+                  className="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-900 dark:text-silver border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors"
+                >
+                  <span className="flex items-center gap-2 text-slate-500 dark:text-silver/70">
+                    Sample Output Signals (signals.json)
+                  </span>
+                  <Download size={14} className="text-bfb-blue dark:text-accent" />
+                </a>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -432,6 +522,65 @@ export default function AlphaResearchDetailsPage() {
                 <Bullets items={card.points} />
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Legal Disclaimers & Code Execution Criteria */}
+      <section className="py-section px-gutter border-t border-slate-100 dark:border-white/5 bg-slate-900 text-slate-100">
+        <div className="max-w-6xl mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <span className="text-eyebrow font-bold tracking-[0.25em] uppercase text-accent">
+              Official Legal Notices &amp; Execution Rules
+            </span>
+            <h2 className="text-h2 font-serif text-white">
+              Code Execution Criteria &amp; IP Privacy Release
+            </h2>
+          </div>
+
+          <div className="grid lap:grid-cols-2 gap-6 pt-4">
+            {/* 1-Click Code Disqualification Rule */}
+            <div className="p-6 rounded-2xl bg-red-500/10 border border-red-500/20 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-red-500/20 text-red-400 rounded-xl">
+                  <AlertCircle size={22} />
+                </div>
+                <h3 className="text-base font-bold text-white font-serif">
+                  1-Click Execution &amp; Automatic Disqualification Rule
+                </h3>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                All strategy submissions are evaluated strictly via automated execution using standardized entry points:
+              </p>
+              <div className="p-3 bg-slate-950 rounded-xl border border-white/10 font-mono text-xs text-emerald-400 space-y-1">
+                <div>Python: <code>python3 strategy.py market_data.json output_signals.json</code></div>
+                <div>C++: <code>make &amp;&amp; ./strategy_runner market_data.json output_signals.json</code></div>
+              </div>
+              <p className="text-xs text-red-300 font-semibold leading-relaxed">
+                ⚠️ If your submitted code fails to compile, throws uncaught runtime exceptions, or fails to produce target weight signals under this exact command, the strategy will be automatically disqualified.
+              </p>
+            </div>
+
+            {/* IP Privacy & Cybersecurity Disclaimer */}
+            <div className="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/20 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 bg-amber-500/20 text-amber-400 rounded-xl">
+                  <Lock size={22} />
+                </div>
+                <h3 className="text-base font-bold text-white font-serif">
+                  Strategy Privacy &amp; IP Security Liability Disclaimer
+                </h3>
+              </div>
+              <p className="text-xs text-slate-300 leading-relaxed">
+                BFB at UCLA maintains standard access controls for competition judging, but all strategy submissions are uploaded at the participant&apos;s own risk.
+              </p>
+              <p className="text-xs text-amber-300 font-semibold leading-relaxed">
+                🔒 BFB at UCLA does NOT guarantee enterprise-grade confidentiality or cybersecurity protection for proprietary models, and disclaims all liability for accidental disclosure or unauthorized IP access.
+              </p>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Participants requiring strict IP secrecy are advised to submit public baseline models, synthetic features, or obfuscated logic.
+              </p>
+            </div>
           </div>
         </div>
       </section>

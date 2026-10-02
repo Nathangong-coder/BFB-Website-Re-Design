@@ -159,8 +159,8 @@ export default function EventsPage() {
                     <Info size={24} aria-hidden="true" />
                   </div>
                   <div className="space-y-3">
-                    {selectedEvents.map((event) => (
-                      <div key={`${event.title}-${event.time ?? ""}`}>
+                    {selectedEvents.map((event, idx) => (
+                      <div key={`evt-${event.title || idx}-${idx}`}>
                         <h3 className="font-serif text-xl mb-1 text-pretty">{event.title}</h3>
                         <p className="text-sm text-slate-500 dark:text-silver/60">
                           {format(event.date, "EEEE, MMMM d, yyyy")}

@@ -350,7 +350,7 @@ export default function QuantPage() {
       {/* Footer link/CTA to other areas */}
       <section className="py-section px-gutter text-center relative z-10">
         <div className="max-w-2xl mx-auto">
-          <h3 className="text-h3 font-serif text-slate-900 dark:text-silver mb-4">
+          <h3 className="text-h3 font-serif text-slate-900 dark:text-silver mb-4">why 
             Ready for advanced research?
           </h3>
           <p className="text-slate-500 dark:text-silver/60 text-body font-light mb-8 max-w-md mx-auto">
