@@ -17,9 +17,10 @@ import {
   Database,
   Lock,
   Trophy,
+  UserPlus,
+  UploadCloud,
 } from "lucide-react";
 import { fadeInUp } from "@/lib/animations";
-import CompetitionAuthPortal from "@/components/CompetitionAuthPortal";
 
 const glance = [
   { icon: Users, label: "Team Size", value: "1–3 undergraduates, any school" },
@@ -279,18 +280,6 @@ function WorkflowStep({ item }: { item: (typeof workflow)[number] }) {
 
 export default function AlphaResearchCompetitionPage() {
   const reduceMotion = useReducedMotion() ?? false;
-  const [isAuthOpen, setIsAuthOpen] = useState(false);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const hasAuthParams =
-        window.location.hash.includes("access_token") ||
-        window.location.search.includes("code=");
-      if (hasAuthParams) {
-        setIsAuthOpen(true);
-      }
-    }
-  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white dark:bg-midnight">
@@ -325,17 +314,23 @@ export default function AlphaResearchCompetitionPage() {
             </p>
 
             <div className="flex flex-col lap:flex-row items-center gap-4 mt-4">
-              <button
-                onClick={() => setIsAuthOpen(true)}
-                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+              <Link
+                href="/competition/alpha-research/register"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
               >
-                Submission Portal & Registration <ChevronRight size={18} aria-hidden="true" />
-              </button>
+                Register Team <UserPlus size={18} aria-hidden="true" />
+              </Link>
+              <Link
+                href="/competition/alpha-research/submit"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-bfb-blue text-bfb-blue dark:text-accent font-bold rounded-sm hover:bg-bfb-blue/10 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+              >
+                Submit Strategy <UploadCloud size={18} aria-hidden="true" />
+              </Link>
               <a
                 href="#timeline"
-                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 font-medium rounded-sm hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
+                className="inline-flex items-center justify-center min-h-[52px] gap-2 px-6 py-4 border border-slate-300 dark:border-white/15 text-slate-600 dark:text-silver/70 font-medium rounded-sm hover:border-slate-400 dark:hover:border-white/30 hover:text-slate-900 dark:hover:text-silver transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2"
               >
-                See the Timeline
+                See Timeline
               </a>
             </div>
           </motion.div>
@@ -724,12 +719,20 @@ export default function AlphaResearchCompetitionPage() {
             Open to undergraduates from any school, solo or in teams of up to 3. Register by Sun, Nov 22, 2026, 11:59 PM PT. Detailed instructions are emailed after you register.
           </p>
 
-          <button
-            onClick={() => setIsAuthOpen(true)}
-            className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
-          >
-            Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              href="/competition/alpha-research/register"
+              className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 bg-bfb-blue text-white font-bold rounded-sm hover:bg-bfb-blue/90 transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer shadow-lg shadow-bfb-blue/20"
+            >
+              Register Team / Sign In <ChevronRight size={18} aria-hidden="true" />
+            </Link>
+            <Link
+              href="/competition/alpha-research/submit"
+              className="inline-flex items-center justify-center min-h-[52px] gap-2 px-8 py-4 border border-slate-300 dark:border-white/15 text-slate-700 dark:text-silver font-semibold rounded-sm hover:border-slate-400 dark:hover:border-white/30 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-bfb-blue focus-visible:ring-offset-2 cursor-pointer"
+            >
+              Submit Deliverables <UploadCloud size={18} aria-hidden="true" />
+            </Link>
+          </div>
 
           <p className="mt-4 text-sm text-slate-500 dark:text-silver/60">
             Questions? Email{" "}
@@ -746,12 +749,6 @@ export default function AlphaResearchCompetitionPage() {
           </p>
         </div>
       </section>
-
-      {/* Supabase Auth & Registration Modal Portal */}
-      <CompetitionAuthPortal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-      />
     </div>
   );
 }

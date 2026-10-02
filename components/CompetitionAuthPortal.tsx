@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   X,
@@ -31,8 +32,9 @@ import CompetitionSubmissionPortal from "./CompetitionSubmissionPortal";
 import SubmissionHashInspector from "./SubmissionHashInspector";
 
 interface CompetitionAuthPortalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  isInline?: boolean;
+  onClose?: () => void;
 }
 
 const CLASS_YEARS: ClassYear[] = [
@@ -123,7 +125,8 @@ function getErrorMessage(err: unknown): string {
 }
 
 export default function CompetitionAuthPortal({
-  isOpen,
+  isOpen = true,
+  isInline = false,
   onClose,
 }: CompetitionAuthPortalProps) {
   const [activeTab, setActiveTab] = useState<"register" | "login">("register");
@@ -765,22 +768,10 @@ export default function CompetitionAuthPortal({
     }
   }
 
-  if (!isOpen) return null;
+  if (!isOpen && !isInline) return null;
 
-  return (
-    <>
-      <AnimatePresence>
-        <div
-          key="auth-portal-backdrop"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md"
-        >
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 10 }}
-          transition={{ duration: 0.2 }}
-          className="relative w-full max-w-lg bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col"
-        >
+  const content = (
+    <div className={`relative w-full max-w-xl mx-auto bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col ${isInline ? "" : "max-h-[90vh]"}`}>
           {/* Quick Team Change Confirmation Overlay Popup */}
           <AnimatePresence>
             {showLeaveConfirm && (
@@ -1121,12 +1112,12 @@ export default function CompetitionAuthPortal({
                         </div>
 
                         <div className="flex items-center gap-2 pt-1">
-                          <button
-                            onClick={() => setIsSubmissionPortalOpen(true)}
+                          <Link
+                            href="/competition/alpha-research/submit"
                             className="flex-1 py-2 px-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
                           >
-                            Resubmit Strategy (v{latestSubmission.version + 1}) <ArrowRight size={14} />
-                          </button>
+                            Go to Submission Portal (v{latestSubmission.version + 1}) <ArrowRight size={14} />
+                          </Link>
                           <button
                             onClick={() => setIsInspectorOpen(true)}
                             className="py-2 px-3 bg-white/10 hover:bg-white/20 text-silver font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5"
@@ -1140,12 +1131,12 @@ export default function CompetitionAuthPortal({
                         <p className="text-xs text-slate-300 leading-relaxed">
                           Upload your team&apos;s Research Memo, Strategy Code, Backtest Report, Data Provenance, and Reproduction Instructions. Teams can resubmit as many times as needed before the deadline.
                         </p>
-                        <button
-                          onClick={() => setIsSubmissionPortalOpen(true)}
+                        <Link
+                          href="/competition/alpha-research/submit"
                           className="w-full py-2.5 px-4 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-2 shadow-lg shadow-bfb-blue/20"
                         >
                           Submit Strategy Deliverables <ArrowRight size={14} />
-                        </button>
+                        </Link>
                       </div>
                     )}
                   </div>
@@ -1551,31 +1542,37 @@ export default function CompetitionAuthPortal({
               </div>
             )}
           </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+    </div>
+  );
 
-    {/* Submission Portal Modal */}
-    <CompetitionSubmissionPortal
-      isOpen={isSubmissionPortalOpen}
-      onClose={() => setIsSubmissionPortalOpen(false)}
-      teamName={userProfile?.team_name || ""}
-      userEmail={sessionUser?.email || ""}
-      userId={sessionUser?.id || ""}
-      currentSubmission={latestSubmission}
-      onSubmissionSuccess={() => {
-        if (userProfile?.team_name) {
-          fetchTeamSubmission(userProfile.team_name);
-        }
-      }}
-    />
+  return (
+    <>
+      {isInline ? (
+        content
+      ) : (
+        <AnimatePresence>
+          <div key="auth-portal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md pointer-events-none" />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2 }}
+              className="relative z-10 w-full max-w-lg"
+            >
+              {content}
+            </motion.div>
+          </div>
+        </AnimatePresence>
+      )}
 
-    {/* Hash Verification Inspector Modal */}
-    <SubmissionHashInspector
-      isOpen={isInspectorOpen}
-      onClose={() => setIsInspectorOpen(false)}
-      submission={latestSubmission}
-    />
-  </>
+
+      {/* Hash Verification Inspector Modal */}
+      <SubmissionHashInspector
+        isOpen={isInspectorOpen}
+        onClose={() => setIsInspectorOpen(false)}
+        submission={latestSubmission}
+      />
+    </>
   );
 }

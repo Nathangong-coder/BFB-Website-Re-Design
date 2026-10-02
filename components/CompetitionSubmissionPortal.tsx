@@ -34,8 +34,9 @@ import type {
 import { computeSubmissionHash } from "@/lib/crypto";
 
 interface CompetitionSubmissionPortalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  isInline?: boolean;
+  onClose?: () => void;
   teamName: string;
   userEmail: string;
   userId: string;
@@ -125,7 +126,8 @@ int main(int argc, char* argv[]) {
 `;
 
 export default function CompetitionSubmissionPortal({
-  isOpen,
+  isOpen = true,
+  isInline = false,
   onClose,
   teamName,
   userEmail,
@@ -497,22 +499,11 @@ export default function CompetitionSubmissionPortal({
     };
   }, [codeContent]);
 
-  if (!isOpen) return null;
+  if (!isOpen && !isInline) return null;
 
-  return (
-    <AnimatePresence>
-      <div key="submission-portal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Static Isolated Backdrop Layer */}
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md pointer-events-none" />
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 10 }}
-          transition={{ duration: 0.2 }}
-          style={{ transform: "translateZ(0)", contain: "layout style" }}
-          className="relative z-10 w-full max-w-3xl bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden max-h-[92vh] flex flex-col will-change-transform"
-        >
+  const content = (
+    <div className={`relative z-10 w-full max-w-4xl bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl overflow-hidden flex flex-col ${isInline ? "" : "max-h-[92vh] will-change-transform"}`}>
+      {/* Header */}
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-white/5 bg-slate-50/50 dark:bg-slate-900/40 shrink-0">
             <div className="flex items-center gap-3">
@@ -1040,7 +1031,7 @@ export default function CompetitionSubmissionPortal({
             <div className="pt-4 border-t border-slate-100 dark:border-white/5 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs text-slate-400">
                 <ShieldCheck size={16} className="text-emerald-500" />
-                <span>Timestamped & Crypto-Hashed Digest</span>
+                <span>Timestamped &amp; Crypto-Hashed Digest</span>
               </div>
 
               <button
@@ -1059,6 +1050,28 @@ export default function CompetitionSubmissionPortal({
               </button>
             </div>
           </form>
+    </div>
+  );
+
+  if (isInline) {
+    return content;
+  }
+
+  return (
+    <AnimatePresence>
+      <div key="submission-portal-backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* Static Isolated Backdrop Layer */}
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-md pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96, y: 10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.96, y: 10 }}
+          transition={{ duration: 0.2 }}
+          style={{ transform: "translateZ(0)", contain: "layout style" }}
+          className="relative z-10 w-full max-w-3xl"
+        >
+          {content}
         </motion.div>
       </div>
     </AnimatePresence>
