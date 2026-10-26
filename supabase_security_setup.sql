@@ -8,6 +8,7 @@
 -- - All writes go through the SECURITY DEFINER functions below; clients have
 --   no direct INSERT/UPDATE/DELETE on either table.
 -- - Admins are listed in competition_admins and must have a confirmed email.
+-- - Submissions and team changes close at competition_settings.submission_deadline.
 -- ==============================================================================
 
 BEGIN;
@@ -135,6 +136,32 @@ CREATE TRIGGER on_auth_user_created_competition
 AFTER INSERT ON auth.users
 FOR EACH ROW EXECUTE FUNCTION public.handle_new_competition_user();
 
+-- 5b. Submission deadline: Sun, Nov 22, 2026 11:59 PM PT (PST = UTC-8).
+--     Submissions and team create/join/leave are refused once it passes.
+--     Re-running this file keeps an edited deadline; change it with
+--     UPDATE public.competition_settings SET submission_deadline = '...';
+CREATE TABLE IF NOT EXISTS public.competition_settings (
+    id BOOLEAN PRIMARY KEY DEFAULT true CHECK (id),
+    submission_deadline TIMESTAMP WITH TIME ZONE NOT NULL
+);
+ALTER TABLE public.competition_settings ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON public.competition_settings FROM anon, authenticated;
+
+INSERT INTO public.competition_settings (id, submission_deadline)
+VALUES (true, '2026-11-23 08:00:00+00')
+ON CONFLICT (id) DO NOTHING;
+
+CREATE OR REPLACE FUNCTION public.assert_competition_open()
+RETURNS VOID
+LANGUAGE plpgsql STABLE SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+    IF NOW() >= (SELECT submission_deadline FROM public.competition_settings) THEN
+        RAISE EXCEPTION 'The submission deadline has passed. Submissions and team changes are closed.' USING HINT = 'deadline_passed';
+    END IF;
+END;
+$$;
+
 -- 6. Profile and team functions
 CREATE OR REPLACE FUNCTION public.save_competition_profile(p_full_name TEXT, p_class_year TEXT)
 RETURNS public.competition_registrations
@@ -217,6 +244,7 @@ DECLARE
     v_name TEXT := trim(coalesce(p_team_name, ''));
     v_reg public.competition_registrations;
 BEGIN
+    PERFORM public.assert_competition_open();
     v_reg := public.lock_my_competition_registration();
 
     IF v_reg.team_name IS NOT NULL THEN
@@ -253,6 +281,7 @@ DECLARE
     v_canonical TEXT;
     v_count INTEGER;
 BEGIN
+    PERFORM public.assert_competition_open();
     v_reg := public.lock_my_competition_registration();
 
     IF v_reg.team_name IS NOT NULL THEN
@@ -287,6 +316,7 @@ AS $$
 DECLARE
     v_reg public.competition_registrations;
 BEGIN
+    PERFORM public.assert_competition_open();
     v_reg := public.lock_my_competition_registration();
     IF v_reg.team_name IS NULL THEN
         RETURN;
@@ -335,6 +365,7 @@ BEGIN
     IF auth.uid() IS NULL THEN
         RAISE EXCEPTION 'Please sign in to submit.' USING HINT = 'not_signed_in';
     END IF;
+    PERFORM public.assert_competition_open();
 
     SELECT * INTO v_reg FROM public.competition_registrations WHERE id = auth.uid();
     IF NOT FOUND OR v_reg.team_name IS NULL THEN
@@ -419,6 +450,7 @@ REVOKE EXECUTE ON FUNCTION
     public.is_admin(),
     public.my_team_key(),
     public.handle_new_competition_user(),
+    public.assert_competition_open(),
     public.save_competition_profile(TEXT, TEXT),
     public.lock_my_competition_registration(),
     public.list_team_names(),

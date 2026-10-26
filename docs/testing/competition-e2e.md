@@ -4,7 +4,7 @@ Manual tests for the competition's sign-up, team, submission and admin flows. Ea
 
 - [Setup](#setup)
 - [Step 1: Access control](#step-1-access-control)
-- Step 2: Deadline enforcement (added with step 2)
+- [Step 2: Deadline enforcement](#step-2-deadline-enforcement)
 - Step 3: Lint fixes (added with step 3)
 
 ## Setup
@@ -178,3 +178,80 @@ Run these with Eve's token. Each one must fail **and** the SQL editor must show 
 | 1H.1 | Before running `supabase_security_setup.sql` on production, run its step 0 check alone. | No exception. If it lists teams, fix their duplicate rows first (keep one `is_latest` per team and unique versions). |
 | 1H.2 | Run the whole file, then deploy the new site build right away. | Between the two, old pages can't write (sign-ups still work through the trigger). Existing registrations and submissions are unchanged: compare `SELECT count(*)` on both tables before and after. |
 | 1H.3 | Existing team members open the submit page. | They see their team's latest submission. Old submissions with no `terms_accepted_at` show the "updated terms" banner. |
+
+---
+
+## Step 2: Deadline enforcement
+
+The deadline is Sun, Nov 22, 2026 at 11:59 PM PT, stored as `2026-11-23 08:00:00+00` (PST is UTC-8). The database refuses submissions and team create/join/leave from that moment on. The site hides those controls as well, but the database decides.
+
+Re-run `supabase_security_setup.sql` first; it adds the deadline. Re-running is safe and keeps an edited deadline.
+
+**Move the server deadline** (SQL editor):
+```sql
+-- Close now
+UPDATE public.competition_settings SET submission_deadline = now() - interval '1 minute';
+-- Close in 3 minutes
+UPDATE public.competition_settings SET submission_deadline = now() + interval '3 minutes';
+-- Restore (do this at the end)
+UPDATE public.competition_settings SET submission_deadline = '2026-11-23 08:00:00+00';
+```
+
+**Move the site's deadline** (the closed screens): add `NEXT_PUBLIC_SUBMISSION_DEADLINE=<ISO time>` to `.env.local`, e.g. `2026-10-26T18:00:00Z`, and restart `npm run dev`. Remove it at the end.
+
+### 2A. Before the deadline
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 2A.1 | (SQL editor) | `SELECT submission_deadline FROM public.competition_settings;` | One row: `2026-11-23 08:00:00+00`. |
+| 2A.2 | Alice, Bob, Dave | Repeat 1A.4–1A.9 (create, join, submit, resubmit) and leave/rejoin. | Everything works as in step 1. |
+
+### 2B. Server closed, site still open
+
+Close the server deadline now. Don't set `NEXT_PUBLIC_SUBMISSION_DEADLINE`. This is what a user with a wrong clock or an old open page sees.
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 2B.1 | Alice | Submit from the submit page. | "The submission deadline has passed. Submissions and team changes are closed." No new row. |
+| 2B.2 | Dave | Create a team. Then try to join Quant Bruins. | Same deadline message both times. Dave stays teamless. |
+| 2B.3 | Bob | Click Change Team, confirm. | Same deadline message. Bob is still on Quant Bruins. |
+| 2B.4 | Eve | curl `create_team`, `join_team`, `leave_team` and `submit_version` with her token (commands as in 1C/1D). | Each returns the deadline message (hint `deadline_passed`). Nothing changes. |
+| 2B.5 | Alice | Reload the submit page. | The team's latest submission still loads; reading is never blocked. |
+| 2B.6 | Admin | Open `/admin/submissions`, refresh, download a ZIP. | Everything works. |
+| 2B.7 | New user | Sign up and confirm after the deadline. | Signup works and the registration row is created. Team creation is refused (as 2B.2). |
+| 2B.8 | Export | Run 1G.2. | Works. |
+
+### 2C. Site closed
+
+Keep the server closed. Set `NEXT_PUBLIC_SUBMISSION_DEADLINE` to a past time and restart the dev server.
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 2C.1 | Alice | Open the submit page. | "Submissions Closed" panel with "final submission is version N". No form. No "updated terms" banner even if the latest version has no terms acceptance. |
+| 2C.2 | Team with no submissions | Open the submit page. | "Submissions Closed" with "has no submission on record". |
+| 2C.3 | Alice | Open the register page (signed in). | The team card has no "Change Team" link. The submission card says "Submissions closed. Version N is final." with no link to the form. "Verify Hash" still works. |
+| 2C.4 | Dave | Open the register page (signed in, no team). | "Registration closed…" notice instead of the create/join forms. |
+| 2C.5 | Nobody | Signed out, open the submit page. | The sign-in prompt shows as before. |
+
+### 2D. Crossing the deadline with the page open
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 2D.1 | Alice | Set the server deadline to now + 3 minutes and `NEXT_PUBLIC_SUBMISSION_DEADLINE` to the same moment (UTC). Restart, open the submit page, start editing, and wait past the deadline. | Within 30 seconds of the deadline, the form is replaced by the "Submissions Closed" panel without a reload. |
+| 2D.2 | Alice | Same setup, but click Submit within the 30 seconds after the deadline, before the panel appears. | "The submission deadline has passed…" shown immediately (checked in the browser). No request reaches the server, and no row. |
+| 2D.3 | Alice | Server deadline = now + 3 minutes, no site override. Submit at about 2:50 into the window. | Accepted. A request that starts before the deadline is accepted even if it finishes just after. |
+| 2D.4 | Bob | Same, but submit at about 3:10. | Refused by the server with the deadline message. |
+
+### 2E. Wrong client clock
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 2E.1 | Alice | Server deadline in the future. Set the computer clock to a date after Nov 23, 2026. Reload. | The site shows "Submissions Closed" (the clock decides the UI only). Fix the clock: the form returns and submitting works. |
+| 2E.2 | Alice | Server closed. Set the computer clock to a date well before the deadline. Reload and submit. | The form shows, but the server refuses. The reply is either the deadline message or the clock-skew message from step 1. Either way, no row. |
+
+### 2F. Clean up
+
+| # | Steps | Expected |
+|---|---|---|
+| 2F.1 | Restore the server deadline (SQL above). Remove `NEXT_PUBLIC_SUBMISSION_DEADLINE` and restart. Fix the computer clock. | 2A.1 shows `2026-11-23 08:00:00+00`. Submitting works again. |
+| 2F.2 | On production, after re-running the SQL: `SELECT submission_deadline FROM public.competition_settings;` | `2026-11-23 08:00:00+00`. |
