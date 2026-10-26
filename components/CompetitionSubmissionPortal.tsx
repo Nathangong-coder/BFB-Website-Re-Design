@@ -37,7 +37,6 @@ interface CompetitionSubmissionPortalProps {
   onClose?: () => void;
   teamName: string;
   userEmail: string;
-  userId: string;
   currentSubmission?: CompetitionSubmission | null;
   onSubmissionSuccess: () => void;
 }
@@ -129,7 +128,6 @@ export default function CompetitionSubmissionPortal({
   onClose,
   teamName,
   userEmail,
-  userId,
   currentSubmission,
   onSubmissionSuccess,
 }: CompetitionSubmissionPortalProps) {
@@ -313,44 +311,17 @@ export default function CompetitionSubmissionPortal({
         deliverables,
       });
 
-      // 1. Mark previous team submissions as is_latest = false
-      if (teamName) {
-        await supabase
-          .from("competition_submissions")
-          .update({ is_latest: false })
-          .ilike("team_name", teamName.trim());
-      }
-
-      // 2. Insert new submission version with SHA-256 cryptographic hash digest
-      const { error: insertError } = await supabase
-        .from("competition_submissions")
-        .insert({
-          team_name: teamName.trim(),
-          submitted_by_id: userId,
-          submitted_by_email: userEmail,
-          version: nextVersion,
-          is_latest: true,
+      // Versioning, the is_latest flip and the insert happen atomically on the server
+      const { error: insertError } = await supabase.rpc("submit_version", {
+        p: {
+          ...deliverables,
+          expected_version: nextVersion,
           submitted_at: submittedAt,
           crypto_hash: cryptoHash,
-
-          language: deliverables.language,
-          research_memo_title: deliverables.research_memo_title,
-          research_memo_content: deliverables.research_memo_content,
-          research_memo_file_name: deliverables.research_memo_file_name || null,
-
-          strategy_code_filename: deliverables.strategy_code_filename,
-          strategy_code_content: deliverables.strategy_code_content,
-          entry_point: deliverables.entry_point,
-          dependencies: deliverables.dependencies,
-
-          backtest_metrics: deliverables.backtest_metrics,
-
-          data_provenance: deliverables.data_provenance,
-
-          reproduction_instructions: deliverables.reproduction_instructions,
-          signed_confirmation: deliverables.signed_confirmation,
-          terms_accepted_at: new Date().toISOString(),
-        });
+          team_name: teamName.trim(),
+          submitted_by_email: userEmail,
+        },
+      });
 
       if (insertError) throw insertError;
 

@@ -178,6 +178,7 @@ function AdminSubmissionsDashboardContent() {
   const { logout } = useAdminAuth();
   const [submissions, setSubmissions] = useState<CompetitionSubmission[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [languageFilter, setLanguageFilter] = useState<"all" | "python" | "cpp">("all");
   const [latestOnly, setLatestOnly] = useState(true);
@@ -208,20 +209,23 @@ function AdminSubmissionsDashboardContent() {
           .select("*")
           .order("submitted_at", { ascending: false });
 
+        // Never substitute sample data for real data: an empty or failed
+        // result must look empty, not like a list of teams
         if (sbError) {
-          console.warn("Supabase fetch failed, falling back to local/sample data:", sbError.message);
-          loadFallbackSubmissions();
-        } else if (data && data.length > 0) {
-          setSubmissions(data as CompetitionSubmission[]);
+          console.error("Supabase fetch failed:", sbError.message);
+          setLoadError(sbError.message);
+          setSubmissions([]);
         } else {
-          loadFallbackSubmissions();
+          setLoadError(null);
+          setSubmissions((data ?? []) as CompetitionSubmission[]);
         }
       } else {
         loadFallbackSubmissions();
       }
     } catch (err) {
-      console.warn("Error fetching submissions:", err);
-      loadFallbackSubmissions();
+      console.error("Error fetching submissions:", err);
+      setLoadError(err instanceof Error ? err.message : "Unknown error");
+      setSubmissions([]);
     } finally {
       setLoading(false);
     }
@@ -655,7 +659,11 @@ function AdminSubmissionsDashboardContent() {
                     <td colSpan={6} className="py-12 text-center text-slate-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <AlertCircle size={24} className="text-amber-400" />
-                        <span>No strategy submissions found matching your filters.</span>
+                        <span>
+                          {loadError
+                            ? `Couldn't load submissions: ${loadError}`
+                            : "No strategy submissions found matching your filters."}
+                        </span>
                       </div>
                     </td>
                   </tr>

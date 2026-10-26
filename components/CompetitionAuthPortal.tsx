@@ -196,9 +196,6 @@ export default function CompetitionAuthPortal({
           setLatestSubmission(null);
           setIsSettingUpProfile(false);
         }
-
-        // Fetch list of existing unique team names for the Join dropdown/autocomplete
-        fetchExistingTeams();
       } catch (err: unknown) {
         console.error("Session check error:", err);
       } finally {
@@ -231,34 +228,19 @@ export default function CompetitionAuthPortal({
 
   async function fetchExistingTeams() {
     try {
-      const { data, error } = await supabase
-        .from("competition_registrations")
-        .select("team_name")
-        .not("team_name", "is", null);
+      const { data, error } = await supabase.rpc("list_team_names");
 
       if (!error && data) {
-        const unique = Array.from(
-          new Set(
-            data
-              .map((d: { team_name: string | null }) => d.team_name)
-              .filter((name: string | null): name is string => Boolean(name && name.trim() !== ""))
-          )
-        );
-        setExistingTeams(unique);
+        setExistingTeams(data as string[]);
       }
     } catch (err: unknown) {
       console.error("Error fetching existing teams:", err);
     }
   }
 
-  async function fetchTeamSubmission(teamName: string) {
+  async function fetchTeamSubmission() {
     try {
-      const { data, error } = await supabase
-        .from("competition_submissions")
-        .select("*")
-        .ilike("team_name", teamName.trim())
-        .eq("is_latest", true)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_my_latest_submission").maybeSingle();
 
       if (!error && data) {
         setLatestSubmission(data as CompetitionSubmission);
@@ -281,9 +263,11 @@ export default function CompetitionAuthPortal({
       if (data && data.class_year) {
         setUserProfile(data as CompetitionRegistration);
         setIsSettingUpProfile(false);
+        // Team names for the Join dropdown/autocomplete
+        fetchExistingTeams();
         if (data.team_name) {
-          fetchTeamMembers(data.team_name);
-          fetchTeamSubmission(data.team_name);
+          fetchTeamMembers();
+          fetchTeamSubmission();
         }
       } else {
         // User logged in via Google (or row missing class_year) -> prompt for Google profile setup
@@ -331,28 +315,23 @@ export default function CompetitionAuthPortal({
       const combinedFullName = `${cleanFirst} ${cleanLast}`;
       const userEmail = sessionUser.email || email;
 
-      const { error: dbError } = await supabase
-        .from("competition_registrations")
-        .upsert({
+      const { data: savedProfile, error: dbError } = await supabase.rpc("save_competition_profile", {
+        p_full_name: combinedFullName,
+        p_class_year: googleClassYear,
+      });
+
+      if (dbError) throw dbError;
+
+      setUserProfile(
+        (savedProfile as CompetitionRegistration | null) ?? {
           id: sessionUser.id,
           full_name: combinedFullName,
           email: userEmail,
           class_year: googleClassYear,
           team_name: null,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (dbError) throw dbError;
-
-      const newProfile: CompetitionRegistration = {
-        id: sessionUser.id,
-        full_name: combinedFullName,
-        email: userEmail,
-        class_year: googleClassYear,
-        team_name: null,
-      };
-
-      setUserProfile(newProfile);
+        }
+      );
+      fetchExistingTeams();
       setIsSettingUpProfile(false);
       setSuccessMsg("Profile saved successfully! Now create or join a team below.");
     } catch (err: unknown) {
@@ -362,12 +341,9 @@ export default function CompetitionAuthPortal({
     }
   }
 
-  async function fetchTeamMembers(teamName: string) {
+  async function fetchTeamMembers() {
     try {
-      const { data, error } = await supabase
-        .from("competition_registrations")
-        .select("full_name, email, class_year")
-        .ilike("team_name", teamName);
+      const { data, error } = await supabase.rpc("get_my_team_members");
 
       if (!error && data) {
         setTeamMembers(data as TeamMember[]);
@@ -450,24 +426,6 @@ export default function CompetitionAuthPortal({
       return;
     }
 
-    // Pre-check if email already exists in DB before attempting registration
-    try {
-      const { data: existingEmail } = await supabase
-        .from("competition_registrations")
-        .select("id")
-        .eq("email", cleanEmail)
-        .maybeSingle();
-
-      if (existingEmail) {
-        setErrorMsg(
-          `An account with email '${cleanEmail}' is already registered. Please sign in instead.`
-        );
-        return;
-      }
-    } catch (err) {
-      // Continue if table is not yet created
-    }
-
     setLoading(true);
 
     try {
@@ -503,23 +461,16 @@ export default function CompetitionAuthPortal({
         throw new Error("Registration failed. Please try again.");
       }
 
-      const userId = authData.user.id;
-
-      // 2. Insert user record into competition_registrations table
-      const { error: dbError } = await supabase
-        .from("competition_registrations")
-        .upsert({
-          id: userId,
-          full_name: fullName,
-          email: cleanEmail,
-          class_year: classYear,
-          team_name: null,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (dbError) {
-        console.warn("Profile DB Insert warning:", dbError.message);
+      // With email confirmation on, Supabase returns a user with no identities
+      // (instead of an error) when the email is already registered
+      if (authData.user.identities && authData.user.identities.length === 0) {
+        throw new Error(
+          `An account with email '${cleanEmail}' is already registered. Please sign in instead.`
+        );
       }
+
+      // 2. The competition_registrations row is created by a database trigger on signup
+      const userId = authData.user.id;
 
       if (!authData.session && authData.user) {
         setSuccessMsg(
@@ -534,6 +485,7 @@ export default function CompetitionAuthPortal({
           class_year: classYear,
           team_name: null,
         });
+        fetchExistingTeams();
 
         setSuccessMsg(
           "Account created successfully! Now please create or join a team below to complete your competition registration."
@@ -607,50 +559,19 @@ export default function CompetitionAuthPortal({
     try {
       const cleanTeamName = newTeamName.trim();
 
-      // Check if team name already exists (case-insensitive)
-      const { data: existingTeam, error: checkError } = await supabase
-        .from("competition_registrations")
-        .select("team_name")
-        .ilike("team_name", cleanTeamName)
-        .limit(1);
+      const { data: createdName, error: createError } = await supabase.rpc("create_team", {
+        p_team_name: cleanTeamName,
+      });
 
-      if (checkError) throw checkError;
+      if (createError) throw createError;
 
-      if (existingTeam && existingTeam.length > 0) {
-        throw new Error(
-          `Team name '${cleanTeamName}' is already taken. Please choose a different team name or join the existing team.`
-        );
-      }
-
-      // Assign user to new team (use upsert to support users whose initial DB insert failed due to previous RLS)
-      const meta = sessionUser.user_metadata || {};
-      const { error: updateError } = await supabase
-        .from("competition_registrations")
-        .upsert({
-          id: sessionUser.id,
-          full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
-          email: sessionUser.email || email,
-          class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
-          team_name: cleanTeamName,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (updateError) throw updateError;
-
-      const updatedProfile: CompetitionRegistration = {
-        id: sessionUser.id,
-        full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
-        email: sessionUser.email || email,
-        class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
-        team_name: cleanTeamName,
-      };
-
-      setUserProfile(updatedProfile);
-      fetchTeamMembers(cleanTeamName);
+      const teamName = (createdName as string | null) || cleanTeamName;
+      setUserProfile((prev) => (prev ? { ...prev, team_name: teamName } : prev));
+      fetchTeamMembers();
       fetchExistingTeams();
 
       setSuccessMsg(
-        `Team '${cleanTeamName}' created successfully! You are registered for the competition. More details will be sent to your email soon.`
+        `Team '${teamName}' created successfully! You are registered for the competition. More details will be sent to your email soon.`
       );
     } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
@@ -680,51 +601,19 @@ export default function CompetitionAuthPortal({
     try {
       const cleanTeamName = joinTeamName.trim();
 
-      // Check if team exists and count current members
-      const { data: teamMembersData, error: teamCheckError } = await supabase
-        .from("competition_registrations")
-        .select("id, full_name")
-        .ilike("team_name", cleanTeamName);
+      const { data: joinedName, error: joinError } = await supabase.rpc("join_team", {
+        p_team_name: cleanTeamName,
+      });
 
-      if (teamCheckError) throw teamCheckError;
+      if (joinError) throw joinError;
 
-      if (!teamMembersData || teamMembersData.length === 0) {
-        throw new Error(
-          `Team '${cleanTeamName}' was not found. Please check the spelling or create a new team.`
-        );
-      }
-
-      if (teamMembersData.length >= 3) {
-        throw new Error(
-          `Team '${cleanTeamName}' is full (maximum 3 members per team reached).`
-        );
-      }
-
-      // Add user to team (use upsert to support users whose initial DB insert failed due to previous RLS)
-      const meta = sessionUser.user_metadata || {};
-      const { error: updateError } = await supabase
-        .from("competition_registrations")
-        .upsert({
-          id: sessionUser.id,
-          full_name: userProfile?.full_name || (meta.full_name as string) || fullName || "Participant",
-          email: sessionUser.email || email,
-          class_year: userProfile?.class_year || (meta.class_year as ClassYear) || classYear || "2027",
-          team_name: cleanTeamName,
-          updated_at: new Date().toISOString(),
-        });
-
-      if (updateError) throw updateError;
-
-      const updatedProfile = {
-        ...userProfile!,
-        team_name: cleanTeamName,
-      };
-
-      setUserProfile(updatedProfile);
-      fetchTeamMembers(cleanTeamName);
+      const teamName = (joinedName as string | null) || cleanTeamName;
+      setUserProfile((prev) => (prev ? { ...prev, team_name: teamName } : prev));
+      fetchTeamMembers();
+      fetchTeamSubmission();
 
       setSuccessMsg(
-        `Successfully joined Team '${cleanTeamName}'! More competition details will be sent to your email soon.`
+        `Successfully joined Team '${teamName}'! More competition details will be sent to your email soon.`
       );
     } catch (err: unknown) {
       setErrorMsg(getErrorMessage(err));
@@ -740,16 +629,15 @@ export default function CompetitionAuthPortal({
     setErrorMsg(null);
     setSuccessMsg(null);
     try {
-      await supabase
-        .from("competition_registrations")
-        .update({ team_name: null })
-        .eq("id", sessionUser.id);
+      const { error } = await supabase.rpc("leave_team");
+      if (error) throw error;
 
       setUserProfile((prev) => (prev ? { ...prev, team_name: null } : null));
       setTeamMembers([]);
+      setLatestSubmission(null);
       setSuccessMsg("You have left your team. Please create or join a new team below.");
     } catch (err: unknown) {
-      setErrorMsg("Failed to leave team.");
+      setErrorMsg(getErrorMessage(err) || "Failed to leave team.");
     } finally {
       setLoading(false);
       setShowLeaveConfirm(false);

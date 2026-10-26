@@ -1,6 +1,8 @@
 -- ==============================================================================
 -- Supabase SQL Setup for Competition Registrations
 -- Fixes Infinite Recursion (Error 42P17) and enables clean non-recursive RLS policies
+-- After running this file, run supabase_security_setup.sql: the policies and
+-- grants below are open and are replaced there.
 -- ==============================================================================
 
 -- 1. Create table if it doesn't already exist

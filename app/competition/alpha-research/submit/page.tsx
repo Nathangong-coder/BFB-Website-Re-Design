@@ -95,13 +95,8 @@ export default function AlphaResearchSubmitPage() {
         // 2. Fetch latest submission if team exists
         if (profile.team_name) {
           const { data: subData } = await supabase
-            .from("competition_submissions")
-            .select("*")
-            .ilike("team_name", profile.team_name.trim())
-            .eq("is_latest", true)
-            .order("version", { ascending: false })
-            .limit(1)
-            .single();
+            .rpc("get_my_latest_submission")
+            .maybeSingle<CompetitionSubmission>();
 
           if (subData) {
             setLatestSubmission(subData);
@@ -249,7 +244,6 @@ export default function AlphaResearchSubmitPage() {
                 onClose={() => {}}
                 teamName={userProfile.team_name}
                 userEmail={sessionUser.email || userProfile.email}
-                userId={sessionUser.id}
                 currentSubmission={latestSubmission}
                 onSubmissionSuccess={handleSubmissionSuccess}
               />

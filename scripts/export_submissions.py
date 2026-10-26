@@ -159,24 +159,27 @@ def main():
 
     # Check for Supabase environment variables
     sb_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    # RLS hides submissions from the public key, so a real export needs the service role key
+    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
     submissions = []
 
-    if sb_url and sb_key:
+    if sb_url:
+        if not sb_key:
+            sys.exit("❌ SUPABASE_SERVICE_ROLE_KEY is required to export submissions (the public key can't read them).")
         try:
             from supabase import create_client
             print("🔗 Connecting to Supabase...")
             client = create_client(sb_url, sb_key)
             res = client.table("competition_submissions").select("*").eq("is_latest", True).execute()
-            if res.data:
-                submissions = res.data
-                print(f"Found {len(submissions)} latest team submissions in Supabase.")
         except Exception as e:
-            print(f"⚠️ Supabase query warning: {e}")
-
-    if not submissions:
-        print("ℹ️ Using sample submission packages for offline export verification.")
+            sys.exit(f"❌ Supabase query failed: {e}")
+        submissions = res.data or []
+        print(f"Found {len(submissions)} latest team submissions in Supabase.")
+        if not submissions:
+            return
+    else:
+        print("ℹ️ NEXT_PUBLIC_SUPABASE_URL not set; using sample submission packages for offline export verification.")
         submissions = SAMPLE_SUBMISSIONS
 
     export_submissions(submissions, args.out_dir)

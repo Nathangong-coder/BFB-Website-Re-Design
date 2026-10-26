@@ -1,6 +1,8 @@
 -- ==============================================================================
 -- Supabase SQL Setup for Competition Submissions
 -- Supports team resubmissions, versioning, timestamping, and SHA-256 cryptographic hashing
+-- After running this file, run supabase_security_setup.sql: the policies and
+-- grants below are open and are replaced there.
 -- ==============================================================================
 
 -- 1. Create table for competition submissions
