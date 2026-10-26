@@ -13,7 +13,7 @@ const markets = [
   },
   {
     label: "Crypto",
-    body: "Up to 1,000 Binance spot instruments, selected under published liquidity and data-availability criteria.",
+    body: "A frozen list of Binance spot USDT pairs, selected under liquidity and data-availability criteria.",
   },
   {
     label: "Your Responsibility",
@@ -122,7 +122,7 @@ const verification = [
     icon: ShieldCheck,
     title: "Finalist Verification",
     points: [
-      "Finalists are the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams.",
+      "Finalists are the Best Sharpe and Best Calmar teams and the top 3 Best Rigor teams.",
       "BFB reproduces headline metrics from your archived package and the official logs.",
       "Finalists reconcile return, P&L, drawdown, exposure, and trade count to a common methodology.",
       "Judges may inspect a sample of signals and trades for timestamp integrity and rule compliance.",
@@ -553,8 +553,8 @@ export default function AlphaResearchDetailsPage() {
                 All strategy submissions are evaluated strictly via automated execution using standardized entry points:
               </p>
               <div className="p-3 bg-slate-950 rounded-xl border border-white/10 font-mono text-xs text-emerald-400 space-y-1">
-                <div>Python: <code>python3 strategy.py market_data.json output_signals.json</code></div>
-                <div>C++: <code>make &amp;&amp; ./strategy_runner market_data.json output_signals.json</code></div>
+                <div>Python: <code>python strategy.py market_data.json signals.json</code></div>
+                <div>C++: <code>make &amp;&amp; ./strategy_runner market_data.json signals.json</code></div>
               </div>
               <p className="text-xs text-red-300 font-semibold leading-relaxed">
                 ⚠️ If your submitted code fails to compile, throws uncaught runtime exceptions, or fails to produce target weight signals under this exact command, the strategy will be automatically disqualified.

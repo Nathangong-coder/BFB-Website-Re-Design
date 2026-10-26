@@ -1,6 +1,8 @@
 -- ==============================================================================
 -- Supabase SQL Setup for Competition Submissions
 -- Supports team resubmissions, versioning, timestamping, and SHA-256 cryptographic hashing
+-- After running this file, run supabase_security_setup.sql: the policies and
+-- grants below are open and are replaced there.
 -- ==============================================================================
 
 -- 1. Create table for competition submissions
@@ -36,6 +38,7 @@ CREATE TABLE IF NOT EXISTS public.competition_submissions (
     -- Deliverable 5: Reproduction & Risk Confirmation
     reproduction_instructions TEXT,
     signed_confirmation BOOLEAN NOT NULL DEFAULT true,
+    terms_accepted_at TIMESTAMP WITH TIME ZONE,
 
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -77,3 +80,5 @@ USING (auth.uid() IS NOT NULL);
 GRANT ALL ON public.competition_submissions TO anon;
 GRANT ALL ON public.competition_submissions TO authenticated;
 GRANT ALL ON public.competition_submissions TO service_role;
+
+-- Existing deployments: ALTER TABLE public.competition_submissions ADD COLUMN IF NOT EXISTS terms_accepted_at TIMESTAMP WITH TIME ZONE;

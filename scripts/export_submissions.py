@@ -42,7 +42,7 @@ SAMPLE_SUBMISSIONS: List[Dict[str, Any]] = [
         "team_name": "Bruin Alpha Research",
         "version": 1,
         "is_latest": True,
-        "submitted_at": "2026-10-01T14:32:00Z",
+        "submitted_at": "2026-10-01T20:30:00Z",
         "submitted_by_email": "alex.bruin@ucla.edu",
         "crypto_hash": "3cddc3eb4ea2e89a46f9541841acaa36ab89a209b5ca0d113b28cef69b115ae4",
         "language": "python",
@@ -58,7 +58,7 @@ SAMPLE_SUBMISSIONS: List[Dict[str, Any]] = [
             "max_drawdown_pct": 7.2
         },
         "data_provenance": "Polygon.io 5-minute equity bars 2021-2025.",
-        "reproduction_instructions": "1. pip install -r requirements.txt\n2. python3 strategy.py market_data.json output_signals.json"
+        "reproduction_instructions": "1. pip install -r requirements.txt\n2. python strategy.py market_data.json signals.json"
     },
     {
         "id": "sample-cpp-002",
@@ -81,7 +81,7 @@ SAMPLE_SUBMISSIONS: List[Dict[str, Any]] = [
             "max_drawdown_pct": 4.8
         },
         "data_provenance": "High frequency tick data backtest.",
-        "reproduction_instructions": "1. make\n2. ./strategy_runner market_data.json output_signals.json"
+        "reproduction_instructions": "1. make\n2. ./strategy_runner market_data.json signals.json"
     }
 ]
 
@@ -159,24 +159,27 @@ def main():
 
     # Check for Supabase environment variables
     sb_url = os.environ.get("NEXT_PUBLIC_SUPABASE_URL")
-    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("NEXT_PUBLIC_SUPABASE_ANON_KEY")
+    # RLS hides submissions from the public key, so a real export needs the service role key
+    sb_key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
 
     submissions = []
 
-    if sb_url and sb_key:
+    if sb_url:
+        if not sb_key:
+            sys.exit("❌ SUPABASE_SERVICE_ROLE_KEY is required to export submissions (the public key can't read them).")
         try:
             from supabase import create_client
             print("🔗 Connecting to Supabase...")
             client = create_client(sb_url, sb_key)
             res = client.table("competition_submissions").select("*").eq("is_latest", True).execute()
-            if res.data:
-                submissions = res.data
-                print(f"Found {len(submissions)} latest team submissions in Supabase.")
         except Exception as e:
-            print(f"⚠️ Supabase query warning: {e}")
-
-    if not submissions:
-        print("ℹ️ Using sample submission packages for offline export verification.")
+            sys.exit(f"❌ Supabase query failed: {e}")
+        submissions = res.data or []
+        print(f"Found {len(submissions)} latest team submissions in Supabase.")
+        if not submissions:
+            return
+    else:
+        print("ℹ️ NEXT_PUBLIC_SUPABASE_URL not set; using sample submission packages for offline export verification.")
         submissions = SAMPLE_SUBMISSIONS
 
     export_submissions(submissions, args.out_dir)

@@ -2,31 +2,17 @@
 
 import React, { useState, useEffect, createContext, useContext } from "react";
 import Link from "next/link";
-import {
-  Lock,
-  Unlock,
-  KeyRound,
-  Shield,
-  Eye,
-  EyeOff,
-  AlertCircle,
-  ArrowRight,
-  ArrowLeft,
-  Check,
-  CheckCircle2,
-  LogOut,
-  Sparkles,
-} from "lucide-react";
+import { Lock, Shield, AlertCircle, ArrowRight, ArrowLeft, LogOut } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 interface AdminAuthContextType {
   isAuthenticated: boolean;
-  login: (passwordInput: string, rememberDevice: boolean) => boolean;
   logout: () => void;
 }
 
 const AdminAuthContext = createContext<AdminAuthContextType>({
   isAuthenticated: false,
-  login: () => false,
   logout: () => {},
 });
 
@@ -36,102 +22,60 @@ interface AdminAuthGuardProps {
   children: React.ReactNode;
 }
 
-const AUTH_STORAGE_KEY_SESSION = "bfb_admin_authenticated";
-const AUTH_STORAGE_KEY_PERSIST = "bfb_admin_authenticated_persist";
-const AUTH_EXPIRATION_KEY = "bfb_admin_auth_expires_at";
+type AdminStatus = "checking" | "signed_out" | "not_admin" | "admin";
 
+// Admin access is decided by the database: the signed-in user's confirmed email
+// must be listed in competition_admins (see supabase_security_setup.sql). The
+// same check gates the data itself through RLS, so this guard is only the UI.
 export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
-  const [passwordInput, setPasswordInput] = useState<string>("");
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [rememberDevice, setRememberDevice] = useState<boolean>(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
-  const getTargetPassword = () => {
-    return process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "bfb2026admin";
-  };
+  // Without Supabase the dashboard only shows bundled sample data
+  const [status, setStatus] = useState<AdminStatus>(() =>
+    isSupabaseConfigured() ? "checking" : "admin"
+  );
+  const [signedInEmail, setSignedInEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    function checkAuth() {
-      if (typeof window === "undefined") {
-        setCheckingAuth(false);
-        return;
-      }
+    if (!isSupabaseConfigured()) return;
 
-      // 1. Check Session Storage
-      const sessionAuth = sessionStorage.getItem(AUTH_STORAGE_KEY_SESSION);
-      if (sessionAuth === "true") {
-        setIsAuthenticated(true);
-        setCheckingAuth(false);
-        return;
-      }
+    let active = true;
 
-      // 2. Check Persisted Storage with 24h expiration
-      const persistAuth = localStorage.getItem(AUTH_STORAGE_KEY_PERSIST);
-      const expiresAt = localStorage.getItem(AUTH_EXPIRATION_KEY);
-
-      if (persistAuth === "true" && expiresAt) {
-        const expTime = parseInt(expiresAt, 10);
-        if (Date.now() < expTime) {
-          setIsAuthenticated(true);
-          setCheckingAuth(false);
-          return;
-        } else {
-          // Expired
-          localStorage.removeItem(AUTH_STORAGE_KEY_PERSIST);
-          localStorage.removeItem(AUTH_EXPIRATION_KEY);
+    async function checkSession(session: Session | null) {
+      if (!session?.user) {
+        if (active) {
+          setSignedInEmail(null);
+          setStatus("signed_out");
         }
+        return;
       }
 
-      setIsAuthenticated(false);
-      setCheckingAuth(false);
+      const { data, error } = await supabase.rpc("is_admin");
+      if (!active) return;
+      setSignedInEmail(session.user.email ?? null);
+      setStatus(!error && data === true ? "admin" : "not_admin");
     }
 
-    checkAuth();
+    supabase.auth.getSession().then(({ data: { session } }) => checkSession(session));
+
+    // Handles sign-out in another tab and expired sessions
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      checkSession(session);
+    });
+
+    return () => {
+      active = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  function handleLogin(input: string, remember: boolean): boolean {
-    const targetPass = getTargetPassword();
-    if (input.trim() === targetPass) {
-      setIsAuthenticated(true);
-      setErrorMsg(null);
-
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem(AUTH_STORAGE_KEY_SESSION, "true");
-        if (remember) {
-          const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
-          localStorage.setItem(AUTH_STORAGE_KEY_PERSIST, "true");
-          localStorage.setItem(AUTH_EXPIRATION_KEY, expiresAt.toString());
-        } else {
-          localStorage.removeItem(AUTH_STORAGE_KEY_PERSIST);
-          localStorage.removeItem(AUTH_EXPIRATION_KEY);
-        }
-      }
-      return true;
-    } else {
-      setErrorMsg("Invalid Organizer Passcode. Please check password and try again.");
-      return false;
-    }
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setSignedInEmail(null);
+    setStatus("signed_out");
   }
 
-  function handleLogout() {
-    setIsAuthenticated(false);
-    setPasswordInput("");
-    setErrorMsg(null);
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem(AUTH_STORAGE_KEY_SESSION);
-      localStorage.removeItem(AUTH_STORAGE_KEY_PERSIST);
-      localStorage.removeItem(AUTH_EXPIRATION_KEY);
-    }
-  }
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    handleLogin(passwordInput, rememberDevice);
-  }
-
-  if (checkingAuth) {
+  if (status === "checking") {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400">
         <div className="flex items-center gap-2">
@@ -142,7 +86,7 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     );
   }
 
-  if (!isAuthenticated) {
+  if (status !== "admin") {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between font-sans relative overflow-hidden">
         {/* Subtle Background Glow */}
@@ -159,14 +103,12 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
             <ArrowLeft size={16} /> Competition Overview
           </Link>
           <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-            <Lock size={14} className="text-amber-400" /> BFB Security Gate v1.0
+            <Lock size={14} className="text-amber-400" /> BFB Security Gate v2.0
           </div>
         </header>
 
-        {/* Centered Passcode Gate Form */}
         <main className="relative z-10 flex-1 flex flex-col items-center justify-center p-6">
           <div className="w-full max-w-md bg-slate-900/90 border border-white/10 rounded-2xl shadow-2xl p-8 space-y-6 backdrop-blur-xl">
-            {/* Header Shield */}
             <div className="text-center space-y-3">
               <div className="w-14 h-14 bg-bfb-blue/20 text-accent border border-bfb-blue/30 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-bfb-blue/10">
                 <Shield size={28} />
@@ -175,64 +117,35 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
                 BFB Admin Portal Locked
               </h2>
               <p className="text-xs text-slate-400 max-w-xs mx-auto leading-relaxed">
-                Enter the official BFB Organizer Passcode to access competition submissions, strategy source code, and deliverables.
+                {status === "signed_out"
+                  ? "Sign in with your organizer account to access competition submissions, strategy source code, and deliverables."
+                  : "Your account isn't on the organizer list. Ask a BFB organizer to add your email, or sign in with a different account."}
               </p>
             </div>
 
-            {/* Error Message */}
-            {errorMsg && (
+            {status === "not_admin" && (
               <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-xs text-red-400">
                 <AlertCircle size={16} className="shrink-0" />
-                <span>{errorMsg}</span>
+                <span>Signed in as {signedInEmail ?? "an unknown account"} (not an organizer).</span>
               </div>
             )}
 
-            {/* Form Input */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400">
-                  Organizer Passcode
-                </label>
-                <div className="relative">
-                  <KeyRound className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
-                    placeholder="Enter passcode..."
-                    autoFocus
-                    required
-                    className="w-full pl-10 pr-10 py-3 bg-slate-950 border border-white/15 rounded-xl text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-bfb-blue focus:ring-1 focus:ring-bfb-blue font-mono transition-all"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
-                  >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-1">
-                <label className="flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={rememberDevice}
-                    onChange={(e) => setRememberDevice(e.target.checked)}
-                    className="rounded border-white/20 bg-slate-950 text-bfb-blue focus:ring-bfb-blue"
-                  />
-                  Remember device for 24h
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full py-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-bold text-xs rounded-xl transition-all shadow-lg shadow-bfb-blue/25 flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-95"
+            {status === "signed_out" ? (
+              <Link
+                href="/competition/alpha-research/register"
+                className="w-full py-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-bold text-xs rounded-xl transition-all shadow-lg shadow-bfb-blue/25 flex items-center justify-center gap-2"
               >
-                <Unlock size={16} /> Unlock Admin Submissions Portal
+                Sign In <ArrowRight size={16} />
+              </Link>
+            ) : (
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full py-3 bg-white/10 hover:bg-white/15 text-white font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2"
+              >
+                <LogOut size={16} /> Sign Out
               </button>
-            </form>
+            )}
           </div>
         </main>
 
@@ -248,7 +161,6 @@ export default function AdminAuthGuard({ children }: AdminAuthGuardProps) {
     <AdminAuthContext.Provider
       value={{
         isAuthenticated: true,
-        login: handleLogin,
         logout: handleLogout,
       }}
     >

@@ -1,10 +1,9 @@
 export type ClassYear =
-  | "2025"
   | "2026"
   | "2027"
   | "2028"
   | "2029"
-  | "Graduate / Other"
+  | "2030"
   | "Freshman"
   | "Sophomore"
   | "Junior"
@@ -74,6 +73,7 @@ export interface SubmissionDeliverables {
 }
 
 export interface CompetitionSubmission extends SubmissionDeliverables {
+  terms_accepted_at?: string | null;
   id: string;
   team_name: string;
   submitted_by_id: string;

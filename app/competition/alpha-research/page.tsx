@@ -58,12 +58,12 @@ const workflow = [
   {
     step: "06",
     title: "Complete the Forward Window",
-    desc: "From Mon, Nov 30, 2026, 6:30 AM PT to Fri, Mar 19, 2027, 1:00 PM PT, your unchanged strategy runs through the official evaluation environment and data feed.",
+    desc: "From Mon, Nov 30, 2026 to Fri, Mar 19, 2027, your unchanged strategy runs once per US trading day (76 runs, 12:30 PM PT) through the official evaluation environment and data feed.",
   },
   {
     step: "07",
     title: "Present & Defend",
-    desc: "The Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams present in spring quarter: 3 minutes, plus 3 minutes of Q&A. Explain the result, the attribution, the limitations, and the lessons to the judging panel.",
+    desc: "The Best Sharpe and Best Calmar teams and the top 3 Best Rigor teams present in spring quarter: 3 minutes, plus 3 minutes of Q&A. Explain the result, the attribution, the limitations, and the lessons to the judging panel.",
   },
 ];
 
@@ -85,13 +85,13 @@ const timeline = [
   },
   {
     phase: "Unseen Forward Window",
-    timing: "Mon, Nov 30, 2026, 6:30 AM PT – Fri, Mar 19, 2027, 1:00 PM PT",
+    timing: "Mon, Nov 30, 2026, 12:30 PM PT – Fri, Mar 19, 2027, 12:30 PM PT (76 daily runs)",
     output: "Official simulated execution through the period before spring break",
   },
   {
     phase: "Verification & Finals",
     timing: "Late March – early spring quarter 2027",
-    output: "Reproduction checks; the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams present; awards",
+    output: "Reproduction checks; the Best Sharpe and Best Calmar teams and the top 3 Best Rigor teams present; awards",
   },
 ];
 
@@ -144,7 +144,7 @@ const scoring = [
 const awards = [
   {
     title: "Best Sharpe",
-    body: "Highest forward-window Sharpe ratio among eligible strategies.",
+    body: "Highest positive forward-window Sharpe ratio among eligible strategies.",
     tag: "Cash prize",
   },
   {
@@ -154,7 +154,7 @@ const awards = [
   },
   {
     title: "Best Rigor",
-    body: "Judged by the panel on the full rubric. The top 5 teams present, and the winner is decided after the presentations.",
+    body: "Judged by the panel on the full rubric. The top 3 teams present, and the presentations decide the winner.",
     tag: "Cash prize",
   },
 ];
@@ -208,17 +208,17 @@ const faq = [
   {
     id: "a-10",
     q: "When does the forward window run, and do I need to do anything?",
-    a: "From Mon, Nov 30, 2026, 6:30 AM PT to Fri, Mar 19, 2027, 1:00 PM PT. BFB runs your frozen strategy, so you don't need to do anything during the window.",
+    a: "From Mon, Nov 30, 2026 to Fri, Mar 19, 2027: one run per US trading day at 12:30 PM PT (76 runs). BFB runs your frozen strategy, so you don't need to do anything during the window.",
   },
   {
     id: "a-11",
     q: "How are the awards decided?",
-    a: "Best Sharpe and Best Calmar go to the eligible strategies with the highest forward-window Sharpe and Calmar ratios. Best Rigor is judged on the rubric: thesis and implementation 30%, backtest rigor and robustness 35%, forward-window performance 20%, and risk controls and reproducibility 15%.",
+    a: "Best Sharpe (positive Sharpe required) and Best Calmar go to the eligible strategies with the highest forward-window Sharpe and Calmar ratios. Best Rigor is judged on the rubric: thesis and implementation 30%, backtest rigor and robustness 35%, forward-window performance 20%, and risk controls and reproducibility 15%.",
   },
   {
     id: "a-12",
     q: "What makes a strategy eligible for Best Sharpe or Best Calmar?",
-    a: "At least 30 independent completed trades (at least 10 in the forward window), average gross exposure of at least 25% across the window, a forward drawdown within 35%, and no rule breach, prohibited data use, material post-freeze change, or failed reproduction. Calmar floors max drawdown at 2%.",
+    a: "A positive forward-window Sharpe ratio (Best Sharpe only), at least 30 independent completed trades (at least 10 in the forward window), average gross exposure of at least 25% across the window, a forward drawdown within 35%, and no rule breach, prohibited data use, material post-freeze change, or failed reproduction. Calmar floors max drawdown at 2%.",
   },
   {
     id: "a-13",
@@ -233,12 +233,12 @@ const faq = [
   {
     id: "a-15",
     q: "What happens at the finals?",
-    a: "In spring quarter, the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&A. The Best Rigor winner is decided after the presentations.",
+    a: "In spring quarter, the Best Sharpe and Best Calmar teams and the top 3 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&A. The presentations decide Best Rigor; they do not affect Best Sharpe or Best Calmar.",
   },
   {
     id: "a-16",
     q: "Do the presentations change Best Sharpe or Best Calmar?",
-    a: "No. Those two awards are decided by the forward-window metrics once BFB has verified the results. Only Best Rigor is decided after the presentations.",
+    a: "No. Those two awards are decided by the forward-window metrics once BFB has verified the results. Only Best Rigor is decided by the presentations.",
   },
   {
     id: "a-17",
@@ -643,7 +643,7 @@ export default function AlphaResearchCompetitionPage() {
           </div>
 
           <p className="mt-8 text-sm text-slate-500 dark:text-silver/60 leading-relaxed text-pretty">
-            Finals (spring quarter): the Best Sharpe and Best Calmar teams and the top 5 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&amp;A. The Best Rigor winner is decided after the presentations.
+            Finals (spring quarter): the Best Sharpe and Best Calmar teams and the top 3 Best Rigor teams each present for 3 minutes, plus 3 minutes of Q&amp;A. The presentations decide Best Rigor; they do not affect Best Sharpe or Best Calmar.
           </p>
         </div>
       </section>

@@ -1,7 +1,7 @@
 # Data Dictionary & Provenance
 
 ## Primary Data Sources
-1. **S&P 500 Equities**: Daily OHLCV data from Yahoo Finance / Polygon API (2021-2026). Timestamps aligned to 4:00 PM EST market close.
+1. **S&P 500 Equities**: Daily OHLCV data from Yahoo Finance / Polygon API (2021-2026). Timestamps aligned to 12:30 PM PT decision time (30 minutes before the close).
 2. **Crypto Spot Pairs**: Binance spot 1-hour and 1-day Kline bars for BTCUSDT and ETHUSDT (2021-2026). Timestamps in UTC.
 
 ## Data Preprocessing & Cleaning

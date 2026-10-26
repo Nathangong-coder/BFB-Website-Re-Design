@@ -63,7 +63,7 @@ int main(int argc, char* argv[]) {
 
         std::cout << "C++ Strategy: Generated signals for " << weights.size() << " assets -> " << output_path << "\n";
     } else {
-        std::cout << "Usage: ./strategy_runner <input_market_data.json> <output_signals.json>\n";
+        std::cout << "Usage: ./strategy_runner <input_market_data.json> <signals.json>\n";
     }
 
     return 0;

@@ -95,13 +95,8 @@ export default function AlphaResearchSubmitPage() {
         // 2. Fetch latest submission if team exists
         if (profile.team_name) {
           const { data: subData } = await supabase
-            .from("competition_submissions")
-            .select("*")
-            .ilike("team_name", profile.team_name.trim())
-            .eq("is_latest", true)
-            .order("version", { ascending: false })
-            .limit(1)
-            .single();
+            .rpc("get_my_latest_submission")
+            .maybeSingle<CompetitionSubmission>();
 
           if (subData) {
             setLatestSubmission(subData);
@@ -177,6 +172,14 @@ export default function AlphaResearchSubmitPage() {
               Submit your Research Memo, Python/C++ runnable strategy code, data provenance, and signed strategy freeze confirmation.
               Resubmit as many times as needed before <strong className="text-slate-900 dark:text-silver">Sun, Nov 22, 2026 at 11:59 PM PT</strong>.
             </p>
+            {latestSubmission && !latestSubmission.terms_accepted_at && (
+              <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3 text-sm text-amber-700 dark:text-amber-400 max-w-2xl">
+                <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                <span>
+                  The submission terms have been updated. Accept them and resubmit before <strong>Sun, Nov 22, 2026 at 11:59 PM PT</strong>; your current version has no recorded acceptance.
+                </span>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -241,7 +244,6 @@ export default function AlphaResearchSubmitPage() {
                 onClose={() => {}}
                 teamName={userProfile.team_name}
                 userEmail={sessionUser.email || userProfile.email}
-                userId={sessionUser.id}
                 currentSubmission={latestSubmission}
                 onSubmissionSuccess={handleSubmissionSuccess}
               />
