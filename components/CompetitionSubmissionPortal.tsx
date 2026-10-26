@@ -30,6 +30,7 @@ import type {
   LanguageType,
 } from "@/lib/types/competition";
 import { computeSubmissionHash } from "@/lib/crypto";
+import { isPastDeadline } from "@/lib/competition";
 
 interface CompetitionSubmissionPortalProps {
   isOpen?: boolean;
@@ -278,6 +279,11 @@ export default function CompetitionSubmissionPortal({
     e.preventDefault();
     setErrorMsg(null);
     setSuccessMsg(null);
+
+    if (isPastDeadline()) {
+      setErrorMsg("The submission deadline has passed. Submissions and team changes are closed.");
+      return;
+    }
 
     if (!signedConfirmation) {
       setErrorMsg(

@@ -14,8 +14,10 @@ import {
   Sparkles,
   ArrowRight,
   UserPlus,
+  Lock,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { useSubmissionsClosed } from "@/lib/competition";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import type {
   CompetitionRegistration,
@@ -31,6 +33,7 @@ export default function AlphaResearchSubmitPage() {
   const [latestSubmission, setLatestSubmission] = useState<CompetitionSubmission | null>(null);
   const [isInspectorOpen, setIsInspectorOpen] = useState<boolean>(false);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
+  const submissionsClosed = useSubmissionsClosed();
 
   useEffect(() => {
     async function loadData() {
@@ -172,7 +175,7 @@ export default function AlphaResearchSubmitPage() {
               Submit your Research Memo, Python/C++ runnable strategy code, data provenance, and signed strategy freeze confirmation.
               Resubmit as many times as needed before <strong className="text-slate-900 dark:text-silver">Sun, Nov 22, 2026 at 11:59 PM PT</strong>.
             </p>
-            {latestSubmission && !latestSubmission.terms_accepted_at && (
+            {!submissionsClosed && latestSubmission && !latestSubmission.terms_accepted_at && (
               <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3 text-sm text-amber-700 dark:text-amber-400 max-w-2xl">
                 <AlertCircle size={18} className="mt-0.5 shrink-0" />
                 <span>
@@ -234,8 +237,30 @@ export default function AlphaResearchSubmitPage() {
                 </Link>
               </div>
             </div>
+          ) : submissionsClosed ? (
+            /* STATE 3: DEADLINE PASSED */
+            <div className="p-8 bg-white dark:bg-midnight border border-slate-200 dark:border-white/10 rounded-2xl shadow-xl text-center space-y-5 max-w-xl mx-auto">
+              <div className="w-12 h-12 bg-slate-500/10 text-slate-600 dark:text-silver/70 rounded-full flex items-center justify-center mx-auto">
+                <Lock size={24} />
+              </div>
+              <h3 className="text-lg font-serif font-bold text-slate-900 dark:text-silver">
+                Submissions Closed
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-silver/60 leading-relaxed">
+                The deadline (Sun, Nov 22, 2026 at 11:59 PM PT) has passed.{" "}
+                {latestSubmission ? (
+                  <>
+                    Team <strong className="text-slate-900 dark:text-silver">{userProfile.team_name}</strong>&apos;s final submission is version {latestSubmission.version}.
+                  </>
+                ) : (
+                  <>
+                    Team <strong className="text-slate-900 dark:text-silver">{userProfile.team_name}</strong> has no submission on record.
+                  </>
+                )}
+              </p>
+            </div>
           ) : (
-            /* STATE 3: READY TO SUBMIT */
+            /* STATE 4: READY TO SUBMIT */
             <div className="space-y-6">
               {/* Submission Portal Component */}
               <CompetitionSubmissionPortal

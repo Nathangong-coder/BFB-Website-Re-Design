@@ -21,6 +21,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { useSubmissionsClosed } from "@/lib/competition";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import {
   ClassYear,
@@ -132,6 +133,7 @@ export default function CompetitionAuthPortal({
   const [teamTab, setTeamTab] = useState<"create" | "join">("create");
 
   const [loading, setLoading] = useState<boolean>(false);
+  const submissionsClosed = useSubmissionsClosed();
   const [fetchingSession, setFetchingSession] = useState<boolean>(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
@@ -941,12 +943,14 @@ export default function CompetitionAuthPortal({
                         <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
                           Team Roster ({teamMembers.length}/3 Members)
                         </span>
-                        <button
-                          onClick={() => setShowLeaveConfirm(true)}
-                          className="text-xs text-red-500 hover:underline"
-                        >
-                          Change Team
-                        </button>
+                        {!submissionsClosed && (
+                          <button
+                            onClick={() => setShowLeaveConfirm(true)}
+                            className="text-xs text-red-500 hover:underline"
+                          >
+                            Change Team
+                          </button>
+                        )}
                       </div>
 
                       <div className="space-y-1.5">
@@ -1003,12 +1007,18 @@ export default function CompetitionAuthPortal({
                         </div>
 
                         <div className="flex items-center gap-2 pt-1">
-                          <Link
-                            href="/competition/alpha-research/submit"
-                            className="flex-1 py-2 px-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
-                          >
-                            Go to Submission Portal (v{latestSubmission.version + 1}) <ArrowRight size={14} />
-                          </Link>
+                          {submissionsClosed ? (
+                            <span className="flex-1 py-2 px-3 text-slate-400 font-semibold text-xs text-center">
+                              Submissions closed. Version {latestSubmission.version} is final.
+                            </span>
+                          ) : (
+                            <Link
+                              href="/competition/alpha-research/submit"
+                              className="flex-1 py-2 px-3 bg-bfb-blue hover:bg-bfb-blue/90 text-white font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5 shadow-sm"
+                            >
+                              Go to Submission Portal (v{latestSubmission.version + 1}) <ArrowRight size={14} />
+                            </Link>
+                          )}
                           <button
                             onClick={() => setIsInspectorOpen(true)}
                             className="py-2 px-3 bg-white/10 hover:bg-white/20 text-silver font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1.5"
@@ -1017,6 +1027,10 @@ export default function CompetitionAuthPortal({
                           </button>
                         </div>
                       </div>
+                    ) : submissionsClosed ? (
+                      <p className="text-xs text-slate-300 leading-relaxed pt-1">
+                        Submissions closed on Sun, Nov 22, 2026 at 11:59 PM PT. Your team has no submission on record.
+                      </p>
                     ) : (
                       <div className="space-y-3 pt-1">
                         <p className="text-xs text-slate-300 leading-relaxed">
@@ -1058,6 +1072,15 @@ export default function CompetitionAuthPortal({
                     </p>
                   </div>
 
+                  {submissionsClosed ? (
+                    <div className="p-4 bg-slate-100 dark:bg-slate-900/60 rounded-xl flex items-start gap-3 text-xs text-slate-600 dark:text-silver/70">
+                      <Lock size={16} className="mt-0.5 shrink-0" />
+                      <span>
+                        Registration closed on Sun, Nov 22, 2026 at 11:59 PM PT. Teams can no longer be created, joined, or changed.
+                      </span>
+                    </div>
+                  ) : (
+                  <>
                   {/* Team Sub-tabs */}
                   <div className="flex p-1 bg-slate-100 dark:bg-slate-900/60 rounded-xl">
                     <button
@@ -1174,6 +1197,8 @@ export default function CompetitionAuthPortal({
                         )}
                       </button>
                     </form>
+                  )}
+                  </>
                   )}
 
                   <div className="pt-2 border-t border-slate-100 dark:border-white/5 flex justify-between items-center text-xs text-slate-400">
