@@ -11,10 +11,14 @@
  *   ./strategy_runner market_data.json signals.json
  * 
  * Input Schema (market_data.json):
- *   {"timestamp": "...", "prices": {"AAPL": 180.50, ...}, "ohlcv": {...}}
+ *   {"timestamp": "...", "prices": {"AAPL": 180.50, ...}, "ohlcv": {...},
+ *    "history": {...}, "portfolio": {"equity": ..., "cash": ..., "weights": {...}}}
+ *   One run per US trading day at 12:30 PM PT; e.g. timestamp 2026-11-30T20:30:00Z.
  * 
  * Output Schema (signals.json):
  *   {"AAPL": 0.10, "MSFT": -0.05, "BTCUSDT": 0.05}
+ *   Limits: max |weight| 0.20 per position, gross (sum of |weights|) <= 1.50,
+ *   net (sum of weights) between -1.00 and +1.00. A breach rejects that day's signals.
  */
 
 #include <iostream>
@@ -75,7 +79,7 @@ int main(int argc, char* argv[]) {
 
         std::cout << "Successfully generated C++ signals for " << weights.size() << " assets -> " << output_path << "\n";
     } else {
-        std::cout << "Usage: ./strategy_runner <input_market_data.json> <output_signals.json>\n";
+        std::cout << "Usage: ./strategy_runner <input_market_data.json> <signals.json>\n";
     }
 
     return 0;

@@ -38,12 +38,11 @@ interface CompetitionAuthPortalProps {
 }
 
 const CLASS_YEARS: ClassYear[] = [
-  "2025",
   "2026",
   "2027",
   "2028",
   "2029",
-  "Graduate / Other",
+  "2030",
 ];
 
 function getGoogleName(user: SupabaseUser | null): { firstName: string; lastName: string } {
@@ -481,6 +480,10 @@ export default function CompetitionAuthPortal({
             full_name: fullName,
             class_year: classYear,
           },
+          emailRedirectTo:
+            typeof window !== "undefined"
+              ? `${window.location.origin}/competition/alpha-research`
+              : undefined,
         },
       });
 

@@ -42,7 +42,7 @@ const SAMPLE_ADMIN_SUBMISSIONS: CompetitionSubmission[] = [
     submitted_by_email: "alex.bruin@ucla.edu",
     version: 1,
     is_latest: true,
-    submitted_at: "2026-10-01T14:32:00Z",
+    submitted_at: "2026-10-01T20:30:00Z",
     crypto_hash: "f6a552e52770b2baf09b95a430fe1659bed07769cc9b8006754bfe0451c396dc",
     language: "python",
     research_memo_title: "Statistical Arbitrage via Cointegration & Volatility Targeting",
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     entry_point: "strategy.py",
     dependencies: "numpy>=1.24.0\npandas>=2.0.0\nscipy>=1.10.0",
     data_provenance: "Tested on 5-minute bar equities data from Polygon.io and Alpha Vantage covering 2021-2025. No forward bias; clean train/test split.",
-    reproduction_instructions: "# Reproduction Instructions\n1. Ensure Python 3.10+ is installed.\n2. Install requirements: `pip install -r requirements.txt`.\n3. Execute strategy: `python3 strategy.py market_data.json output_signals.json`.",
+    reproduction_instructions: "# Reproduction Instructions\n1. Ensure Python 3.10+ is installed.\n2. Install requirements: `pip install -r requirements.txt`.\n3. Execute strategy: `python strategy.py market_data.json signals.json`.",
     signed_confirmation: true,
   },
   {
@@ -167,7 +167,7 @@ int main(int argc, char* argv[]) {
     entry_point: "strategy.cpp",
     dependencies: "g++ -O3 -std=c++20 strategy.cpp -o strategy_runner",
     data_provenance: "High-frequency tick data backtested using custom C++ market simulator with 50-microsecond synthetic queue latency.",
-    reproduction_instructions: "# Reproduction Instructions\n1. Compile with Makefile: `make` or `g++ -O3 -std=c++20 strategy.cpp -o strategy_runner`.\n2. Execute strategy: `./strategy_runner market_data.json output_signals.json`.",
+    reproduction_instructions: "# Reproduction Instructions\n1. Compile with Makefile: `make` or `g++ -O3 -std=c++20 strategy.cpp -o strategy_runner`.\n2. Execute strategy: `./strategy_runner market_data.json signals.json`.",
     signed_confirmation: true,
   },
 ];
@@ -673,6 +673,11 @@ function AdminSubmissionsDashboardContent() {
                               LATEST
                             </span>
                           )}
+                          {!sub.terms_accepted_at && (
+                            <span className="px-1.5 py-0.5 text-[9px] font-extrabold uppercase bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded">
+                              TERMS MISSING
+                            </span>
+                          )}
                         </div>
                         <p className="text-[11px] text-slate-400 truncate max-w-[220px] mt-0.5">
                           {sub.research_memo_title || "Untitled Research Memo"}
@@ -961,8 +966,8 @@ function AdminSubmissionsDashboardContent() {
                       <span className="text-slate-400">Local Execution Command:</span>
                       <code className="text-emerald-400 font-bold">
                         {selectedSubmission.language === "cpp"
-                          ? "make && ./strategy_runner market_data.json output_signals.json"
-                          : "python3 strategy.py market_data.json output_signals.json"}
+                          ? "make && ./strategy_runner market_data.json signals.json"
+                          : "python strategy.py market_data.json signals.json"}
                       </code>
                     </div>
                   </div>

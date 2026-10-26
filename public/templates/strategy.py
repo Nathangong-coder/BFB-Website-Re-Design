@@ -10,21 +10,29 @@ CLI Execution Contract:
 Input File Format (market_data.json):
   JSON object containing market timestamps, prices, and OHLCV bars:
   {
-    "timestamp": "2026-11-30T14:30:00Z",
+    "timestamp": "2026-11-30T20:30:00Z",
     "universe": ["AAPL", "MSFT", "NVDA", "BTCUSDT", "ETHUSDT"],
     "prices": { "AAPL": 180.50, "MSFT": 410.20, "BTCUSDT": 64000.00 },
     "ohlcv": {
       "AAPL": { "open": 179.80, "high": 181.20, "low": 179.50, "close": 180.50, "volume": 45200000 }
-    }
+    },
+    "history": {   # last 252 completed daily bars per symbol, oldest first
+      "AAPL": [ { "date": "2026-11-27", "open": 179.80, "high": 181.20, "low": 179.50, "close": 180.50, "volume": 45200000 } ]
+    },
+    "portfolio": { "equity": 1000000.0, "cash": 1000000.0, "weights": { "AAPL": 0.0 } }
   }
+  One run per US trading day at 12:30 PM PT (30 minutes before the close).
 
 Output File Format (signals.json):
-  JSON object mapping ticker symbols to portfolio target allocation weights [-1.0, +1.0]:
+  JSON object mapping ticker symbols to portfolio target allocation weights (fraction of equity):
   {
     "AAPL": 0.10,    # +10% Long Allocation
     "MSFT": -0.05,   # -5% Short Allocation
     "BTCUSDT": 0.05  # +5% Long Allocation
   }
+  Limits: max |weight| 0.20 per position, sum of |weights| <= 1.50, sum of
+  weights between -1.00 and +1.00. Symbols left out are closed. A breach (or an
+  invalid file) rejects that day's signals and current positions are held.
 """
 
 import sys
@@ -58,7 +66,7 @@ def generate_signals(market_data: Dict[str, Any]) -> Dict[str, float]:
     # YOUR STRATEGY LOGIC HERE
     # --------------------------------------------------------------------------
     num_assets = len(prices)
-    weight_per_asset = 0.50 / max(num_assets, 1)  # Max 50% gross allocation
+    weight_per_asset = min(0.50 / max(num_assets, 1), 0.20)  # 50% gross, <= 0.20 per position
 
     for symbol in prices.keys():
         target_weights[symbol] = round(weight_per_asset, 4)

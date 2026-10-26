@@ -165,8 +165,7 @@ export default function CompetitionSubmissionPortal({
   const [reproductionInstructions, setReproductionInstructions] = useState<string>(
     "1. Install dependencies via pip install -r requirements.txt\n2. Run python strategy.py market_data.json signals.json\n3. Output signals are verified automatically by BFB Evaluation Harness"
   );
-  const [signedConfirmation, setSignedConfirmation] = useState<boolean>(true);
-  const [signedSecurityDisclaimer, setSignedSecurityDisclaimer] = useState<boolean>(true);
+  const [signedConfirmation, setSignedConfirmation] = useState<boolean>(false);
 
   const isResubmission = Boolean(currentSubmission);
   const nextVersion = (currentSubmission?.version || 0) + 1;
@@ -206,7 +205,7 @@ export default function CompetitionSubmissionPortal({
 
     setDataProvenance(currentSubmission.data_provenance || "");
     setReproductionInstructions(currentSubmission.reproduction_instructions || "");
-    setSignedConfirmation(currentSubmission.signed_confirmation ?? true);
+    setSignedConfirmation(Boolean(currentSubmission.terms_accepted_at));
   }, [currentSubmission]);
 
   const buildDeliverablesPayload = useCallback((): SubmissionDeliverables => {
@@ -282,9 +281,9 @@ export default function CompetitionSubmissionPortal({
     setErrorMsg(null);
     setSuccessMsg(null);
 
-    if (!signedConfirmation || !signedSecurityDisclaimer) {
+    if (!signedConfirmation) {
       setErrorMsg(
-        "Please check both required confirmation boxes: Strategy Freeze Agreement and the IP Privacy & 1-Click Disqualification Release."
+        "Please accept the submission terms (Strategy Freeze, IP Privacy & 1-Click Disqualification Release) to submit."
       );
       return;
     }
@@ -350,6 +349,7 @@ export default function CompetitionSubmissionPortal({
 
           reproduction_instructions: deliverables.reproduction_instructions,
           signed_confirmation: deliverables.signed_confirmation,
+          terms_accepted_at: new Date().toISOString(),
         });
 
       if (insertError) throw insertError;
@@ -647,8 +647,8 @@ export default function CompetitionSubmissionPortal({
                       All strategy code is evaluated strictly via the automated 1-click command:{" "}
                       <code className="px-1.5 py-0.5 bg-slate-950 text-emerald-400 font-mono rounded border border-white/10 font-bold">
                         {language === "cpp"
-                          ? "make && ./strategy_runner market_data.json output_signals.json"
-                          : "python3 strategy.py market_data.json output_signals.json"}
+                          ? "make && ./strategy_runner market_data.json signals.json"
+                          : "python strategy.py market_data.json signals.json"}
                       </code>
                       . If your submission fails to compile, throws uncaught errors, or fails to output target signals under this command, <strong>the strategy will be automatically disqualified</strong>.
                     </p>
@@ -879,23 +879,7 @@ export default function CompetitionSubmissionPortal({
                       htmlFor="signedConfirmation"
                       className="text-xs text-slate-700 dark:text-silver leading-relaxed cursor-pointer"
                     >
-                      <span className="font-bold">1. Strategy Freeze Confirmation:</span> I confirm that our team&apos;s code and configuration will be locked at the submission deadline (Nov 22, 11:59 PM PT). No modifications will be made to the strategy logic during the forward window (Nov 30, 2026 – Mar 19, 2027).
-                    </label>
-                  </div>
-
-                  <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="signedSecurityDisclaimer"
-                      checked={signedSecurityDisclaimer}
-                      onChange={(e) => setSignedSecurityDisclaimer(e.target.checked)}
-                      className="mt-1 w-4 h-4 text-bfb-blue rounded border-slate-300 focus:ring-bfb-blue cursor-pointer"
-                    />
-                    <label
-                      htmlFor="signedSecurityDisclaimer"
-                      className="text-xs text-slate-700 dark:text-silver leading-relaxed cursor-pointer"
-                    >
-                      <span className="font-bold text-amber-600 dark:text-amber-400">2. IP Privacy &amp; 1-Click Disqualification Release:</span> I understand that our code must execute cleanly via the 1-click evaluation command or face automatic disqualification. I acknowledge that BFB at UCLA does not guarantee enterprise-grade confidentiality or cybersecurity protection for proprietary trading models, and disclaims all liability for strategy privacy or IP disclosure.
+                      <span className="font-bold">Submission Terms (required):</span> <span className="font-bold">1. Strategy Freeze Confirmation:</span> I confirm that our team&apos;s code and configuration will be locked at the submission deadline (Nov 22, 11:59 PM PT). No modifications will be made to the strategy logic during the forward window (Nov 30, 2026 – Mar 19, 2027). <span className="font-bold text-amber-600 dark:text-amber-400">2. IP Privacy &amp; 1-Click Disqualification Release:</span> I understand that our code must execute cleanly via the 1-click evaluation command or face automatic disqualification. I acknowledge that BFB at UCLA does not guarantee enterprise-grade confidentiality or cybersecurity protection for proprietary trading models, and disclaims all liability for strategy privacy or IP disclosure.
                     </label>
                   </div>
                 </div>

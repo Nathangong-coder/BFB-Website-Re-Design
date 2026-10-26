@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local exports
 submissions_archive/
+
+# Competition universe lists (sent by onboarding email only; never publish)
+/harness/universe-*.csv
