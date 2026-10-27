@@ -5,7 +5,7 @@ Manual tests for the competition's sign-up, team, submission and admin flows. Ea
 - [Setup](#setup)
 - [Step 1: Access control](#step-1-access-control)
 - [Step 2: Deadline enforcement](#step-2-deadline-enforcement)
-- Step 3: Lint fixes (added with step 3)
+- [Step 3: Submission success message](#step-3-submission-success-message)
 
 ## Setup
 
@@ -255,3 +255,19 @@ Keep the server closed. Set `NEXT_PUBLIC_SUBMISSION_DEADLINE` to a past time and
 |---|---|---|
 | 2F.1 | Restore the server deadline (SQL above). Remove `NEXT_PUBLIC_SUBMISSION_DEADLINE` and restart. Fix the computer clock. | 2A.1 shows `2026-11-23 08:00:00+00`. Submitting works again. |
 | 2F.2 | On production, after re-running the SQL: `SELECT submission_deadline FROM public.competition_settings;` | `2026-11-23 08:00:00+00`. |
+
+---
+
+## Step 3: Submission success message
+
+After a successful submit, the page reloads the team's latest submission. It used to show the loading spinner while doing so, which removed the form and with it the "Version N saved successfully" message. Now only the first load shows the spinner.
+
+| # | Persona | Steps | Expected |
+|---|---|---|---|
+| 3.1 | Alice | Open the submit page. | The loading spinner shows briefly, then the form. |
+| 3.2 | Alice | Submit a new version. | The green "Submission Version N saved successfully! Timestamped & hashed (…)" message stays on screen. The header badges change to "Active Version N Submitted" and the button to "Resubmit Package (Version N+1)", without a spinner. |
+| 3.3 | Alice | After 3.2, look at the form fields. | They still hold what was just submitted (memo, code, provenance), and the terms box is ticked. |
+| 3.4 | Alice | Submit again right away. | Version N+1 is saved. No `stale_version` error. |
+| 3.5 | Alice | Submit with the terms box unticked. | The red terms error shows. No spinner, no reload. |
+| 3.6 | Alice | Sign out in another tab. | The submit page switches to the sign-in prompt. |
+| 3.7 | Alice | Sign back in, open the submit page. | The form loads with the latest version, as in 3.1. |

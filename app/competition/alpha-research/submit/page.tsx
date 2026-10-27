@@ -36,8 +36,9 @@ export default function AlphaResearchSubmitPage() {
   const submissionsClosed = useSubmissionsClosed();
 
   useEffect(() => {
+    // loading starts true and is only cleared here; refreshes after a submit
+    // keep the form mounted so its success message stays visible
     async function loadData() {
-      setLoading(true);
       try {
         if (!isSupabaseConfigured()) {
           setLoading(false);
