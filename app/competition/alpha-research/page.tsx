@@ -292,6 +292,37 @@ export default function AlphaResearchCompetitionPage() {
             animate="visible"
             className="flex flex-col items-center gap-4 text-center"
           >
+            <div className="flex flex-col items-center gap-3 mb-2">
+              <div className="flex items-center gap-4">
+                {/* The BFB PNG has heavy transparent padding; scale it so the visible mark matches the 48px FIT logo. */}
+                <div className="relative h-12 w-[42px] shrink-0">
+                  <img
+                    src="/bfb-transparent.png"
+                    alt="BFB logo"
+                    className="absolute left-1/2 -translate-x-1/2 -top-[14px] h-[86px] w-auto max-w-none dark:hidden"
+                  />
+                  <img
+                    src="/bfb-transparent-white.png"
+                    alt="BFB logo"
+                    className="absolute left-1/2 -translate-x-1/2 -top-[14px] h-[86px] w-auto max-w-none hidden dark:block"
+                  />
+                </div>
+                <span className="text-lg text-slate-400 dark:text-silver/40" aria-hidden="true">
+                  ×
+                </span>
+                <img
+                  src="/competition/fit-logo.jpg"
+                  alt="Financial Investment and Technology (FIT) logo"
+                  className="h-12 w-12 rounded-lg object-cover"
+                />
+              </div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.1em] leading-relaxed text-slate-400 dark:text-silver/50 text-balance">
+                Presented by Bruins in Finance and Banking x{" "}
+                <br className="lap:hidden" />
+                Financial Investment and Technology
+              </p>
+            </div>
+
             <span className="text-eyebrow font-bold tracking-[0.25em] uppercase text-bfb-blue dark:text-accent">
               Fall 2026 – Spring 2027
             </span>
